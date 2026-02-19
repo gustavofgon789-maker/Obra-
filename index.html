@@ -3,105 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aluguel de Ferramentas - Irapuã</title>
+  <title>Obraí - Alugue Ferramentas Perto de Você</title>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f5;
     }
 
     header {
-      background: black;
+      background: #0f3d2e;
       color: white;
-      padding: 20px;
+      padding: 25px 20px;
       text-align: center;
+    }
+
+    header h1 {
+      font-size: 32px;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .search-bar {
+      margin: 20px auto;
+      max-width: 500px;
+      display: flex;
+      gap: 10px;
+      padding: 0 20px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .search-bar button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #0f3d2e;
+      color: white;
+      cursor: pointer;
     }
 
     .container {
       padding: 20px;
+      max-width: 1000px;
+      margin: auto;
     }
 
     .card {
       background: white;
       padding: 15px;
-      margin-bottom: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .card img {
+      width: 100%;
       border-radius: 10px;
-      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+      margin-bottom: 10px;
     }
 
     .card h2 {
-      margin: 0;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .location {
+      font-size: 14px;
+      color: #666;
     }
 
     .price {
-      color: green;
+      font-size: 18px;
+      color: #0f3d2e;
       font-weight: bold;
-      margin-top: 5px;
+      margin-top: 8px;
     }
 
     .btn {
       display: inline-block;
-      margin-top: 10px;
+      margin-top: 12px;
       padding: 12px;
-      background: #25D366;
+      background: #0f3d2e;
       color: white;
       text-decoration: none;
       border-radius: 8px;
       text-align: center;
+      width: 100%;
+    }
+
+    .announce {
+      text-align: center;
+      margin: 40px 20px;
+    }
+
+    .announce a {
+      padding: 14px 25px;
+      background: #1d6b50;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 16px;
     }
 
     footer {
+      background: #0f3d2e;
+      color: white;
       text-align: center;
-      padding: 15px;
+      padding: 20px;
+      margin-top: 40px;
       font-size: 14px;
-      color: gray;
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <h1>Aluguel de Ferramentas - Irapuã</h1>
-    <p>Reserve ferramentas perto de você!</p>
-  </header>
+<header>
+  <h1>Obraí</h1>
+  <p>Alugue ferramentas perto de você</p>
+</header>
 
-  <div class="container">
+<div class="search-bar">
+  <input type="text" placeholder="Digite sua cidade...">
+  <button>Buscar</button>
+</div>
 
-    <div class="card">
-      <h2>Furadeira Bosch</h2>
-      <p class="price">R$ 30 por dia</p>
-      <a class="btn" href="https://wa.me/5519983552688">
-        Reservar no WhatsApp
-      </a>
-    </div>
+<div class="container">
 
-    <div class="card">
-      <h2>Betoneira 400L</h2>
-      <p class="price">R$ 100 por dia</p>
-      <a class="btn" href="https://wa.me/5519983552688">
-        Reservar no WhatsApp
-      </a>
-    </div>
-
-    <div class="card">
-      <h2>Cortador de Grama</h2>
-      <p class="price">R$ 70 por dia</p>
-      <a class="btn" href="https://wa.me/5519983552688">
-        Reservar no WhatsApp
-      </a>
-    </div>
-
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1581090700227-1e8f2d2c2d6b" alt="Furadeira">
+    <h2>Furadeira Bosch</h2>
+    <p class="location">📍 Irapuã - SP</p>
+    <p class="price">R$ 30 por dia</p>
+    <a class="btn" href="https://wa.me/55SEUNUMEROAQUI">Reservar pelo WhatsApp</a>
   </div>
 
-  <footer>
-    MVP inicial - Plataforma de aluguel de ferramentas 🚀
-  </footer>
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1605146769289-440113cc3d00" alt="Betoneira">
+    <h2>Betoneira 400L</h2>
+    <p class="location">📍 Irapuã - SP</p>
+    <p class="price">R$ 100 por dia</p>
+    <a class="btn" href="https://wa.me/55SEUNUMEROAQUI">Reservar pelo WhatsApp</a>
+  </div>
+
+</div>
+
+<div class="announce">
+  <a href="https://wa.me/55SEUNUMEROAQUI">
+    Anuncie sua ferramenta no Obraí
+  </a>
+</div>
+
+<footer>
+  © 2026 Obraí - Plataforma de Aluguel de Ferramentas
+</footer>
 
 </body>
-</html>
-</html>
 </html>
