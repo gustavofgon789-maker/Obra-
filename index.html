@@ -16,25 +16,31 @@
     body {
       background-color: #f4f6f5;
     }
-    .hero {
-  background: linear-gradient(135deg, #145c43, #0f3d2e);
-  color: white;
+    .top-header {
+  background: #dff3e8; /* verde claro */
+  padding: 20px 0;
   text-align: center;
-  padding: 50px 20px;
 }
 
-.logo {
-  height: 90px;
-  margin-bottom: 15px;
+.logo-full {
+  width: 80%;
+  max-width: 400px;
 }
 
-.hero h1 {
-  margin: 10px 0;
+.hero-text {
+  text-align: center;
+  padding: 30px 20px;
+  background: white;
+}
+
+.hero-text h1 {
   font-size: 24px;
+  margin-bottom: 10px;
+  color: #145c43;
 }
 
-.hero p {
-  opacity: 0.9;
+.hero-text p {
+  color: #555;
 }
      .topo {
   width: 100%;
@@ -203,11 +209,14 @@
   
 <body>
 
-<header class="hero">
-  <img src="logo.png" alt="Obraí" class="logo">
+<header class="top-header">
+  <img src="logo.png" alt="Obraí" class="logo-full">
+</header>
+
+<section class="hero-text">
   <h1>Alugue ferramentas perto de você</h1>
   <p>Rápido, seguro e na sua cidade</p>
-</header>
+</section>
 
 <div class="search-bar">
   <input type="text" placeholder="Digite sua cidade...">
