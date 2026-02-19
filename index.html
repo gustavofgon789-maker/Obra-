@@ -16,6 +16,26 @@
     body {
       background-color: #f4f6f5;
     }
+    .hero {
+  background: linear-gradient(135deg, #145c43, #0f3d2e);
+  color: white;
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.logo {
+  height: 90px;
+  margin-bottom: 15px;
+}
+
+.hero h1 {
+  margin: 10px 0;
+  font-size: 24px;
+}
+
+.hero p {
+  opacity: 0.9;
+}
      .topo {
   width: 100%;
   margin: 0;
@@ -74,7 +94,30 @@
       max-width: 1000px;
       margin: auto;
     }
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-top: -25px;
+  margin-bottom: 30px;
+}
 
+.search-container input {
+  padding: 15px;
+  width: 60%;
+  border: none;
+  border-radius: 12px 0 0 12px;
+  outline: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.search-container button {
+  padding: 15px 20px;
+  border: none;
+  background: #145c43;
+  color: white;
+  border-radius: 0 12px 12px 0;
+  font-weight: bold;
+}
     .card {
       background: white;
       padding: 15px;
@@ -131,7 +174,18 @@
       border-radius: 10px;
       font-size: 16px;
     }
-
+.floating-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #145c43;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
     footer {
       background: #0f3d2e;
       color: white;
@@ -142,13 +196,24 @@
     }
   </style>
 </head>
-
+  
+<a href="anunciar.html" class="floating-btn">
+  + Anunciar
+</a>
+  
 <body>
 
-<header class="topo">
-  <img src="logo.png" alt="Obraí">
+<header class="hero">
+  <img src="logo.png" alt="Obraí" class="logo">
+  <h1>Alugue ferramentas perto de você</h1>
+  <p>Rápido, seguro e na sua cidade</p>
 </header>
-
+  
+<div class="search-container">
+  <input type="text" placeholder="Digite sua cidade...">
+  <button>Buscar</button>
+</div>
+  
 <div class="search-bar">
   <input type="text" placeholder="Digite sua cidade...">
   <button>Buscar</button>
