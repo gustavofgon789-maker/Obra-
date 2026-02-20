@@ -94,7 +94,7 @@ async function carregarAnuncios() {
     card.classList.add("card");
 
     card.innerHTML = `
-  <img src="${anuncio.imagem}" style="width:100%; border-radius:10px; margin-bottom:10px;">
+  ${anuncio.imagem ? `<img src="${anuncio.imagem}" style="width:100%; border-radius:10px; margin-bottom:10px;">` : ""}
   <h3>${anuncio.nome}</h3>
   <p class="price">R$ ${anuncio.preco} por dia</p>
   <p>${anuncio.cidade}</p>
