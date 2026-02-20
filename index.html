@@ -235,25 +235,71 @@
 </a>
   
 <body>
-  <script type="module">
-
+ <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
- const firebaseConfig = {
-    apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
-    authDomain: "obrai-56278.firebaseapp.com",
-    projectId: "obrai-56278",
-    storageBucket: "obrai-56278.firebasestorage.app",
-    messagingSenderId: "735990959965",
-    appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
-    measurementId: "G-080J3KWME7"
-  };
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "obrai-56278.firebaseapp.com",
+  projectId: "obrai-56278",
+  storageBucket: "obrai-56278.appspot.com", // CORRIGIDO
+  messagingSenderId: "735990959965",
+  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
+};
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-  </script>
+const lista = document.getElementById("listaAnuncios");
+
+async function carregarAnuncios() {
+  lista.innerHTML = ""; // limpa antes de carregar
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "anuncios"));
+
+    if (querySnapshot.empty) {
+      lista.innerHTML = "<p>Nenhum anúncio encontrado.</p>";
+      return;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const anuncio = doc.data();
+
+      // exige mínimo 2 imagens
+      if (!anuncio.imagens || anuncio.imagens.length < 2) return;
+
+      const card = document.createElement("div");
+      card.classList.add("card");
+
+      let imagensHTML = anuncio.imagens
+        .map(img => `<img src="${img}" alt="${anuncio.nome}">`)
+        .join("");
+
+      card.innerHTML = `
+        ${imagensHTML}
+        <h3>${anuncio.nome}</h3>
+        <p class="price">R$ ${anuncio.preco} por dia</p>
+        <p class="location">${anuncio.cidade}</p>
+        <a class="whatsapp-btn" 
+           href="https://wa.me/55${anuncio.whatsapp.replace(/\D/g,'')}" 
+           target="_blank">
+           Falar no WhatsApp
+        </a>
+      `;
+
+      lista.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error("Erro ao carregar anúncios:", error);
+    lista.innerHTML = "<p>Erro ao carregar anúncios.</p>";
+  }
+}
+
+carregarAnuncios();
+</script>
 <header class="top-header">
   <img src="logo.png" alt="Obraí" class="logo-full">
 </header>
@@ -280,115 +326,8 @@ const db = getFirestore(app);
 <footer>
   © 2026 Obraí - Plataforma de Aluguel de Ferramentas
 </footer>
-  <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
-  authDomain: "obrai-56278.firebaseapp.com",
-  projectId: "obrai-56278",
-  storageBucket: "obrai-56278.firebasestorage.app",
-  messagingSenderId: "735990959965",
-  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
-  measurementId: "G-080J3KWME7"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const lista = document.getElementById("listaAnuncios");
-
-async function carregarAnuncios() {
-  const querySnapshot = await getDocs(collection(db, "anuncios"));
-
-  querySnapshot.forEach((doc) => {
-    const anuncio = doc.data();
-
-    const card = document.createElement("div");
-    card.classList.add("card");
-
-    card.innerHTML = `
-      <h3>${anuncio.nome}</h3>
-      <p><strong>R$ ${anuncio.preco}</strong> por dia</p>
-      <p>${anuncio.cidade}</p>
-      <a class="whatsapp-btn" 
-   href="https://wa.me/55${anuncio.whatsapp.replace(/\D/g,'')}" 
-   target="_blank">
-
-  <svg class="whatsapp-icon" width:18px;height:18px viewBox="0 0 32 32">
-    <path d="M16 .4C7.2.4 0 7.5 0 16.3c0 2.9.8 5.7 2.3 8.1L0 32l7.8-2.2c2.3 1.3 5 2 8.2 2 8.8 0 16-7.1 16-15.9C32 7.5 24.8.4 16 .4zm0 29.1c-2.8 0-5.4-.8-7.7-2.1l-.6-.4-4.6 1.3 1.3-4.5-.4-.6C2.7 21.4 2 19 2 16.3 2 8.9 8.1 2.8 16 2.8s14 6.1 14 13.5-6.1 13.2-14 13.2zm7.8-9.9c-.4-.2-2.2-1.1-2.6-1.2-.4-.2-.7-.2-1 .2-.3.4-1.1 1.2-1.3 1.4-.2.2-.5.3-.9.1-.4-.2-1.8-.7-3.4-2.2-1.3-1.1-2.1-2.5-2.3-2.9-.2-.4 0-.6.2-.8.2-.2.4-.5.6-.7.2-.2.3-.4.4-.6.1-.2.1-.5 0-.7-.1-.2-1-2.4-1.4-3.3-.3-.8-.7-.7-1-.7h-.9c-.3 0-.7.1-1 .5-.4.4-1.5 1.5-1.5 3.7s1.6 4.3 1.8 4.6c.2.3 3.1 4.7 7.5 6.6 1 .4 1.9.6 2.5.8 1 .3 1.9.2 2.6.1.8-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5z"/>
-  </svg>
-
-  Falar no WhatsApp
-</a>
-    `;
-
-    lista.appendChild(card);
-  });
-}
-
-carregarAnuncios();
-
-  </script>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
-  authDomain: "obrai-56278.firebaseapp.com",
-  projectId: "obrai-56278",
-  storageBucket: "obrai-56278.firebasestorage.app",
-  messagingSenderId: "735990959965",
-  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
-  measurementId: "G-080J3KWME7"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const lista = document.getElementById("listaAnuncios");
-
-async function carregarAnuncios() {
-  const querySnapshot = await getDocs(collection(db, "anuncios"));
-
-  querySnapshot.forEach((doc) => {
-    const anuncio = doc.data();
-
-    // Verifica se tem pelo menos 2 imagens
-    if (!anuncio.imagens || anuncio.imagens.length < 2) return;
-
-    const card = document.createElement("div");
-    card.classList.add("card");
-
-    // Monta as imagens
-    let imagensHTML = '';
-    anuncio.imagens.forEach((imgUrl) => {
-      imagensHTML += `<img src="${imgUrl}" alt="${anuncio.nome}">`;
-    });
-
-    card.innerHTML = `
-      ${imagensHTML}
-      <h3>${anuncio.nome}</h3>
-      <p class="price">R$ ${anuncio.preco} por dia</p>
-      <p class="location">${anuncio.cidade}</p>
-      <a class="whatsapp-btn" href="https://wa.me/55${anuncio.whatsapp.replace(/\D/g,'')}" target="_blank">
-        <svg class="whatsapp-icon" viewBox="0 0 32 32" width="20" height="20" fill="white">
-          <path d="M16 .4C7.2.4 0 7.5 0 16.3c0 2.9.8 5.7 2.3 8.1L0 32l7.8-2.2c2.3 1.3 5 2 8.2 2 8.8 0 16-7.1 16-15.9C32 7.5 24.8.4 16 .4zm0 29.1c-2.8 0-5.4-.8-7.7-2.1l-.6-.4-4.6 1.3 1.3-4.5-.4-.6C2.7 21.4 2 19 2 16.3 2 8.9 8.1 2.8 16 2.8s14 6.1 14 13.5-6.1 13.2-14 13.2zm7.8-9.9c-.4-.2-2.2-1.1-2.6-1.2-.4-.2-.7-.2-1 .2-.3.4-1.1 1.2-1.3 1.4-.2.2-.5.3-.9.1-.4-.2-1.8-.7-3.4-2.2-1.3-1.1-2.1-2.5-2.3-2.9-.2-.4 0-.6.2-.8.2-.2.4-.5.6-.7.2-.2.3-.4.4-.6.1-.2.1-.5 0-.7-.1-.2-1-2.4-1.4-3.3-.3-.8-.7-.7-1-.7h-.9c-.3 0-.7.1-1 .5-.4.4-1.5 1.5-1.5 3.7s1.6 4.3 1.8 4.6c.2.3 3.1 4.7 7.5 6.6 1 .4 1.9.6 2.5.8 1 .3 1.9.2 2.6.1.8-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5z"/>
-        </svg>
-        Falar no WhatsApp
-      </a>
-    `;
-
-    lista.appendChild(card);
-  });
-}
-
-carregarAnuncios();
-</script>
   
 </body>
   
