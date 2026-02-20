@@ -3,38 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Obraí - Anunciar Ferramenta</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f5;
-    margin: 0;
-    padding: 0;
-  }
-  header {
-    background: #0f3d2e;
-    color: white;
-    text-align: center;
-    padding: 25px 20px;
-  }
-  header h1 { font-size: 28px; }
-  .container {
-    max-width: 600px;
-    margin: 30px auto;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-  input, select, textarea {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
+<title>Anunciar - Obraí</title>
+</head>
+<body style="font-family: Arial; padding:20px;">
 
+<h2>Anunciar Ferramenta</h2>
+
+<form id="formAnuncio">
+  <input id="nome" type="text" placeholder="Nome da ferramenta" required><br><br>
+  <input id="preco" type="number" placeholder="Preço por dia" required><br><br>
+  <input id="cidade" type="text" placeholder="Cidade" required><br><br>
+
+  <button type="submit">Publicar</button>
+</form>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "COLE_SUA_API_KEY_AQUI",
+  authDomain: "obrai-56278.firebaseapp.com",
+  projectId: "obrai-56278",
+  storageBucket: "obrai-56278.appspot.com",
+  messagingSenderId: "735990959965",
+  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+document.getElementById("formAnuncio").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const nome = document.getElementById("nome").value;
+  const preco = document.getElementById("preco").value;
+  const cidade = document.getElementById("cidade").value;
+
+  try {
+    await addDoc(collection(db, "anuncios"), {
+      nome,
+      preco,
+      cidade,
+      criadoEm: new Date()
+    });
+
+    alert("Anúncio criado com sucesso!");
+    window.location.href = "index.html";
+
+  } catch (error) {
+    alert("Erro ao salvar anúncio");
+  }
+});
+</script>
+
+</body>
+</html>
   footer {
       background: #0f3d2e;
       color: white;
