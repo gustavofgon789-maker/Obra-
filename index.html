@@ -80,7 +80,13 @@ header {
   <div class="topo">
   <img src="logo.png" alt="Obraí Logo">
   </div>
-
+<div class="filtros" style="text-align: center; margin: 20px 0; overflow-x: auto; white-space: nowrap; padding: 10px;">
+  <button onclick="filtrar('Todas')" style="padding: 8px 15px; margin: 5px; border-radius: 20px; border: 1px solid #145c43; background: #145c43; color: white; cursor: pointer;">Todas</button>
+  <button onclick="filtrar('Eletricas')" style="padding: 8px 15px; margin: 5px; border-radius: 20px; border: 1px solid #145c43; background: white; cursor: pointer;">Elétricas</button>
+  <button onclick="filtrar('Jardinagem')" style="padding: 8px 15px; margin: 5px; border-radius: 20px; border: 1px solid #145c43; background: white; cursor: pointer;">Jardinagem</button>
+  <button onclick="filtrar('Construcao')" style="padding: 8px 15px; margin: 5px; border-radius: 20px; border: 1px solid #145c43; background: white; cursor: pointer;">Construção</button>
+</div>
+  
 <header>
   <h1>Ferramentas Disponíveis</h1>
 </header>
@@ -109,22 +115,31 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const lista = document.getElementById("listaAnuncios");
 
-async function carregarAnuncios() {
-  lista.innerHTML = "Carregando anúncios...";
+async function carregarAnuncios(filtro = "Todas") {
+  lista.innerHTML = "Carregando...";
+  const querySnapshot = await getDocs(collection(db, "anuncios"));
+  lista.innerHTML = "";
 
-  try {
-    const querySnapshot = await getDocs(collection(db, "anuncios"));
-    lista.innerHTML = ""; // Limpa o "Carregando..."
+  querySnapshot.forEach((doc) => {
+    const anuncio = doc.data();
 
-    if (querySnapshot.empty) {
-      lista.innerHTML = "<p>Nenhum anúncio encontrado.</p>";
-      return;
+    // Lógica de Filtro
+    if (filtro !== "Todas" && anuncio.categoria !== filtro) {
+      return; // Pula este anúncio se não for da categoria selecionada
     }
 
-    querySnapshot.forEach((doc) => {
-      const anuncio = doc.data();
-      const card = document.createElement("div");
-      card.classList.add("card");
+    const card = document.createElement("div");
+    card.classList.add("card");
+    // ... resto do seu código de montar o card ...
+    lista.appendChild(card);
+  });
+}
+
+// Função global para os botões chamarem
+window.filtrar = (categoria) => {
+  carregarAnuncios(categoria);
+};
+
 
       // Montando o HTML do card de forma organizada
       card.innerHTML = `
