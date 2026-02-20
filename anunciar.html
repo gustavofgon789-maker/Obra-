@@ -80,70 +80,44 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
+  apiKey: "SUA_API_KEY_AQUI",
   authDomain: "obrai-56278.firebaseapp.com",
   projectId: "obrai-56278",
-  storageBucket: "obrai-56278.firebasestorage.app",
+  storageBucket: "obrai-56278.appspot.com",
   messagingSenderId: "735990959965",
-  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
-  measurementId: "G-080J3KWME7"
+  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
 const form = document.getElementById("formAnuncio");
-const mensagem = document.getElementById("mensagem");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const nome = document.getElementById("nome").value.trim();
-  const preco = document.getElementById("preco").value.trim();
-  const cidade = document.getElementById("cidade").value.trim();
-  const whatsapp = document.getElementById("whatsapp").value.trim();
-  const imagens = document.getElementById("imagens").files;
+  console.log("Tentando salvar...");
 
-  if (imagens.length < 2) {
-    mensagem.style.color = "red";
-    mensagem.innerText = "Envie pelo menos 2 fotos da ferramenta!";
-    return;
-  }
-
-  mensagem.style.color = "green";
-  mensagem.innerText = "Enviando anúncio... ⏳";
+  const nome = document.getElementById("nome").value;
+  const preco = document.getElementById("preco").value;
+  const cidade = document.getElementById("cidade").value;
 
   try {
-    // Upload das imagens para Storage
-    const urls = [];
-    for (let i = 0; i < imagens.length; i++) {
-      const file = imagens[i];
-      const storageRef = ref(storage, `imagens/${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      urls.push(url);
-    }
-
-    // Salvar anúncio no Firestore
     await addDoc(collection(db, "anuncios"), {
-      nome,
-      preco,
-      cidade,
-      whatsapp,
-      imagens: urls,
-      criadoEm: Date.now()
+      nome: nome,
+      preco: preco,
+      cidade: cidade,
+      criadoEm: new Date()
     });
 
-    mensagem.innerText = "Anúncio enviado com sucesso! 🚀";
+    alert("Anúncio criado com sucesso!");
     form.reset();
+
   } catch (error) {
-    console.error(error);
-    mensagem.style.color = "red";
-    mensagem.innerText = "Erro ao enviar anúncio. Tente novamente.";
+    console.error("Erro ao salvar:", error);
+    alert("Erro ao salvar anúncio. Veja o console.");
   }
 });
 </script>
