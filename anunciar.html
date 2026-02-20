@@ -1,76 +1,130 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anunciar</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anunciar - Obrahhí</title>
 
-<style>
-  button {
-  margin-top: 10px;
-  }
-  body {
-    font-family: Arial;
-    background: #f4f6f5;
-    margin: 0;
-  }
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f1;
+      margin: 0;
+      color: #333;
+    }
 
-  header {
-    background: #145c43;
-    color: white;
-    text-align: center;
-    padding: 20px;
-  }
+    header {
+      background: #145c43;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
 
-  .container {
-    max-width: 500px;
-    margin: 30px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-  }
+    .container {
+      max-width: 450px;
+      margin: -30px auto 40px; /* Sobe um pouco para sobrepor o header */
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
 
-  input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #145c43;
+      font-size: 14px;
+    }
 
-  button {
-    width: 100%;
-    padding: 14px;
-    background: #145c43;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-  }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      box-sizing: border-box; /* Garante que o padding não quebre a largura */
+      transition: border-color 0.3s;
+    }
 
-  .msg {
-    text-align: center;
-    margin-top: 10px;
-    color: green;
-    font-weight: bold;
-  }
-</style>
+    input:focus {
+      outline: none;
+      border-color: #145c43;
+      box-shadow: 0 0 5px rgba(20, 92, 67, 0.2);
+    }
+
+    .file-input-group {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px dashed #ccc;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: #145c43;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #0e4231;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .btn-voltar {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
   <h1>Anunciar Ferramenta</h1>
+  <p>Preencha os dados abaixo para alugar sua ferramenta</p>
 </header>
 
 <div class="container">
-  <input type="text" id="nome" placeholder="Nome da ferramenta">
-  <input type="text" id="preco" placeholder="Preço por dia">
-  <input type="text" id="cidade" placeholder="Cidade">
-  <input type="text" id="whatsapp" placeholder="WhatsApp (somente números)">
-  <button type="button" id="btnPublicar">Publicar</button>
-  <input type="file" id="imagem">
-  <div class="msg" id="msg"></div>
+  <label for="nome">O que você está alugando?</label>
+  <input type="text" id="nome" placeholder="Ex: Furadeira Bosch 220v">
+
+  <label for="preco">Preço da diária (R$)</label>
+  <input type="number" id="preco" placeholder="Ex: 50">
+
+  <label for="cidade">Sua Cidade/Bairro</label>
+  <input type="text" id="cidade" placeholder="Ex: São Paulo - Centro">
+
+  <label for="whatsapp">Seu WhatsApp</label>
+  <input type="tel" id="whatsapp" placeholder="Ex: 11999999999">
+
+  <label>Foto da Ferramenta</label>
+  <div class="file-input-group">
+    <input type="file" id="imagem" accept="image/*" style="margin-bottom: 0; border: none; background: none;">
+  </div>
+
+  <button type="button" id="btnPublicar">Publicar Anúncio</button>
+  
+  <a href="index.html" class="btn-voltar">← Voltar para a lista</a>
+  <div id="msg"></div>
 </div>
 
 <script type="module">
@@ -91,31 +145,52 @@ const db = getFirestore(app);
 
 const btn = document.getElementById("btnPublicar");
 
-btn.addEventListener("click", async () => {
+// Função para converter imagem para texto (Base64)
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
 
+btn.addEventListener("click", async () => {
   const nome = document.getElementById("nome").value;
   const preco = document.getElementById("preco").value;
   const cidade = document.getElementById("cidade").value;
   const whatsapp = document.getElementById("whatsapp").value;
+  const inputImagem = document.getElementById("imagem");
+
+  if(!nome || !preco || !whatsapp) {
+    alert("Por favor, preencha os campos obrigatórios.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerText = "Publicando...";
 
   try {
+    let fotoString = "";
+    if (inputImagem.files.length > 0) {
+      fotoString = await toBase64(inputImagem.files[0]);
+    }
 
     await addDoc(collection(db, "anuncios"), {
       nome,
       preco,
       cidade,
       whatsapp,
-      imagem: ""
+      imagem: fotoString,
+      dataCriacao: new Date()
     });
 
-    alert("Publicado com sucesso!");
+    alert("Anúncio publicado com sucesso!");
     window.location.href = "index.html";
 
   } catch (error) {
-    alert("Erro: " + error.message);
-    console.error(error);
+    alert("Erro ao publicar: " + error.message);
+    btn.disabled = false;
+    btn.innerText = "Publicar Anúncio";
   }
-
 });
 </script>
 
