@@ -6,6 +6,9 @@
 <title>Anunciar</title>
 
 <style>
+  button {
+  margin-top: 10px;
+  }
   body {
     font-family: Arial;
     background: #f4f6f5;
@@ -87,6 +90,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+  alert("JS carregado");
 const btn = document.getElementById("btnPublicar");
 btn.addEventListener("click", publicar);
 
