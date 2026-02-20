@@ -120,14 +120,15 @@ window.publicar = async function() {
       whatsapp,
       imagem: imageUrl
     });
-
+    {
     alert("Anúncio publicado com imagem!");
     window.location.href = "index.html";
 
-  } catch (error) {
-    alert("Erro ao publicar");
-    console.error(error);
-  }
+  } 
+  catch (error) {
+  alert("Erro: " + error.message);
+  console.error(error);
+}
 }
 </script>
 
