@@ -155,6 +155,22 @@
       margin-top: 8px;
     }
 
+    .whatsapp-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #25D366;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.whatsapp-btn:hover {
+  background: #1ebe5d;
+}
+    
     .btn {
       display: inline-block;
       margin-top: 12px;
@@ -288,9 +304,11 @@ async function carregarAnuncios() {
       <h3>${anuncio.nome}</h3>
       <p><strong>R$ ${anuncio.preco}</strong> por dia</p>
       <p>${anuncio.cidade}</p>
-      <a href="https://wa.me/55${anuncio.whatsapp.replace(/\D/g,'')}" target="_blank">
-        📲 Falar no WhatsApp
-      </a>
+      <a class="whatsapp-btn" 
+   href="https://wa.me/55${anuncio.whatsapp.replace(/\D/g,'')}" 
+   target="_blank">
+   💬 Falar no WhatsApp
+</a>
     `;
 
     lista.appendChild(card);
