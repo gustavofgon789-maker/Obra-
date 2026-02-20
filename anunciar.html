@@ -4,16 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anunciar - Obraí</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f5;
+  margin: 0;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+}
+
+form {
+  max-width: 400px;
+  margin: 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #0f3d2e;
+  color: white;
+  border: none;
+}
+</style>
+
 </head>
-<body style="font-family: Arial; padding:20px;">
+<body>
 
 <h2>Anunciar Ferramenta</h2>
 
 <form id="formAnuncio">
-  <input id="nome" type="text" placeholder="Nome da ferramenta" required><br><br>
-  <input id="preco" type="number" placeholder="Preço por dia" required><br><br>
-  <input id="cidade" type="text" placeholder="Cidade" required><br><br>
-
+  <input id="nome" type="text" placeholder="Nome da ferramenta" required>
+  <input id="preco" type="number" placeholder="Preço por dia" required>
+  <input id="cidade" type="text" placeholder="Cidade" required>
   <button type="submit">Publicar</button>
 </form>
 
@@ -22,7 +57,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "COLE_SUA_API_KEY_AQUI",
+  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
   authDomain: "obrai-56278.firebaseapp.com",
   projectId: "obrai-56278",
   storageBucket: "obrai-56278.appspot.com",
@@ -52,106 +87,10 @@ document.getElementById("formAnuncio").addEventListener("submit", async (e) => {
     window.location.href = "index.html";
 
   } catch (error) {
-    alert("Erro ao salvar anúncio");
+    alert("Erro ao salvar anúncio.");
   }
 });
 </script>
 
 </body>
 </html>
-  footer {
-      background: #0f3d2e;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      font-size: 14px;
-  }
-  
-  button {
-    width: 100%;
-    padding: 14px;
-    background: #0f3d2e;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  button:hover { background: #145c43; }
-  .message { text-align: center; margin-top: 10px; color: green; font-weight: bold; }
-</style>
-</head>
-<body>
-
-<header>
-  <h1>Anunciar Ferramenta</h1>
-  <p>Preencha os dados para seu anúncio aparecer no Obraí</p>
-</header>
-
-<div class="container">
-  <form id="formAnuncio">
-
-<input id="nome" type="text" placeholder="Nome da ferramenta" required>
-<input id="preco" type="number" placeholder="Preço por dia" required>
-<input id="cidade" type="text" placeholder="Cidade" required>
-
-<button type="submit">Publicar</button>
-
-</form>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-const firebaseConfig = {
-  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
-  authDomain: "obrai-56278.firebaseapp.com",
-  projectId: "obrai-56278",
-  storageBucket: "obrai-56278.firebasestorage.app",
-  messagingSenderId: "735990959965",
-  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
-  measurementId: "G-080J3KWME7"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const form = document.getElementById("formAnuncio");
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  console.log("Tentando salvar...");
-
-  const nome = document.getElementById("nome").value;
-  const preco = document.getElementById("preco").value;
-  const cidade = document.getElementById("cidade").value;
-
-  try {
-    await addDoc(collection(db, "anuncios"), {
-      nome: nome,
-      preco: preco,
-      cidade: cidade,
-      criadoEm: new Date()
-    });
-
-    alert("Anúncio criado com sucesso!");
-    form.reset();
-
-  } catch (error) {
-    console.error("Erro ao salvar:", error);
-    alert("Erro ao salvar anúncio. Veja o console.");
-  }
-});
-</script>
-
-</body>
-  
-</html>      
-
-<footer>
-  © 2026 Obraí - Plataforma de Aluguel de Ferramentas
-</footer>
