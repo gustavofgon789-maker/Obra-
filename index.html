@@ -125,11 +125,11 @@
   font-weight: bold;
 }
     .card {
-      background: white;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  background: white;
+  padding: 15px;
+  margin: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     .card img {
@@ -245,28 +245,61 @@ alert("Firebase conectado 🚀");
 
 <div class="container">
 
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1581090700227-1e8f2d2c2d6b" alt="Furadeira">
-    <h2>Furadeira Bosch</h2>
-    <p class="location">📍 Irapuã - SP</p>
-    <p class="price">R$ 30 por dia</p>
-    <a class="btn" href="https://wa.me/5519983552688">Reservar pelo WhatsApp</a>
-  </div>
-
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1605146769289-440113cc3d00" alt="Betoneira">
-    <h2>Betoneira 400L</h2>
-    <p class="location">📍 Irapuã - SP</p>
-    <p class="price">R$ 100 por dia</p>
-    <a class="btn" href="https://wa.me/5519983552688">Reservar pelo WhatsApp</a>
-  </div>
+  <section class="anuncios">
+  <h2>Ferramentas disponíveis</h2>
+  <div id="listaAnuncios"></div>
+</section>
 
 </div>
 
 <footer>
   © 2026 Obraí - Plataforma de Aluguel de Ferramentas
 </footer>
-  
+  <script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
+  authDomain: "obrai-56278.firebaseapp.com",
+  projectId: "obrai-56278",
+  storageBucket: "obrai-56278.firebasestorage.app",
+  messagingSenderId: "735990959965",
+  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
+  measurementId: "G-080J3KWME7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const lista = document.getElementById("listaAnuncios");
+
+async function carregarAnuncios() {
+  const querySnapshot = await getDocs(collection(db, "anuncios"));
+
+  querySnapshot.forEach((doc) => {
+    const anuncio = doc.data();
+
+    const card = document.createElement("div");
+    card.classList.add("card");
+
+    card.innerHTML = `
+      <h3>${anuncio.nome}</h3>
+      <p><strong>R$ ${anuncio.preco}</strong> por dia</p>
+      <p>${anuncio.cidade}</p>
+      <a href="https://wa.me/55${anuncio.whatsapp.replace(/\D/g,'')}" target="_blank">
+        📲 Falar no WhatsApp
+      </a>
+    `;
+
+    lista.appendChild(card);
+  });
+}
+
+carregarAnuncios();
+
+  </script>
 </body>
   
 </html>
