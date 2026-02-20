@@ -36,7 +36,6 @@
       border-radius: 8px;
       border: 1px solid #ccc;
     }
-
     button {
       width: 100%;
       padding: 14px;
@@ -66,6 +65,8 @@
 
 <div class="container">
   <form id="formAnuncio">
+    <label>Fotos da ferramenta (mínimo 2)</label>
+<input type="file" id="fotos" multiple accept="image/*" required>
     <input type="text" id="nome" placeholder="Ex: Betoneira 400L" required>
 
 <input type="number" id="preco" placeholder="Ex: 80" required>
@@ -98,7 +99,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const fotosInput = document.getElementById("fotos");
 
+if (fotosInput.files.length < 2) {
+  alert("Você precisa enviar no mínimo 2 fotos.");
+  return;
+}
 const form = document.getElementById("formAnuncio");
 
 form.addEventListener("submit", async (e) => {
