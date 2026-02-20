@@ -94,11 +94,14 @@ async function carregarAnuncios() {
     card.classList.add("card");
 
     card.innerHTML = `
-      <h3>${anuncio.nome}</h3>
-      <p class="price">R$ ${anuncio.preco} por dia</p>
-      <p>${anuncio.cidade}</p>
-      <p>${anuncio.whatsapp}</p>
-    `;
+  <img src="${anuncio.imagem}" style="width:100%; border-radius:10px; margin-bottom:10px;">
+  <h3>${anuncio.nome}</h3>
+  <p class="price">R$ ${anuncio.preco} por dia</p>
+  <p>${anuncio.cidade}</p>
+  <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank">
+    Falar no WhatsApp
+  </a>
+`;
 
     lista.appendChild(card);
   });
