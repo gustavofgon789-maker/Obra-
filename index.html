@@ -37,7 +37,31 @@
       font-weight: bold;
       color: #145c43;
     }
+.topo {
+  background: #145c43;
+  text-align: center;
+  padding: 15px 0;
+}
 
+.topo img {
+  max-width: 180px;
+}
+
+header {
+  display: none; /* esconde o título antigo */
+}
+
+.container {
+  margin-top: 20px;
+}
+
+.card {
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
     .floating-btn {
       position: fixed;
       bottom: 20px;
@@ -53,6 +77,9 @@
 </head>
 
 <body>
+  <div class="topo">
+  <img src="logo.png" alt="Obraí Logo">
+  </div>
 
 <header>
   <h1>Ferramentas Disponíveis</h1>
@@ -99,10 +126,20 @@ async function carregarAnuncios() {
       <h3>${anuncio.nome}</h3>
       <p class="price">R$ ${anuncio.preco} por dia</p>
       <p>${anuncio.cidade}</p>
-      <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank">
-        Falar no WhatsApp
-      </a>
-    `;
+      <a href="https://wa.me/55${anuncio.whatsapp}" 
+   target="_blank"
+   style="
+     display:inline-block;
+     margin-top:10px;
+     padding:10px 15px;
+     background:#25D366;
+     color:white;
+     text-decoration:none;
+     border-radius:8px;
+     font-weight:bold;
+   ">
+   Falar no WhatsApp
+</a>
 
     lista.appendChild(card);
   });
