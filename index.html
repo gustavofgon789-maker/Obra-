@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Obraí - Alugue Ferramentas Perto de Você</title>
 
+<h2>Ferramentas disponíveis</h2>
+<div id="listaAnuncios"></div>
+  
   <style>
     * {
       margin: 0;
@@ -327,7 +330,62 @@ carregarAnuncios();
   © 2026 Obraí - Plataforma de Aluguel de Ferramentas
 </footer>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+const firebaseConfig = {
+  apiKey: "COLE_SUA_API_KEY_AQUI",
+  authDomain: "obrai-56278.firebaseapp.com",
+  projectId: "obrai-56278",
+  storageBucket: "obrai-56278.appspot.com",
+  messagingSenderId: "735990959965",
+  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const lista = document.getElementById("listaAnuncios");
+
+async function carregarAnuncios() {
+  lista.innerHTML = "";
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "anuncios"));
+
+    console.log("Encontrados:", querySnapshot.size);
+
+    if (querySnapshot.empty) {
+      lista.innerHTML = "<p>Nenhum anúncio encontrado.</p>";
+      return;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const anuncio = doc.data();
+
+      const card = document.createElement("div");
+      card.style.background = "white";
+      card.style.padding = "15px";
+      card.style.marginBottom = "15px";
+      card.style.borderRadius = "10px";
+
+      card.innerHTML = `
+        <h3>${anuncio.nome}</h3>
+        <p>Preço: R$ ${anuncio.preco}</p>
+        <p>Cidade: ${anuncio.cidade}</p>
+      `;
+
+      lista.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error("Erro ao carregar:", error);
+  }
+}
+
+carregarAnuncios();
+</script>
   
 </body>
   
