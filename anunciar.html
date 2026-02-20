@@ -87,8 +87,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const btn = document.getElementById("btnPublicar");
+btn.addEventListener("click", publicar);
 
-window.publicar = async function() {
+async function publicar() {
 
   const nome = document.getElementById("nome").value;
   const preco = document.getElementById("preco").value;
