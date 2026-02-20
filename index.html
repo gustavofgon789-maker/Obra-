@@ -3,240 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Obraí - Alugue Ferramentas Perto de Você</title>
-
+  <title>Obraí</title>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
     body {
-      background-color: #f4f6f5;
+      font-family: Arial, sans-serif;
+      background: #f4f6f5;
+      margin: 0;
     }
-    .top-header {
-  background: #145c43;
-  padding: 20px 0;
-  text-align: center;
-}
 
-.logo-full {
-  width: 100%;
-  max-width: 400px;
-}
-
-.hero-text {
-  text-align: center;
-  padding: 30px 20px;
-  background: #f4f6f5;
-}
-
-.hero-text h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #145c43;
-}
-
-.hero-text p {
-  color: #555;
-}
-     .topo {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.topo img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
     header {
-      background: #0f3d2e;
+      background: #145c43;
       color: white;
-      padding: 25px 20px;
       text-align: center;
-    }
-
-    header h1 {
-      font-size: 32px;
-      letter-spacing: 1px;
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 16px;
-      opacity: 0.9;
-    }
-
-    .search-bar {
-      margin: 20px auto;
-      max-width: 500px;
-      display: flex;
-      gap: 10px;
-      padding: 0 20px;
-    }
-
-    .search-bar input {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    .search-bar button {
-      padding: 12px 18px;
-      border: none;
-      border-radius: 8px;
-      background: #0f3d2e;
-      color: white;
-      cursor: pointer;
+      padding: 20px;
     }
 
     .container {
-      padding: 20px;
-      max-width: 1000px;
-      margin: auto;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 15px;
     }
-.search-container {
-  display: flex;
-  justify-content: center;
-  margin-top: -25px;
-  margin-bottom: 30px;
-}
 
-.search-container input {
-  padding: 15px;
-  width: 60%;
-  border: none;
-  border-radius: 12px 0 0 12px;
-  outline: none;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.search-container button {
-  padding: 15px 20px;
-  border: none;
-  background: #145c43;
-  color: white;
-  border-radius: 0 12px 12px 0;
-  font-weight: bold;
-}
     .card {
-  background: white;
-  padding: 15px;
-  margin: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .card img {
-      width: 100%;
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
       border-radius: 10px;
-      margin-bottom: 10px;
-    }
-
-    .card h2 {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-
-    .location {
-      font-size: 14px;
-      color: #666;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     .price {
-      font-size: 18px;
-      color: #0f3d2e;
       font-weight: bold;
-      margin-top: 8px;
+      color: #145c43;
     }
-    
-    .whatsapp-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding: 10px 16px;
-  background: #25D366;
-  color: white;
-  text-decoration: none;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 14px;
-  box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
-  transition: all 0.3s ease;
-}
 
-.whatsapp-btn:hover {
-  background: #1ebe5d;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4);
-}
-
-.whatsapp-icon {
-  width: 18px;
-  height: 18px;
-  fill: white;
-}
-    .btn {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 12px;
-      background: #0f3d2e;
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #145c43;
       color: white;
+      padding: 15px 20px;
+      border-radius: 50px;
       text-decoration: none;
-      border-radius: 8px;
-      text-align: center;
-      width: 100%;
-    }
-
-    .announce {
-      text-align: center;
-      margin: 40px 20px;
-    }
-
-    .announce a {
-      padding: 14px 25px;
-      background: #1d6b50;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-size: 16px;
-    }
-.floating-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #145c43;
-  color: white;
-  padding: 15px 20px;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: bold;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-    footer {
-      background: #0f3d2e;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      font-size: 14px;
+      font-weight: bold;
     }
   </style>
 </head>
-  
-<a href="anunciar.html" class="floating-btn">
-  + Anunciar
-</a>
-  
+
 <body>
- <script type="module">
+
+<header>
+  <h1>Ferramentas Disponíveis</h1>
+</header>
+
+<div class="container">
+  <div id="listaAnuncios"></div>
+</div>
+
+<a href="anunciar.html" class="floating-btn">+ Anunciar</a>
+
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -246,8 +74,7 @@ const firebaseConfig = {
   projectId: "obrai-56278",
   storageBucket: "obrai-56278.firebasestorage.app",
   messagingSenderId: "735990959965",
-  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
-  measurementId: "G-080J3KWME7"
+  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -256,80 +83,29 @@ const db = getFirestore(app);
 const lista = document.getElementById("listaAnuncios");
 
 async function carregarAnuncios() {
-  lista.innerHTML = ""; // limpa antes de carregar
+  lista.innerHTML = "";
 
-  try {
-    const querySnapshot = await getDocs(collection(db, "anuncios"));
+  const querySnapshot = await getDocs(collection(db, "anuncios"));
 
-    if (querySnapshot.empty) {
-      lista.innerHTML = "<p>Nenhum anúncio encontrado.</p>";
-      return;
-    }
+  querySnapshot.forEach((doc) => {
+    const anuncio = doc.data();
 
-    querySnapshot.forEach((doc) => {
-      const anuncio = doc.data();
+    const card = document.createElement("div");
+    card.classList.add("card");
 
-      // exige mínimo 2 imagens
-      if (!anuncio.imagens || anuncio.imagens.length < 2) return;
+    card.innerHTML = `
+      <h3>${anuncio.nome}</h3>
+      <p class="price">R$ ${anuncio.preco} por dia</p>
+      <p>${anuncio.cidade}</p>
+      <p>${anuncio.whatsapp}</p>
+    `;
 
-      const card = document.createElement("div");
-      card.classList.add("card");
-
-      let imagensHTML = anuncio.imagens
-        .map(img => `<img src="${img}" alt="${anuncio.nome}">`)
-        .join("");
-
-      card.innerHTML = `
-        ${imagensHTML}
-        <h3>${anuncio.nome}</h3>
-        <p class="price">R$ ${anuncio.preco} por dia</p>
-        <p class="location">${anuncio.cidade}</p>
-        <a class="whatsapp-btn" 
-           href="https://wa.me/55${anuncio.whatsapp.replace(/\D/g,'')}" 
-           target="_blank">
-           Falar no WhatsApp
-        </a>
-      `;
-
-      lista.appendChild(card);
-    });
-
-  } catch (error) {
-    console.error("Erro ao carregar anúncios:", error);
-    lista.innerHTML = "<p>Erro ao carregar anúncios.</p>";
-  }
+    lista.appendChild(card);
+  });
 }
 
 carregarAnuncios();
 </script>
-<header class="top-header">
-  <img src="logo.png" alt="Obraí" class="logo-full">
-</header>
-
-<section class="hero-text">
-  <h1>Alugue ferramentas perto de você</h1>
-  <p>Rápido, seguro e na sua cidade</p>
-</section>
-
-<div class="search-bar">
-  <input type="text" placeholder="Digite sua cidade...">
-  <button>Buscar</button>
-</div>
-
-<div class="container">
-
-  <section class="anuncios">
-  <h2>Ferramentas disponíveis</h2>
-  <div id="listaAnuncios"></div>
-</section>
-
-</div>
-
-<footer>
-  © 2026 Obraí - Plataforma de Aluguel de Ferramentas
-</footer>
-
 
 </body>
-  
 </html>
