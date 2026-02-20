@@ -139,7 +139,29 @@ const firebaseConfig = {
   messagingSenderId: "735990959965",
   appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
 };
+// Seleciona o campo de WhatsApp
+const campoWhatsapp = document.getElementById("whatsapp");
 
+// Função que aplica a máscara (11) 99999-9999
+campoWhatsapp.addEventListener("input", (e) => {
+  let valor = e.target.value.replace(/\D/g, ""); // Remove tudo que não é número
+  
+  if (valor.length > 11) valor = valor.slice(0, 11); // Limita a 11 dígitos
+
+  // Aplica a formatação visual
+  if (valor.length > 10) {
+    valor = valor.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+  } else if (valor.length > 6) {
+    valor = valor.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+  } else if (valor.length > 2) {
+    valor = valor.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+  } else if (valor.length > 0) {
+    valor = valor.replace(/^(\d*)/, "($1");
+  }
+  
+  e.target.value = valor;
+});
+  
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -157,7 +179,9 @@ btn.addEventListener("click", async () => {
   const nome = document.getElementById("nome").value;
   const preco = document.getElementById("preco").value;
   const cidade = document.getElementById("cidade").value;
-  const whatsapp = document.getElementById("whatsapp").value;
+  // Pega o valor e remove ( ) - e espaços antes de salvar
+const whatsappBruto = document.getElementById("whatsapp").value.replace(/\D/g, "");
+
   const inputImagem = document.getElementById("imagem");
 
   if(!nome || !preco || !whatsapp) {
@@ -175,13 +199,14 @@ btn.addEventListener("click", async () => {
     }
 
     await addDoc(collection(db, "anuncios"), {
-      nome,
-      preco,
-      cidade,
-      whatsapp,
-      imagem: fotoString,
-      dataCriacao: new Date()
-    });
+  nome,
+  preco,
+  cidade,
+  whatsapp: whatsappBruto, // Salva só os números: 11999999999
+  imagem: fotoString,
+  dataCriacao: new Date()
+});
+
 
     alert("Anúncio publicado com sucesso!");
     window.location.href = "index.html";
