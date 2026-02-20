@@ -68,7 +68,7 @@
   <input type="text" id="preco" placeholder="Preço por dia">
   <input type="text" id="cidade" placeholder="Cidade">
   <input type="text" id="whatsapp" placeholder="WhatsApp (somente números)">
-  <button id="btnPublicar">Publicar</button>
+  <button type="button" id="btnPublicar">Publicar</button>
   <input type="file" id="imagem">
   <div class="msg" id="msg"></div>
 </div>
@@ -76,7 +76,6 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -89,53 +88,35 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
-  alert("JS carregado");
-const btn = document.getElementById("btnPublicar");
-btn.addEventListener("click", publicar);
 
-async function publicar() {
+const btn = document.getElementById("btnPublicar");
+
+btn.addEventListener("click", async () => {
 
   const nome = document.getElementById("nome").value;
   const preco = document.getElementById("preco").value;
   const cidade = document.getElementById("cidade").value;
   const whatsapp = document.getElementById("whatsapp").value;
-  const imagemFile = document.getElementById("imagem").files[0];
-
-  if (!imagemFile) {
-    alert("Selecione uma imagem");
-    return;
-  }
 
   try {
 
-    // cria referência no storage
-    const storageRef = ref(storage, "anuncios/" + Date.now() + "_" + imagemFile.name);
-
-    // faz upload
-    await uploadBytes(storageRef, imagemFile);
-
-    // pega URL da imagem
-    const imageUrl = await getDownloadURL(storageRef);
-
-    // salva no Firestore
     await addDoc(collection(db, "anuncios"), {
       nome,
       preco,
       cidade,
       whatsapp,
-      imagem: imageUrl
+      imagem: ""
     });
-    {
-    alert("Anúncio publicado com imagem!");
+
+    alert("Publicado com sucesso!");
     window.location.href = "index.html";
 
-  } 
-  catch (error) {
-  alert("Erro: " + error.message);
-  console.error(error);
-}
-}
+  } catch (error) {
+    alert("Erro: " + error.message);
+    console.error(error);
+  }
+
+});
 </script>
 
 </body>
