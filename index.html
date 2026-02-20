@@ -85,7 +85,32 @@ const lista = document.getElementById("listaAnuncios");
 async function carregarAnuncios() {
   lista.innerHTML = "";
 
+  try {
   const querySnapshot = await getDocs(collection(db, "anuncios"));
+
+  querySnapshot.forEach((doc) => {
+    const anuncio = doc.data();
+
+    const card = document.createElement("div");
+    card.classList.add("card");
+
+    card.innerHTML = `
+      ${anuncio.imagem ? `<img src="${anuncio.imagem}" style="width:100%; border-radius:10px; margin-bottom:10px;">` : ""}
+      <h3>${anuncio.nome}</h3>
+      <p class="price">R$ ${anuncio.preco} por dia</p>
+      <p>${anuncio.cidade}</p>
+      <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank">
+        Falar no WhatsApp
+      </a>
+    `;
+
+    lista.appendChild(card);
+  });
+
+} catch (error) {
+  lista.innerHTML = "<p>Erro ao carregar anúncios.</p>";
+  console.error(error);
+  }
 
   querySnapshot.forEach((doc) => {
     const anuncio = doc.data();
