@@ -104,73 +104,62 @@ const firebaseConfig = {
   appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
   measurementId: "G-080J3KWME7"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 const lista = document.getElementById("listaAnuncios");
 
 async function carregarAnuncios() {
-  lista.innerHTML = "";
+  lista.innerHTML = "Carregando anúncios...";
 
   try {
-  const querySnapshot = await getDocs(collection(db, "anuncios"));
+    const querySnapshot = await getDocs(collection(db, "anuncios"));
+    lista.innerHTML = ""; // Limpa o "Carregando..."
 
-  querySnapshot.forEach((doc) => {
-    const anuncio = doc.data();
+    if (querySnapshot.empty) {
+      lista.innerHTML = "<p>Nenhum anúncio encontrado.</p>";
+      return;
+    }
 
-    const card = document.createElement("div");
-    card.classList.add("card");
+    querySnapshot.forEach((doc) => {
+      const anuncio = doc.data();
+      const card = document.createElement("div");
+      card.classList.add("card");
 
-    card.innerHTML = `
-      ${anuncio.imagem ? `<img src="${anuncio.imagem}" style="width:100%; border-radius:10px; margin-bottom:10px;">` : ""}
-      <h3>${anuncio.nome}</h3>
-      <p class="price">R$ ${anuncio.preco} por dia</p>
-      <p>${anuncio.cidade}</p>
-      <a href="https://wa.me/55${anuncio.whatsapp}" 
-   target="_blank"
-   style="
-     display:inline-block;
-     margin-top:10px;
-     padding:10px 15px;
-     background:#25D366;
-     color:white;
-     text-decoration:none;
-     border-radius:8px;
-     font-weight:bold;
-   ">
-   Falar no WhatsApp
-</a>
+      // Montando o HTML do card de forma organizada
+      card.innerHTML = `
+        ${anuncio.imagem ? `<img src="${anuncio.imagem}" style="width:100%; border-radius:10px; margin-bottom:10px;">` : ""}
+        <h3>${anuncio.nome}</h3>
+        <p class="price">R$ ${anuncio.preco} por dia</p>
+        <p>${anuncio.cidade}</p>
+        <a href="https://wa.me/55${anuncio.whatsapp}" 
+           target="_blank"
+           style="
+             display:inline-block;
+             margin-top:10px;
+             padding:10px 15px;
+             background:#25D366;
+             color:white;
+             text-decoration:none;
+             border-radius:8px;
+             font-weight:bold;
+           ">
+           Falar no WhatsApp
+        </a>
+      `;
 
-    lista.appendChild(card);
-  });
+      lista.appendChild(card);
+    });
 
-} catch (error) {
-  lista.innerHTML = "<p>Erro ao carregar anúncios.</p>";
-  console.error(error);
+  } catch (error) {
+    lista.innerHTML = "<p>Erro ao carregar anúncios. Verifique o console.</p>";
+    console.error("Erro detalhado:", error);
   }
-
-  querySnapshot.forEach((doc) => {
-    const anuncio = doc.data();
-
-    const card = document.createElement("div");
-    card.classList.add("card");
-
-    card.innerHTML = `
-  ${anuncio.imagem ? `<img src="${anuncio.imagem}" style="width:100%; border-radius:10px; margin-bottom:10px;">` : ""}
-  <h3>${anuncio.nome}</h3>
-  <p class="price">R$ ${anuncio.preco} por dia</p>
-  <p>${anuncio.cidade}</p>
-  <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank">
-    Falar no WhatsApp
-  </a>
-`;
-
-    lista.appendChild(card);
-  });
 }
 
 carregarAnuncios();
 </script>
+
 
 </body>
 </html>
