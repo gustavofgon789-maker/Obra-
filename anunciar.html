@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anunciar - Obrahhí</title>
+  <title>Anunciar - Obraí</title>
 
   <style>
     body {
@@ -109,6 +109,15 @@
 
   <label for="preco">Preço da diária (R$)</label>
   <input type="number" id="preco" placeholder="Ex: 50">
+  <label for="categoria">Categoria</label>
+<select id="categoria" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ddd;">
+  <option value="Eletricas">Ferramentas Elétricas</option>
+  <option value="Jardinagem">Jardinagem</option>
+  <option value="Construcao">Construção Civil</option>
+  <option value="Pintura">Pintura</option>
+  <option value="Outros">Outros</option>
+</select>
+  
 
   <label for="cidade">Sua Cidade/Bairro</label>
   <input type="text" id="cidade" placeholder="Ex: São Paulo - Centro">
@@ -197,12 +206,13 @@ const whatsappBruto = document.getElementById("whatsapp").value.replace(/\D/g, "
     if (inputImagem.files.length > 0) {
       fotoString = await toBase64(inputImagem.files[0]);
     }
-
+const categoria = document.getElementById("categoria").value;
     await addDoc(collection(db, "anuncios"), {
   nome,
   preco,
   cidade,
   whatsapp: whatsappBruto, // Salva só os números: 11999999999
+  categoria,
   imagem: fotoString,
   dataCriacao: new Date()
 });
