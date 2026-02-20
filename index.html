@@ -177,13 +177,6 @@
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4);
 }
-
-.whatsapp-icon {
-  width: 18px;
-  height: 18px;
-  fill: white;
-}
-
 .whatsapp-float {
   position: fixed;
   bottom: 20px;
@@ -357,10 +350,10 @@ carregarAnuncios();
 
   </script>
 
-<a href="https://wa.me/5599999999999" 
-   class="whatsapp-float" 
+<a class="whatsapp-btn" 
+   href="https://wa.me/55${anuncio.whatsapp.replace(/\D/g,'')}" 
    target="_blank">
-   💬
+   💬 Falar no WhatsApp
 </a>
   
 </body>
