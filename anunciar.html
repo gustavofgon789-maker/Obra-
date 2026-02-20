@@ -1,40 +1,155 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anuncie sua ferramenta - Obraí</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obraí - Anunciar Ferramenta</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f5;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: #0f3d2e;
+    color: white;
+    text-align: center;
+    padding: 25px 20px;
+  }
+  header h1 { font-size: 28px; }
+  .container {
+    max-width: 600px;
+    margin: 30px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    background: #0f3d2e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  button:hover { background: #145c43; }
+  .message { text-align: center; margin-top: 10px; color: green; font-weight: bold; }
+</style>
+</head>
+<body>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f5;
-      margin: 0;
+<header>
+  <h1>Anunciar Ferramenta</h1>
+  <p>Preencha os dados para seu anúncio aparecer no Obraí</p>
+</header>
+
+<div class="container">
+  <form id="formAnuncio">
+    <label>Nome da ferramenta</label>
+    <input type="text" id="nome" placeholder="Ex: Betoneira 400L" required>
+
+    <label>Preço por dia (R$)</label>
+    <input type="number" id="preco" placeholder="Ex: 80" required>
+
+    <label>Cidade</label>
+    <input type="text" id="cidade" placeholder="Ex: São José do Rio Preto" required>
+
+    <label>WhatsApp</label>
+    <input type="text" id="whatsapp" placeholder="Ex: 17 98888-7777" required>
+
+    <label>Fotos da ferramenta (mínimo 2)</label>
+    <input type="file" id="imagens" accept="image/*" multiple required>
+
+    <button type="submit">Enviar Anúncio</button>
+    <div class="message" id="mensagem"></div>
+  </form>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
+  authDomain: "obrai-56278.firebaseapp.com",
+  projectId: "obrai-56278",
+  storageBucket: "obrai-56278.firebasestorage.app",
+  messagingSenderId: "735990959965",
+  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
+  measurementId: "G-080J3KWME7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+const form = document.getElementById("formAnuncio");
+const mensagem = document.getElementById("mensagem");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const nome = document.getElementById("nome").value.trim();
+  const preco = document.getElementById("preco").value.trim();
+  const cidade = document.getElementById("cidade").value.trim();
+  const whatsapp = document.getElementById("whatsapp").value.trim();
+  const imagens = document.getElementById("imagens").files;
+
+  if (imagens.length < 2) {
+    mensagem.style.color = "red";
+    mensagem.innerText = "Envie pelo menos 2 fotos da ferramenta!";
+    return;
+  }
+
+  mensagem.style.color = "green";
+  mensagem.innerText = "Enviando anúncio... ⏳";
+
+  try {
+    // Upload das imagens para Storage
+    const urls = [];
+    for (let i = 0; i < imagens.length; i++) {
+      const file = imagens[i];
+      const storageRef = ref(storage, `imagens/${Date.now()}_${file.name}`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      urls.push(url);
     }
 
-    header {
-      background: #0f3d2e;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+    // Salvar anúncio no Firestore
+    await addDoc(collection(db, "anuncios"), {
+      nome,
+      preco,
+      cidade,
+      whatsapp,
+      imagens: urls,
+      criadoEm: Date.now()
+    });
 
-    .container {
-      max-width: 600px;
-      margin: 30px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+    mensagem.innerText = "Anúncio enviado com sucesso! 🚀";
+    form.reset();
+  } catch (error) {
+    console.error(error);
+    mensagem.style.color = "red";
+    mensagem.innerText = "Erro ao enviar anúncio. Tente novamente.";
+  }
+});
+</script>
 
-    input, select {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+</body>
+</html>      border: 1px solid #ccc;
     }
     button {
       width: 100%;
