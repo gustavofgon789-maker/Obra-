@@ -71,29 +71,27 @@
 
   const btnPublicar = document.getElementById("btnPublicar");
 
-  btnPublicar.addEventListener("click", async () => {
-    const user = auth.currentUser;
-    if (!user) { alert("Você precisa estar logado!"); return; }
+  // Substitua todo o seu script do botão publicar por este:
 
-    const arquivos = document.getElementById("imagem").files;
-    if (arquivos.length === 0) { alert("Selecione pelo menos uma foto!"); return; }
+btnPublicar.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  if (!user) { alert("Faça login primeiro!"); return; }
 
-    btnPublicar.disabled = true;
-    btnPublicar.innerText = "Enviando fotos...";
+  const arquivo = document.getElementById("imagem").files[0];
+  if (!arquivo) { alert("Selecione uma foto!"); return; }
+
+  btnPublicar.disabled = true;
+  btnPublicar.innerText = "Processando foto...";
+
+  // Função para converter a imagem em texto (Base64)
+  const reader = new FileReader();
+  reader.readAsDataURL(arquivo);
+  
+  reader.onload = async () => {
+    const fotoEmTexto = reader.result; // A foto agora é uma string de texto
 
     try {
-      const linksFotos = [];
-      for (let i = 0; i < arquivos.length; i++) {
-        const arquivo = arquivos[i];
-        const nomeArquivo = `anuncios/${Date.now()}-${arquivo.name}`;
-        const storageRef = ref(storage, nomeArquivo);
-        
-        await uploadBytes(storageRef, arquivo);
-        const url = await getDownloadURL(storageRef);
-        linksFotos.push(url);
-      }
-
-      btnPublicar.innerText = "Salvando anúncio...";
+      btnPublicar.innerText = "Publicando...";
       
       await addDoc(collection(db, "anuncios"), {
         nome: document.getElementById("nome").value,
@@ -101,20 +99,22 @@
         cidade: document.getElementById("cidade").value,
         whatsapp: document.getElementById("whatsapp").value,
         categoria: document.getElementById("categoria").value,
-        fotos: linksFotos,
+        imagem: fotoEmTexto, // Salva a foto como texto no banco gratuito
         userId: user.uid,
         dataCriacao: new Date()
       });
 
-      alert("✅ Anúncio publicado com sucesso!");
+      alert("✅ Publicado com sucesso!");
       window.location.href = "index.html";
 
     } catch (error) {
-      alert("Erro: " + error.message);
+      alert("Erro: Talvez a foto seja grande demais para o plano gratuito.");
       btnPublicar.disabled = false;
-      btnPublicar.innerText = "Publicar Anúncio";
+      btnPublicar.innerText = "Tentar novamente";
     }
-  });
+  };
+});
+
 </script>
 </body>
 </html>
