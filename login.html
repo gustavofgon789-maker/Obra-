@@ -31,9 +31,8 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-  // Usando suas credenciais existentes
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
     authDomain: "obrai-56278.firebaseapp.com",
@@ -47,18 +46,23 @@
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
+  // 1. Verifica se o usuário acabou de voltar do login
+  getRedirectResult(auth)
+    .then((result) => {
+      if (result) {
+        // Se logou com sucesso, vai para a Home
+        window.location.href = "index.html";
+      }
+    }).catch((error) => {
+      console.error("Erro ao retornar do login:", error);
+    });
+
+  // 2. Função do botão de login
   document.getElementById("btnLogin").addEventListener("click", () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // Login com sucesso!
-        alert("Olá, " + result.user.displayName);
-        window.location.href = "index.html"; // Volta para a home
-      }).catch((error) => {
-        console.error("Erro no login: ", error);
-        alert("Erro ao entrar. Verifique se o Google está ativo no console do Firebase.");
-      });
+    signInWithRedirect(auth, provider);
   });
 </script>
+
 
 </body>
 </html>
