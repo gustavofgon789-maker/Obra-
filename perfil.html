@@ -7,54 +7,41 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root { --primary: #145c43; --bg: #f8faf9; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
-    
-    .header-perfil { text-align: center; margin-bottom: 30px; padding-top: 20px; }
-    .foto-grande { width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 10px; }
-    
-    .card-info { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); max-width: 450px; margin: 0 auto; }
-    .info-item { margin-bottom: 20px; }
-    .info-item label { display: block; font-size: 12px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
-    .info-item p { margin: 0; font-size: 16px; font-weight: 600; color: var(--primary); }
-    
-    .btn-acao { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
-    .btn-voltar { background: #e8f0ed; color: var(--primary); text-decoration: none; display: flex; align-items: center; justify-content: center; height: 50px; border-radius: 12px; font-weight: bold; margin-bottom: 15px; }
-    .btn-sair { background: #fff1f1; color: #ff4757; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+    .card-perfil { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); max-width: 400px; margin: 20px auto; text-align: center; }
+    .foto-usuario { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 15px; }
+    .badge-seguranca { background: #e8f5e9; color: #2e7d32; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+    .info-box { text-align: left; background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
+    .info-label { font-size: 11px; color: #888; text-transform: uppercase; font-weight: bold; }
+    .info-valor { font-size: 15px; color: #333; font-weight: 600; }
+    .btn-sair { background: #fee2e2; color: #ef4444; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    .link-voltar { display: block; margin-top: 20px; color: var(--primary); text-decoration: none; font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <div class="header-perfil" id="headerFoto">
-    </div>
-
-  <div class="card-info">
-    <a href="index.html" class="btn-voltar">← Voltar para Início</a>
-    
-    <div id="dadosUsuario">
-      <div class="info-item">
-        <label>Nome Completo</label>
-        <p id="nomeUsuario">Carregando...</p>
-      </div>
-      <div class="info-item">
-        <label>E-mail de Contato</label>
-        <p id="emailUsuario">Carregando...</p>
-      </div>
-      <div class="info-item">
-        <label>Status da Conta</label>
-        <p>✅ Usuário Verificado (Google)</p>
-      </div>
-    </div>
-
-    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-    
-    <button class="btn-acao btn-sair" id="btnSair">Sair da Conta</button>
+<div class="card-perfil">
+  <div id="fotoArea"></div>
+  <div class="badge-seguranca">🛡️ Conta Verificada via Google</div>
+  
+  <div class="info-box">
+    <div class="info-label">Nome do Anunciante</div>
+    <div class="info-valor" id="perfilNome">Carregando...</div>
   </div>
+
+  <div class="info-box">
+    <div class="info-label">E-mail de Identificação</div>
+    <div class="info-valor" id="perfilEmail">Carregando...</div>
+  </div>
+
+  <button class="btn-sair" id="btnSair">Sair da Conta</button>
+  <a href="index.html" class="link-voltar">← Voltar para Ferramentas</a>
+</div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-  // Usando suas credenciais já configuradas no anunciar.html
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
     authDomain: "obrai-56278.firebaseapp.com",
@@ -69,28 +56,17 @@
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // Preenche os dados do Google
-      document.getElementById("headerFoto").innerHTML = `
-        <img src="${user.photoURL}" class="foto-grande">
-        <h2 style="margin:0">${user.displayName}</h2>
-      `;
-      document.getElementById("nomeUsuario").innerText = user.displayName;
-      document.getElementById("emailUsuario").innerText = user.email;
+      document.getElementById("fotoArea").innerHTML = `<img src="${user.photoURL}" class="foto-usuario">`;
+      document.getElementById("perfilNome").innerText = user.displayName;
+      document.getElementById("perfilEmail").innerText = user.email;
     } else {
-      // Se não estiver logado, manda pro login
       window.location.href = "login.html";
     }
   });
 
-  // Função para deslogar
   document.getElementById("btnSair").addEventListener("click", () => {
-    if(confirm("Deseja realmente sair da conta?")) {
-      signOut(auth).then(() => {
-        window.location.href = "index.html";
-      });
-    }
+    signOut(auth).then(() => window.location.href = "index.html");
   });
 </script>
-
 </body>
 </html>
