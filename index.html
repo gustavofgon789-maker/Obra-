@@ -5,174 +5,177 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Obrahhí | Aluguel de Ferramentas</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #145c43;
+    --accent: #25D366;
+    --bg: #f4f7f6; /* Um cinza bem leve para o fundo, destacando os cards brancos */
+    --text: #1a1a1a;
+  }
 
-  <style>
-    :root {
-      --primary: #145c43;
-      --accent: #25D366;
-      --bg: #f8faf9;
-      --text: #333;
-    }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    margin: 0;
+    color: var(--text);
+    padding-bottom: 90px;
+  }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      margin: 0;
-      color: var(--text);
-      padding-bottom: 80px; /* Espaço para o botão flutuante */
-    }
+  /* Topo Moderno e Colorido */
+  .app-header {
+    background: var(--primary); /* Verde Obrahhí no topo */
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-radius: 0 0 20px 20px; /* Curva suave no final do cabeçalho */
+  }
 
-    /* Topo Fixo Estilo App */
-    .app-header {
-      background: white;
-      padding: 15px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+  .app-header img {
+    height: 50px; /* Aumentei o logo */
+    margin-bottom: 15px;
+    filter: brightness(0) invert(1); /* Deixa o logo branco se ele for escuro, para contrastar com o verde */
+  }
 
-    .app-header img {
-      height: 40px;
-      margin-bottom: 15px;
-    }
+  /* Barra de Busca com cara de App */
+  .search-container {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    margin-bottom: 10px;
+  }
 
-    /* Filtros estilo Airbnb */
-    .filter-bar {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      width: 100%;
-      padding-bottom: 5px;
-      scrollbar-width: none; /* Firefox */
-    }
-    .filter-bar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+  .search-container input {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
 
-    .filter-btn {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+  /* Filtros Horizontais */
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    width: 100%;
+    padding: 10px 0 5px 0;
+    scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
 
-    .filter-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
+  .filter-btn {
+    background: rgba(255, 255, 255, 0.2); /* Botões semi-transparentes sobre o verde */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.3s;
+  }
 
-    /* Grade de Anúncios */
+  .filter-btn.active {
+    background: white;
+    color: var(--primary);
+  }
+
+  /* Grade de Anúncios */
+  .container {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 0 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Melhora no mobile */
+    gap: 15px;
+  }
+
+  /* Card Estilo Profissional */
+  .card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: 0.3s;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: #e0e0e0;
+  }
+
+  .card-content {
+    padding: 12px;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text);
+    height: 40px; /* Garante alinhamento */
+    overflow: hidden;
+  }
+
+  .card-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-top: 8px;
+  }
+
+  .btn-whatsapp {
+    display: block;
+    background: var(--accent);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 700;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
+  /* Botão Flutuante */
+  .floating-action {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    z-index: 1001;
+  }
+
+  @media (max-width: 600px) {
     .container {
-      max-width: 1100px;
-      margin: 20px auto;
-      padding: 0 15px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
+      grid-template-columns: 1fr 1fr; /* Duas colunas perfeitas no celular */
+      gap: 10px;
     }
+  }
+</style>
 
-    /* Card Estilo Airbnb */
-    .card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-      border: 1px solid #eee;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card-img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      background: #eee;
-    }
-
-    .card-content {
-      padding: 15px;
-    }
-
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin: 0 0 5px 0;
-    }
-
-    .card-location {
-      font-size: 13px;
-      color: #777;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-
-    .card-price {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .card-price span {
-      font-weight: 400;
-      color: #777;
-    }
-
-    .btn-whatsapp {
-      display: block;
-      background: var(--accent);
-      color: white;
-      text-align: center;
-      padding: 12px;
-      text-decoration: none;
-      border-radius: 10px;
-      font-weight: 700;
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    /* Botão Flutuante Principal */
-    .floating-action {
-      position: fixed;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--primary);
-      color: white;
-      padding: 15px 30px;
-      border-radius: 30px;
-      text-decoration: none;
-      font-weight: 700;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 999;
-    }
-
-    /* Mobile Ajuste */
-    @media (max-width: 600px) {
-      .container {
-        grid-template-columns: 1fr 1fr; /* 2 colunas no celular */
-        gap: 12px;
-        padding: 0 10px;
-      }
-      .card-img { height: 150px; }
-      .card-title { font-size: 14px; }
-      .floating-action { width: 80%; justify-content: center; }
-    }
-  </style>
 </head>
 
 <body>
@@ -181,10 +184,8 @@
 <div class="app-header">
   <img src="logo.png" alt="Obrahhí Logo">
   
-  <div style="width: 100%; max-width: 500px; position: relative; margin-bottom: 15px;">
-    <input type="text" id="inputBusca" placeholder="O que você precisa hoje?" 
-      style="width: 100%; padding: 12px 40px 12px 15px; border-radius: 25px; border: 1px solid #ddd; outline: none; box-sizing: border-box; font-size: 14px;">
-    <span style="position: absolute; right: 15px; top: 12px; color: #999;">🔍</span>
+  <div class="search-container">
+    <input type="text" id="inputBusca" placeholder="O que você precisa hoje?">
   </div>
 
   <div class="filter-bar">
@@ -192,9 +193,9 @@
     <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
     <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
     <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
-    <button class="filter-btn" onclick="filtrar('Pintura', this)">Pintura</button>
   </div>
 </div>
+
 
 
 <a href="anunciar.html" class="floating-action">
