@@ -19,7 +19,25 @@
     .preco { font-size: 20px; color: var(--primary); font-weight: 800; margin-bottom: 15px; }
     .info-item { display: flex; align-items: center; gap: 10px; color: #666; margin-bottom: 10px; font-size: 15px; }
     
-    .btn-reservar { position: fixed; bottom: 20px; left: 5%; width: 90%; background: var(--accent); color: white; text-align: center; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 700; font-size: 16px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+    .btn-reservar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%; /* Alinha o início do botão no meio da tela */
+    transform: translateX(-50%); /* Puxa o botão de volta metade do seu tamanho, centralizando-o */
+    width: 90%;
+    max-width: 400px; /* Evita que o botão fique gigante em tablets ou computadores */
+    background: var(--accent);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    z-index: 100;
+}
+
   </style>
 </head>
 <body>
