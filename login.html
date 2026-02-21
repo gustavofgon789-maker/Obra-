@@ -3,64 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Obrahhí</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Entrar - Obrahhí</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #145c43; --bg: #f8faf9; }
+    :root { 
+      --primary: #145c43; 
+      --primary-dark: #0d3d2c;
+      --bg: #fdfdfd; 
+      --text: #2c3e50;
+    }
     
-    /* Garante que o conteúdo não transborde para os lados */
     body { 
       font-family: 'Inter', sans-serif; 
       background: var(--bg); 
       display: flex; 
       align-items: center; 
       justify-content: center; 
-      height: 100vh; 
+      height: 100dvh; 
       margin: 0;
-      overflow: hidden; 
+      color: var(--text);
+      /* Background sutil com padrão geométrico ou degradê */
+      background-image: radial-gradient(circle at 2px 2px, #e8f5e9 1px, transparent 0);
+      background-size: 40px 40px;
     }
 
     .login-card { 
       background: white; 
-      padding: 30px; 
-      border-radius: 20px; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+      padding: 40px 30px; 
+      border-radius: 28px; 
+      box-shadow: 0 20px 50px rgba(0,0,0,0.08); 
       text-align: center; 
-      width: 85%; 
-      max-width: 350px; 
+      width: 90%; 
+      max-width: 400px; 
+      position: relative;
+      overflow: hidden;
     }
 
-    .logo { height: 50px; margin-bottom: 20px; }
-    h1 { font-size: 18px; margin-bottom: 10px; color: #333; }
-    p { color: #666; font-size: 14px; margin-bottom: 30px; line-height: 1.4; }
+    /* Detalhe decorativo no topo do card */
+    .login-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: var(--primary);
+    }
+
+    .logo-container {
+      margin-bottom: 30px;
+    }
+
+    .logo-placeholder {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -1.5px;
+    }
+
+    .logo-placeholder span {
+      color: #ffd700; /* Um detalhe em dourado para passar valor */
+    }
+
+    h1 { 
+      font-size: 24px; 
+      font-weight: 800;
+      margin-bottom: 12px; 
+      color: var(--text); 
+      letter-spacing: -0.5px;
+    }
+
+    p { 
+      color: #7f8c8d; 
+      font-size: 15px; 
+      margin-bottom: 35px; 
+      line-height: 1.6; 
+      padding: 0 10px;
+    }
 
     .btn-google { 
       background: white; 
-      border: 1px solid #ddd; 
-      padding: 12px; 
-      border-radius: 10px; 
+      border: 2px solid #e0e6ed; 
+      padding: 16px; 
+      border-radius: 16px; 
       width: 100%; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
-      gap: 10px; 
+      gap: 12px; 
       cursor: pointer; 
-      font-weight: 600;
-      font-size: 15px;
+      font-weight: 700;
+      font-size: 16px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text);
+    }
+
+    .btn-google:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .btn-google:active {
+      transform: translateY(0);
+    }
+
+    .btn-google img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .footer-text {
+      margin-top: 30px;
+      font-size: 13px;
+      color: #bdc3c7;
+    }
+
+    /* Animação suave de entrada */
+    .login-card {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
 <div class="login-card">
-  <img src="logo.png" alt="Obrahhí" class="logo">
-  <h1>Bem-vindo ao Obrahhí</h1>
-  <p>Entre com sua conta Google para gerenciar seus anúncios e ferramentas.</p>
+  <div class="logo-container">
+    <div class="logo-placeholder">Obrah<span>hí</span></div>
+  </div>
+
+  <h1>Alugue ferramentas em segundos</h1>
+  <p>Conecte sua conta para anunciar ou alugar os melhores equipamentos da sua região.</p>
   
   <button class="btn-google" id="btnLogin">
-    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
-    Entrar com Google
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+    Continuar com Google
   </button>
+
+  <div class="footer-text">
+    Seguro • Prático • Local
+  </div>
 </div>
 
 <script type="module">
@@ -80,15 +168,22 @@
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // Se já estiver logado, vai direto para a home
+  // Redirecionamento automático se já logado
   onAuthStateChanged(auth, (user) => {
     if (user) { window.location.href = "index.html"; }
   });
 
-  document.getElementById("btnLogin").addEventListener("click", () => {
+  const btnLogin = document.getElementById("btnLogin");
+
+  btnLogin.addEventListener("click", () => {
+    btnLogin.style.opacity = "0.7";
+    btnLogin.innerText = "Conectando...";
+    
     signInWithPopup(auth, provider).catch((error) => {
       console.error("Erro:", error);
-      alert("Erro ao logar. Tente novamente.");
+      alert("Não foi possível conectar. Tente novamente.");
+      btnLogin.style.opacity = "1";
+      btnLogin.innerHTML = `<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> Continuar com Google`;
     });
   });
 </script>
