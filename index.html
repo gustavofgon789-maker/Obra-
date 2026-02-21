@@ -248,7 +248,7 @@ onAuthStateChanged(auth, (user) => {
       <img src="${user.photoURL}" style="width:25px; border-radius:50%; border: 2px solid var(--primary);">
       <div style="font-size: 10px; font-weight: bold; color: var(--primary);">Olá, ${user.displayName.split(' ')[0]}</div>
     `;
-    perfilLink.href = "#"; // Evita voltar para a tela de login se já está logado
+    perfilLink.href = "perfil.html"; // Evita voltar para a tela de login se já está logado
   }
 });
   
