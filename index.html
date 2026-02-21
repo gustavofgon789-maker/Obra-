@@ -23,15 +23,14 @@
       padding-bottom: 100px; 
     }
 
-    /* Header Estilo Premium */
     .header-container { 
       background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
-      padding: 50px 20px 40px; 
+      padding: 40px 20px 20px; 
       text-align: center; 
     }
 
     .logo-tipo { 
-      font-size: 48px; 
+      font-size: 42px; 
       font-weight: 800; 
       color: var(--primary); 
       letter-spacing: -3px; 
@@ -39,17 +38,22 @@
       text-transform: lowercase; 
     }
 
-    /* Barra de Busca Glassmorphism */
+    /* Barra de Busca e Localização */
+    .search-container {
+      max-width: 420px;
+      margin: 0 auto 20px;
+      padding: 0 20px;
+    }
+
     .search-box { 
-      max-width: 400px; 
-      margin: 0 auto 30px; 
       background: rgba(30, 41, 35, 0.5); 
       backdrop-filter: blur(10px);
-      padding: 8px 15px; 
-      border-radius: 20px; 
+      padding: 5px 15px; 
+      border-radius: 18px; 
       display: flex; 
       align-items: center; 
       border: 1px solid var(--border);
+      margin-bottom: 10px;
     }
 
     .search-box input { 
@@ -59,15 +63,33 @@
       width: 100%; 
       outline: none; 
       color: white; 
-      font-size: 16px; 
+      font-size: 15px; 
     }
 
-    /* Filtros Modernos */
+    .loc-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      margin-bottom: 25px;
+    }
+
+    .loc-box select {
+      background: transparent;
+      border: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Filtros */
     .filter-scroll { 
       display: flex; 
-      gap: 12px; 
+      gap: 10px; 
       overflow-x: auto; 
-      padding: 5px 20px 20px; 
+      padding: 0 20px 25px; 
       scrollbar-width: none; 
     }
     .filter-scroll::-webkit-scrollbar { display: none; }
@@ -76,22 +98,18 @@
       background: var(--card-bg); 
       border: 1px solid var(--border); 
       color: var(--text-muted); 
-      padding: 10px 22px; 
+      padding: 8px 18px; 
       border-radius: 100px; 
       white-space: nowrap; 
       font-weight: 600; 
-      font-size: 14px; 
+      font-size: 13px; 
       cursor: pointer; 
-      transition: all 0.3s;
+      transition: 0.3s;
     }
 
-    .filter-btn.active { 
-      background: var(--primary); 
-      color: var(--deep-bg); 
-      border-color: var(--primary); 
-    }
+    .filter-btn.active { background: var(--primary); color: var(--deep-bg); border-color: var(--primary); }
 
-    /* Grid de Anúncios */
+    /* Grid e Cards */
     .lista-anuncios { 
       display: grid; 
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
@@ -99,107 +117,69 @@
       padding: 0 20px; 
     }
 
-    .card { 
-      background: var(--card-bg); 
-      border-radius: 24px; 
-      overflow: hidden; 
-      border: 1px solid var(--border); 
-      transition: transform 0.3s;
-    }
-
+    .card { background: var(--card-bg); border-radius: 22px; overflow: hidden; border: 1px solid var(--border); }
     .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-    .card-content { padding: 15px; }
-    .card-title { font-size: 14px; font-weight: 600; margin: 0 0 5px; color: var(--text-main); }
-    .card-price { color: var(--primary); font-weight: 800; font-size: 16px; }
+    .card-content { padding: 12px; }
+    .card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-loc { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+    .card-price { color: var(--primary); font-weight: 800; font-size: 15px; }
 
-    /* --- SKELETON SCREEN ANIMATION --- */
+    /* Skeletons */
     .skeleton {
-      background: #1e2923;
       background: linear-gradient(90deg, #1e2923 25%, #2a3a31 50%, #1e2923 75%);
       background-size: 200% 100%;
       animation: skeleton-loading 1.5s infinite linear;
-      border-radius: 12px;
     }
+    @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .skeleton-card { height: 250px; border-radius: 22px; background: var(--card-bg); border: 1px solid var(--border); }
 
-    @keyframes skeleton-loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    .skeleton-card { height: 240px; border-radius: 24px; background: var(--card-bg); border: 1px solid var(--border); overflow: hidden; }
-    .skeleton-img { width: 100%; height: 160px; }
-    .skeleton-text { height: 12px; margin: 15px; width: 70%; }
-    .skeleton-price { height: 15px; margin: 0 15px 15px; width: 40%; }
-
-    /* Menu Inferior Fixo */
+    /* Nav */
     .bottom-nav { 
-      position: fixed; 
-      bottom: 20px; 
-      left: 50%; 
-      transform: translateX(-50%); 
-      width: 90%; 
-      max-width: 400px; 
-      background: rgba(20, 26, 23, 0.85); 
-      backdrop-filter: blur(15px);
-      padding: 12px 25px; 
-      border-radius: 30px; 
-      display: flex; 
-      justify-content: space-between; 
-      border: 1px solid var(--border);
-      z-index: 1000;
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+      width: 90%; max-width: 400px; background: rgba(20, 26, 23, 0.9); 
+      backdrop-filter: blur(15px); padding: 12px; border-radius: 25px; 
+      display: flex; justify-content: space-around; border: 1px solid var(--border); z-index: 1000;
     }
-
-    .nav-item { text-align: center; text-decoration: none; color: var(--text-muted); transition: 0.3s; }
+    .nav-item { text-align: center; text-decoration: none; color: var(--text-muted); font-size: 10px; font-weight: 700; text-transform: uppercase; }
     .nav-item.active { color: var(--primary); }
-    .nav-icon { font-size: 22px; display: block; margin-bottom: 4px; }
-    .nav-label { font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .nav-icon { font-size: 20px; display: block; margin-bottom: 2px; }
 
-    #perfilImgContainer img {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--primary);
-    }
-    
-    .profile-placeholder { font-size: 20px; line-height: 24px; }
-
+    #perfilImgContainer img { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--primary); }
   </style>
 </head>
 <body>
 
 <div class="header-container">
-  <h1 class="logo-tipo">𝔒braí</h1>
+  <h1 class="logo-tipo">obrahhí</h1>
 </div>
 
-<div class="search-box">
-  <input type="text" id="inputBusca" placeholder="O que você precisa hoje?" onkeyup="buscar()">
+<div class="search-container">
+  <div class="search-box">
+    <input type="text" id="inputBusca" placeholder="O que você precisa?" onkeyup="filtrarGeral()">
+  </div>
+  
+  <div class="loc-box">
+    <span>📍</span>
+    <select id="filtroLocal" onchange="carregarAnuncios()">
+      <option value="Todos">Ver toda a região</option>
+      </select>
+  </div>
 </div>
 
 <div class="filter-scroll">
-  <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
-  <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
-  <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
-  <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
+  <button class="filter-btn active" onclick="selecionarCategoria('Todas', this)">Todas</button>
+  <button class="filter-btn" onclick="selecionarCategoria('Eletricas', this)">Elétricas</button>
+  <button class="filter-btn" onclick="selecionarCategoria('Jardinagem', this)">Jardinagem</button>
+  <button class="filter-btn" onclick="selecionarCategoria('Construcao', this)">Construção</button>
 </div>
 
-<div class="lista-anuncios" id="listaAnuncios">
-  </div>
+<div class="lista-anuncios" id="listaAnuncios"></div>
 
 <nav class="bottom-nav">
-  <a href="index.html" class="nav-item active">
-    <span class="nav-icon">🏠</span>
-    <span class="nav-label">Home</span>
-  </a>
-  <a href="anunciar.html" class="nav-item">
-    <span class="nav-icon">➕</span>
-    <span class="nav-label">Anunciar</span>
-  </a>
+  <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>Home</a>
+  <a href="anunciar.html" class="nav-item"><span class="nav-icon">➕</span>Anunciar</a>
   <a href="perfil.html" class="nav-item">
-    <span class="nav-icon" id="perfilImgContainer">
-      <span class="profile-placeholder">👤</span>
-    </span>
-    <span class="nav-label">Perfil</span>
+    <span class="nav-icon" id="perfilImgContainer">👤</span>Perfil
   </a>
 </nav>
 
@@ -221,85 +201,98 @@
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  // Monitorar Usuário para Atualizar o Perfil
+  let categoriaAtual = 'Todas';
+
   onAuthStateChanged(auth, (user) => {
     const container = document.getElementById("perfilImgContainer");
     if (user && user.photoURL) {
       container.innerHTML = `<img src="${user.photoURL}" referrerpolicy="no-referrer">`;
-    } else {
-      container.innerHTML = `<span class="profile-placeholder">👤</span>`;
     }
   });
 
-  // Função para criar o efeito de carregamento (Skeletons)
   function mostrarSkeletons() {
     const lista = document.getElementById("listaAnuncios");
-    lista.innerHTML = "";
-    for (let i = 0; i < 4; i++) { // Mostra 4 cards fantasmagóricos
-      lista.innerHTML += `
-        <div class="skeleton-card">
-          <div class="skeleton-img skeleton"></div>
-          <div class="skeleton-text skeleton"></div>
-          <div class="skeleton-price skeleton"></div>
-        </div>
-      `;
-    }
+    lista.innerHTML = Array(4).fill('<div class="skeleton-card skeleton"></div>').join('');
   }
 
-  async function carregarAnuncios(cat = 'Todas') {
+  // Carrega cidades únicas no seletor
+  async function carregarLocais() {
+    const snap = await getDocs(collection(db, "anuncios"));
+    const locais = new Set();
+    snap.forEach(doc => {
+      if(doc.data().cidade) locais.add(doc.data().cidade);
+    });
+    
+    const select = document.getElementById("filtroLocal");
+    locais.forEach(loc => {
+      const opt = document.createElement("option");
+      opt.value = loc;
+      opt.text = loc;
+      select.add(opt);
+    });
+  }
+
+  window.selecionarCategoria = (cat, btn) => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    categoriaAtual = cat;
+    carregarAnuncios();
+  };
+
+  async function carregarAnuncios() {
     const lista = document.getElementById("listaAnuncios");
-    mostrarSkeletons(); // Ativa os skeletons antes da busca
+    const localSelecionado = document.getElementById("filtroLocal").value;
+    mostrarSkeletons();
 
     try {
       let q = collection(db, "anuncios");
-      if (cat !== 'Todas') {
-        q = query(collection(db, "anuncios"), where("categoria", "==", cat));
+      
+      // Filtro Sênior: Combina categoria e localização
+      if (categoriaAtual !== 'Todas' && localSelecionado !== 'Todos') {
+        q = query(q, where("categoria", "==", categoriaAtual), where("cidade", "==", localSelecionado));
+      } else if (categoriaAtual !== 'Todas') {
+        q = query(q, where("categoria", "==", categoriaAtual));
+      } else if (localSelecionado !== 'Todos') {
+        q = query(q, where("cidade", "==", localSelecionado));
       }
 
       const snap = await getDocs(q);
-      lista.innerHTML = ""; // Limpa skeletons para por os dados reais
+      lista.innerHTML = "";
 
       if (snap.empty) {
-        lista.innerHTML = "<p style='grid-column:1/-1; text-align:center; color:var(--text-muted);'>Nenhuma ferramenta nesta categoria.</p>";
+        lista.innerHTML = "<p style='grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)'>Nenhum resultado encontrado nesta região.</p>";
         return;
       }
 
-      snap.forEach((doc) => {
-        const anuncio = doc.data();
+      snap.forEach(doc => {
+        const item = doc.data();
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
-          <a href="detalhes.html?id=${doc.id}" style="text-decoration: none;">
-            <img src="${anuncio.imagem}" class="card-img" onerror="this.src='https://via.placeholder.com/300x300?text=Obrahhi'">
+          <a href="detalhes.html?id=${doc.id}" style="text-decoration:none;color:inherit">
+            <img src="${item.imagem}" class="card-img">
             <div class="card-content">
-              <h3 class="card-title">${anuncio.nome}</h3>
-              <div class="card-price">R$ ${anuncio.preco} <span style="font-size:10px; color:var(--text-muted)">/dia</span></div>
+              <h3 class="card-title">${item.nome}</h3>
+              <div class="card-loc">📍 ${item.cidade || 'Local não informado'}</div>
+              <div class="card-price">R$ ${item.preco} <span style="font-size:10px;color:var(--text-muted)">/dia</span></div>
             </div>
           </a>
         `;
         lista.appendChild(card);
       });
-    } catch (e) {
-      console.error(e);
-      lista.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Erro ao carregar ferramentas.</p>";
-    }
+    } catch (e) { console.error(e); }
   }
 
-  window.filtrar = (categoria, btn) => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    carregarAnuncios(categoria);
-  };
-
-  window.buscar = () => {
+  // Busca em tempo real no que está na tela
+  window.filtrarGeral = () => {
     const termo = document.getElementById("inputBusca").value.toLowerCase();
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
+    document.querySelectorAll('.card').forEach(card => {
       const nome = card.querySelector('.card-title').innerText.toLowerCase();
       card.style.display = nome.includes(termo) ? "block" : "none";
     });
   };
 
+  carregarLocais();
   carregarAnuncios();
 </script>
 </body>
