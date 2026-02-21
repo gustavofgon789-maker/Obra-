@@ -3,165 +3,140 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anunciar Ferramenta - Obrahhí</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Anunciar | Obrahhí</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { 
-      --primary: #145c43; 
-      --primary-light: #e8f5e9;
-      --bg: #fdfdfd; 
-      --text: #2c3e50;
-      --border: #e0e6ed;
+      --deep-bg: #0a0f0d;
+      --card-bg: #141a17;
+      --primary: #10b981;
+      --primary-dark: #065f46;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #1e2923;
     }
     
     body { 
       font-family: 'Inter', sans-serif; 
-      background: var(--bg); 
+      background: var(--deep-bg); 
       margin: 0; 
-      padding: 0; 
-      color: var(--text); 
+      color: var(--text-main); 
       display: flex;
       justify-content: center;
+      min-height: 100vh;
     }
 
     .container { 
       width: 100%;
       max-width: 480px; 
-      background: white; 
-      padding: 30px; 
-      min-height: 100vh;
+      background: var(--deep-bg); 
+      padding: 40px 25px; 
       box-sizing: border-box;
     }
 
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+    .header { text-align: center; margin-bottom: 35px; }
+    h2 { color: var(--primary); font-weight: 800; font-size: 28px; margin: 0; letter-spacing: -1px; }
+    .subtitle { color: var(--text-muted); font-size: 14px; margin-top: 5px; }
 
-    h2 { 
-      color: var(--primary); 
-      font-weight: 800;
-      font-size: 24px;
-      margin: 10px 0;
-    }
-
-    .subtitle {
-      color: #7f8c8d;
-      font-size: 14px;
-    }
-
-    /* Estilização dos Inputs */
-    .form-group {
-      margin-bottom: 20px;
-    }
+    /* Estilização dos Inputs Modernos */
+    .form-group { margin-bottom: 22px; }
 
     label { 
       display: block; 
-      font-weight: 600; 
-      margin-bottom: 8px; 
-      font-size: 13px;
+      font-weight: 700; 
+      margin-bottom: 10px; 
+      font-size: 12px;
       color: var(--primary);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
 
     input, select, textarea { 
       width: 100%; 
-      padding: 14px 16px; 
-      border: 2px solid var(--border); 
-      border-radius: 12px; 
+      padding: 16px; 
+      border: 1px solid var(--border); 
+      border-radius: 16px; 
       box-sizing: border-box; 
       font-size: 16px; 
-      transition: all 0.3s ease;
-      background: #fcfdfe;
+      background: var(--card-bg);
+      color: white;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     input:focus, select:focus {
       outline: none;
       border-color: var(--primary);
-      background: #fff;
-      box-shadow: 0 0 0 4px var(--primary-light);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+      transform: translateY(-2px);
     }
 
-    /* Design dos horários em linha */
-    .row {
-      display: flex;
-      gap: 15px;
-    }
-    .row > div { flex: 1; }
-
-    /* Estilo do upload de arquivo customizado */
+    /* Custom File Upload */
     input[type="file"] {
-      padding: 10px;
-      font-size: 14px;
+      padding: 15px;
       border: 2px dashed var(--border);
-      background: var(--bg);
+      background: rgba(16, 185, 129, 0.05);
+      cursor: pointer;
     }
+
+    .row { display: flex; gap: 15px; }
+    .row > div { flex: 1; }
 
     /* Botão Principal */
     .btn-publicar { 
       width: 100%; 
-      padding: 18px; 
+      padding: 20px; 
       background: var(--primary); 
-      color: white; 
+      color: var(--deep-bg); 
       border: none; 
-      border-radius: 16px; 
-      font-weight: 700; 
+      border-radius: 18px; 
+      font-weight: 800; 
       font-size: 16px; 
-      margin-top: 10px; 
+      margin-top: 15px; 
       cursor: pointer; 
       transition: all 0.3s;
-      box-shadow: 0 10px 20px rgba(20, 92, 67, 0.2);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
     }
 
     .btn-publicar:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 25px rgba(20, 92, 67, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.3);
+      background: #14d496;
     }
 
-    .btn-publicar:active { transform: translateY(0); }
-
-    .btn-publicar:disabled { 
-      background: #bdc3c7; 
-      box-shadow: none;
-      cursor: not-allowed; 
-    }
+    .btn-publicar:disabled { background: #1e2923; color: #444; cursor: not-allowed; box-shadow: none; }
 
     .btn-voltar { 
       display: block; 
       text-align: center; 
-      margin-top: 20px; 
-      color: #95a5a6; 
+      margin-top: 25px; 
+      color: var(--text-muted); 
       text-decoration: none; 
       font-size: 14px; 
       font-weight: 500;
     }
-
-    .btn-voltar:hover { color: var(--text); }
-
   </style>
 </head>
 <body>
 
 <div class="container">
   <div class="header">
-    <h2>Novo Anúncio</h2>
-    <p class="subtitle">Preencha os detalhes da sua ferramenta</p>
+    <h2>Anunciar</h2>
+    <p class="subtitle">Coloque sua ferramenta para trabalhar</p>
   </div>
   
   <div class="form-group">
-    <label>Foto da Ferramenta</label>
+    <label>Imagem da Ferramenta</label>
     <input type="file" id="imagem" accept="image/*">
   </div>
 
   <div class="form-group">
-    <label>Nome da Ferramenta</label>
-    <input type="text" id="nome" placeholder="Ex: Furadeira Bosch 600W">
+    <label>O que você está alugando?</label>
+    <input type="text" id="nome" placeholder="Ex: Martelo Demolidor 15kg">
   </div>
 
   <div class="row">
     <div class="form-group">
-      <label>Preço/Dia (R$)</label>
+      <label>Preço/Dia</label>
       <input type="number" id="preco" placeholder="0.00">
     </div>
     <div class="form-group">
@@ -176,28 +151,28 @@
   </div>
 
   <div class="form-group">
-    <label>WhatsApp (DDD + Número)</label>
+    <label>WhatsApp com DDD</label>
     <input type="number" id="whatsapp" placeholder="Ex: 11999999999">
   </div>
 
   <div class="form-group">
-    <label>Cidade / Bairro</label>
-    <input type="text" id="cidade" placeholder="Ex: Centro, São Paulo">
+    <label>Bairro / Cidade</label>
+    <input type="text" id="cidade" placeholder="Ex: Moema, SP">
   </div>
 
   <div class="row">
     <div class="form-group">
-      <label>Retirada das:</label>
+      <label>Disponível das:</label>
       <input type="time" id="horarioInicio" value="08:00">
     </div>
     <div class="form-group">
-      <label>Devolução até:</label>
+      <label>Até às:</label>
       <input type="time" id="horarioFim" value="18:00">
     </div>
   </div>
 
-  <button class="btn-publicar" id="btnPublicar">Publicar Anúncio</button>
-  <a href="index.html" class="btn-voltar">Voltar ao Início</a>
+  <button class="btn-publicar" id="btnPublicar">Publicar Agora</button>
+  <a href="index.html" class="btn-voltar">Cancelar e Voltar</a>
 </div>
 
 <script type="module">
@@ -223,16 +198,16 @@
   btnPublicar.addEventListener("click", async () => {
     const user = auth.currentUser;
     if (!user) { 
-      alert("Faça login primeiro!"); 
-      window.location.href = "login.html";
-      return; 
+        alert("Sessão expirada. Entre novamente."); 
+        window.location.href = "login.html";
+        return; 
     }
 
     const arquivo = document.getElementById("imagem").files[0];
-    if (!arquivo) { alert("Selecione uma foto!"); return; }
+    if (!arquivo) { alert("A foto é obrigatória!"); return; }
 
     btnPublicar.disabled = true;
-    btnPublicar.innerText = "Publicando...";
+    btnPublicar.innerText = "Sincronizando...";
 
     const reader = new FileReader();
     reader.readAsDataURL(arquivo);
@@ -255,7 +230,7 @@
           await addDoc(collection(db, "anuncios"), {
             nome: document.getElementById("nome").value,
             preco: document.getElementById("preco").value,
-            whatsapp: document.getElementById("whatsapp").value,
+            whatsapp: String(document.getElementById("whatsapp").value), // Garantia de String para o Firebase
             cidade: document.getElementById("cidade").value,
             categoria: document.getElementById("categoria").value,
             imagem: fotoCompacta, 
@@ -264,12 +239,12 @@
             userId: user.uid,
             dataCriacao: new Date()
           });
-          alert("✅ Publicado com sucesso!");
+          alert("🚀 Ferramenta publicada com sucesso!");
           window.location.href = "index.html";
         } catch (err) {
-          alert("Erro ao salvar: " + err.message);
+          alert("Erro técnico: " + err.message);
           btnPublicar.disabled = false;
-          btnPublicar.innerText = "Publicar Anúncio";
+          btnPublicar.innerText = "Publicar Agora";
         }
       };
     };
