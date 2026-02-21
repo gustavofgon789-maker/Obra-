@@ -7,82 +7,161 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-  <style>
-  :root {
-    --verde-escuro: #145c43;
-    --verde-claro: #e8f5e9; /* Verde bem suave de fundo */
-    --branco: #ffffff;
-  }
+    :root {
+      --primary: #145c43;
+      --bg-light: #e8f5e9;
+      --white: #ffffff;
+      --text: #333;
+    }
 
-  body {
-    background-color: #f4f7f6; /* Fundo geral da página */
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-  }
+    body {
+      background-color: #f4f7f6;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 80px; /* Espaço para o menu não cobrir o conteúdo */
+    }
 
-  /* Cabeçalho com a Logo preenchendo */
-  .header-container {
-    background-color: var(--verde-claro);
-    padding: 40px 20px 60px 20px;
-    text-align: center;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
-  }
+    /* Cabeçalho Profissional */
+    .header-container {
+      background-color: var(--bg-light);
+      padding: 40px 20px 60px 20px;
+      text-align: center;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+    }
 
-  .logo-tipo {
-    font-size: 48px;
-    font-weight: 800;
-    color: var(--verde-escuro);
-    letter-spacing: -2px;
-    margin: 0;
-    text-transform: lowercase; /* Estilo startup */
-  }
+    .logo-tipo {
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -3px;
+      margin: 0;
+      text-transform: lowercase;
+    }
 
-  .logo-tipo span {
-    color: #2e7d32; /* Um detalhe em verde levemente diferente */
-  }
+    .logo-tipo span { color: #2e7d32; }
 
-  /* Barra de pesquisa que sobrepõe o verde */
-  .search-box {
-    max-width: 90%;
-    margin: -30px auto 20px;
-    background: var(--branco);
-    padding: 10px 20px;
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-    display: flex;
-    align-items: center;
-  }
+    .search-box {
+      max-width: 90%;
+      margin: -30px auto 20px;
+      background: var(--white);
+      padding: 5px 15px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+    }
 
-  .search-box input {
-    border: none;
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    outline: none;
-  }
-</style>
+    .search-box input {
+      border: none;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    /* Filtros */
+    .filter-wrapper { overflow-x: auto; padding: 10px 20px; white-space: nowrap; }
+    .filter-btn {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 8px 18px;
+      border-radius: 20px;
+      margin-right: 8px;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+    }
+    .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* Grid de Anúncios */
+    .container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-img { width: 100%; height: 150px; object-fit: cover; background: #eee; }
+    .card-content { padding: 12px; flex-grow: 1; }
+    .card-title { font-size: 14px; font-weight: 700; margin: 0; color: #333; }
+    .card-price { color: var(--primary); font-weight: 700; font-size: 16px; margin-top: 5px; }
+
+    .btn-card-wa {
+      background: #25d366;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      padding: 10px;
+      border-radius: 12px;
+      display: block;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    /* Menu Inferior Fixo (Ajustado) */
+    .app-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      height: 70px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+      z-index: 1000;
+    }
+
+    .footer-item { text-decoration: none; text-align: center; color: #888; flex: 1; }
+    .footer-item.active { color: var(--primary); }
+    
+    .footer-center-btn {
+      background: var(--primary);
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 30px;
+      text-decoration: none;
+      margin-top: -35px;
+      box-shadow: 0 5px 15px rgba(20, 92, 67, 0.3);
+      border: 4px solid white;
+    }
+  </style>
+</head>
+<body>
 
 <header class="header-container">
   <h1 class="logo-tipo">obrah<span>hí</span></h1>
-  <p style="color: var(--verde-escuro); opacity: 0.8; margin-top: 5px; font-weight: 500;">
+  <p style="color: var(--primary); opacity: 0.8; margin-top: 5px; font-weight: 500; font-size: 14px;">
     Aluguel de ferramentas sem burocracia
   </p>
 </header>
 
 <div class="search-box">
-  <input type="text" placeholder="O que você precisa hoje?">
+  <input type="text" id="inputBusca" placeholder="O que você precisa hoje?">
 </div>
 
-
-  <div class="filter-wrapper">
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
-      <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
-      <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
-      <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
-      <button class="filter-btn" onclick="filtrar('Pintura', this)">Pintura</button>
-    </div>
+<div class="filter-wrapper">
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
+    <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
+    <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
+    <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
   </div>
 </div>
 
@@ -91,24 +170,22 @@
 
 <div class="app-footer">
   <a href="index.html" class="footer-item active">
-    <div style="font-size: 20px;">🏠</div>
-    <div style="font-size: 10px; font-weight: bold;">Início</div>
+    <div>🏠</div>
+    <div style="font-size: 10px;">Início</div>
   </a>
 
-  <a href="anunciar.html" class="footer-center-btn">
-    +
+  <a href="anunciar.html" class="footer-center-btn">+</a>
+
+  <a href="login.html" id="perfilBtn" class="footer-item">
+    <div>👤</div>
+    <div style="font-size: 10px;">Perfil</div>
   </a>
-
-  <a href="login.html" class="footer-item">
-  <div style="font-size: 20px;">👤</div>
-  <div style="font-size: 10px; font-weight: bold;">Perfil</div>
-</a>
-
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -121,29 +198,23 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 const lista = document.getElementById("listaAnuncios");
 
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-const auth = getAuth(app);
-
-// Monitor de Login para mudar o visual do botão Perfil
+// Monitor de Login
 onAuthStateChanged(auth, (user) => {
-  const perfilLink = document.querySelector('a[href="login.html"]');
+  const perfilBtn = document.getElementById("perfilBtn");
   if (user) {
-    // Se estiver logado, mostra a foto do Google ou a inicial do nome
-    perfilLink.innerHTML = `
-      <img src="${user.photoURL}" style="width:25px; border-radius:50%; border: 2px solid var(--primary);">
-      <div style="font-size: 10px; font-weight: bold; color: var(--primary);">Olá, ${user.displayName.split(' ')[0]}</div>
+    perfilBtn.innerHTML = `
+      <img src="${user.photoURL}" style="width:24px; height:24px; border-radius:50%; border: 2px solid var(--primary);">
+      <div style="font-size: 10px;">Olá, ${user.displayName.split(' ')[0]}</div>
     `;
-    perfilLink.href = "perfil.html"; // Evita voltar para a tela de login se já está logado
+    perfilBtn.href = "perfil.html";
   }
 });
-  
-  
+
 async function carregarAnuncios(filtro = "Todas") {
-  lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Buscando ferramentas...</p>";
-  
+  lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Carregando...</p>";
   try {
     const q = query(collection(db, "anuncios"), orderBy("dataCriacao", "desc"));
     const querySnapshot = await getDocs(q);
@@ -151,46 +222,34 @@ async function carregarAnuncios(filtro = "Todas") {
 
     querySnapshot.forEach((doc) => {
       const anuncio = doc.data();
-
       if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
 
       const card = document.createElement("div");
       card.className = "card";
-            card.innerHTML = `
+      card.innerHTML = `
         <a href="detalhes.html?id=${doc.id}" style="text-decoration: none; color: inherit;">
-          <img src="${anuncio.imagem || 'https://via.placeholder.com/300x300?text=Obrahhi'}" class="card-img">
+          <img src="${anuncio.fotos ? anuncio.fotos[0] : (anuncio.imagem || 'https://via.placeholder.com/300x300?text=Obrahhi')}" class="card-img">
           <div class="card-content">
             <h3 class="card-title">${anuncio.nome}</h3>
             <div class="card-price">R$ ${anuncio.preco} / dia</div>
           </div>
         </a>
         <div style="padding: 0 12px 12px 12px;">
-          <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-card-wa">
-            Reservar
-          </a>
+          <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-card-wa">Reservar</a>
         </div>
       `;
-
       lista.appendChild(card);
     });
-
-    if (lista.innerHTML === "") {
-      lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Nenhuma ferramenta encontrada.</p>";
-    }
-
   } catch (e) {
     console.error(e);
-    lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Erro ao carregar os anúncios.</p>";
+    lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Erro ao carregar anúncios.</p>";
   }
 }
 
-// Busca Instantânea
 document.getElementById("inputBusca").addEventListener("input", (e) => {
   const termo = e.target.value.toLowerCase();
-  const cards = document.querySelectorAll(".card");
-  cards.forEach(card => {
-    const texto = card.innerText.toLowerCase();
-    card.style.display = texto.includes(termo) ? "flex" : "none";
+  document.querySelectorAll(".card").forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(termo) ? "flex" : "none";
   });
 });
 
@@ -202,6 +261,5 @@ window.filtrar = (categoria, btn) => {
 
 carregarAnuncios();
 </script>
-
 </body>
 </html>
