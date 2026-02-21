@@ -4,69 +4,206 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anunciar Ferramenta - Obrahhí</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #145c43; --bg: #f8faf9; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
-    .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-    h2 { color: var(--primary); text-align: center; margin-bottom: 25px; }
-    label { display: block; font-weight: 600; margin: 15px 0 5px; font-size: 14px; }
-    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
-    .btn-publicar { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; margin-top: 25px; cursor: pointer; transition: 0.3s; }
-    .btn-publicar:disabled { background: #ccc; cursor: not-allowed; }
-    .btn-voltar { display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none; font-size: 14px; }
+    :root { 
+      --primary: #145c43; 
+      --primary-light: #e8f5e9;
+      --bg: #fdfdfd; 
+      --text: #2c3e50;
+      --border: #e0e6ed;
+    }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: var(--bg); 
+      margin: 0; 
+      padding: 0; 
+      color: var(--text); 
+      display: flex;
+      justify-content: center;
+    }
+
+    .container { 
+      width: 100%;
+      max-width: 480px; 
+      background: white; 
+      padding: 30px; 
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h2 { 
+      color: var(--primary); 
+      font-weight: 800;
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .subtitle {
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+
+    /* Estilização dos Inputs */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label { 
+      display: block; 
+      font-weight: 600; 
+      margin-bottom: 8px; 
+      font-size: 13px;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, select, textarea { 
+      width: 100%; 
+      padding: 14px 16px; 
+      border: 2px solid var(--border); 
+      border-radius: 12px; 
+      box-sizing: border-box; 
+      font-size: 16px; 
+      transition: all 0.3s ease;
+      background: #fcfdfe;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    /* Design dos horários em linha */
+    .row {
+      display: flex;
+      gap: 15px;
+    }
+    .row > div { flex: 1; }
+
+    /* Estilo do upload de arquivo customizado */
+    input[type="file"] {
+      padding: 10px;
+      font-size: 14px;
+      border: 2px dashed var(--border);
+      background: var(--bg);
+    }
+
+    /* Botão Principal */
+    .btn-publicar { 
+      width: 100%; 
+      padding: 18px; 
+      background: var(--primary); 
+      color: white; 
+      border: none; 
+      border-radius: 16px; 
+      font-weight: 700; 
+      font-size: 16px; 
+      margin-top: 10px; 
+      cursor: pointer; 
+      transition: all 0.3s;
+      box-shadow: 0 10px 20px rgba(20, 92, 67, 0.2);
+    }
+
+    .btn-publicar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 25px rgba(20, 92, 67, 0.3);
+    }
+
+    .btn-publicar:active { transform: translateY(0); }
+
+    .btn-publicar:disabled { 
+      background: #bdc3c7; 
+      box-shadow: none;
+      cursor: not-allowed; 
+    }
+
+    .btn-voltar { 
+      display: block; 
+      text-align: center; 
+      margin-top: 20px; 
+      color: #95a5a6; 
+      text-decoration: none; 
+      font-size: 14px; 
+      font-weight: 500;
+    }
+
+    .btn-voltar:hover { color: var(--text); }
+
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Novo Anúncio</h2>
-  
-  <label>Foto da Ferramenta</label>
-  <input type="file" id="imagem" accept="image/*">
-
-  <label>Nome da Ferramenta</label>
-  <input type="text" id="nome" placeholder="Ex: Furadeira Bosch 600W">
-
-  <label>Preço por Dia (R$)</label>
-  <input type="number" id="preco" placeholder="0.00">
-
-  <label>Categoria</label>
-  <select id="categoria">
-    <option value="Eletricas">Elétricas</option>
-    <option value="Jardinagem">Jardinagem</option>
-    <option value="Construcao">Construção</option>
-    <option value="Pintura">Pintura</option>
-  </select>
-
-  <label>Seu WhatsApp (apenas números)</label>
-  <input type="number" id="whatsapp" placeholder="Ex: 11999999999">
-
-  <label>Cidade/Bairro</label>
-  <input type="text" id="cidade" placeholder="Onde a ferramenta está?">
-
-<div style="display: flex; gap: 10px; margin-bottom: 15px;">
-  <div style="flex: 1;">
-    <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px;">Retirada das:</label>
-    <input type="time" id="horarioInicio" value="08:00" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;">
+  <div class="header">
+    <h2>Novo Anúncio</h2>
+    <p class="subtitle">Preencha os detalhes da sua ferramenta</p>
   </div>
-  <div style="flex: 1;">
-    <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px;">Devolução até:</label>
-    <input type="time" id="horarioFim" value="18:00" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;">
+  
+  <div class="form-group">
+    <label>Foto da Ferramenta</label>
+    <input type="file" id="imagem" accept="image/*">
   </div>
-</div>
 
-<button class="btn-publicar" id="btnPublicar">Publicar Anúncio</button>
-  
-  
+  <div class="form-group">
+    <label>Nome da Ferramenta</label>
+    <input type="text" id="nome" placeholder="Ex: Furadeira Bosch 600W">
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label>Preço/Dia (R$)</label>
+      <input type="number" id="preco" placeholder="0.00">
+    </div>
+    <div class="form-group">
+      <label>Categoria</label>
+      <select id="categoria">
+        <option value="Eletricas">Elétricas</option>
+        <option value="Jardinagem">Jardinagem</option>
+        <option value="Construcao">Construção</option>
+        <option value="Pintura">Pintura</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>WhatsApp (DDD + Número)</label>
+    <input type="number" id="whatsapp" placeholder="Ex: 11999999999">
+  </div>
+
+  <div class="form-group">
+    <label>Cidade / Bairro</label>
+    <input type="text" id="cidade" placeholder="Ex: Centro, São Paulo">
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label>Retirada das:</label>
+      <input type="time" id="horarioInicio" value="08:00">
+    </div>
+    <div class="form-group">
+      <label>Devolução até:</label>
+      <input type="time" id="horarioFim" value="18:00">
+    </div>
+  </div>
+
   <button class="btn-publicar" id="btnPublicar">Publicar Anúncio</button>
-  <a href="index.html" class="btn-voltar">Cancelar e Voltar</a>
+  <a href="index.html" class="btn-voltar">Voltar ao Início</a>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -95,7 +232,7 @@
     if (!arquivo) { alert("Selecione uma foto!"); return; }
 
     btnPublicar.disabled = true;
-    btnPublicar.innerText = "Processando...";
+    btnPublicar.innerText = "Publicando...";
 
     const reader = new FileReader();
     reader.readAsDataURL(arquivo);
@@ -122,12 +259,12 @@
             cidade: document.getElementById("cidade").value,
             categoria: document.getElementById("categoria").value,
             imagem: fotoCompacta, 
-            horarioInicio: document.getElementById("horarioInicio").value, // LINHA NOVA
+            horarioInicio: document.getElementById("horarioInicio").value,
             horarioFim: document.getElementById("horarioFim").value,
             userId: user.uid,
             dataCriacao: new Date()
           });
-          alert("✅ Publicado!");
+          alert("✅ Publicado com sucesso!");
           window.location.href = "index.html";
         } catch (err) {
           alert("Erro ao salvar: " + err.message);
