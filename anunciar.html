@@ -45,6 +45,20 @@
   <label>Cidade/Bairro</label>
   <input type="text" id="cidade" placeholder="Onde a ferramenta está?">
 
+<div style="display: flex; gap: 10px; margin-bottom: 15px;">
+  <div style="flex: 1;">
+    <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px;">Retirada das:</label>
+    <input type="time" id="horarioInicio" value="08:00" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;">
+  </div>
+  <div style="flex: 1;">
+    <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px;">Devolução até:</label>
+    <input type="time" id="horarioFim" value="18:00" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;">
+  </div>
+</div>
+
+<button class="btn-publicar" id="btnPublicar">Publicar Anúncio</button>
+  
+  
   <button class="btn-publicar" id="btnPublicar">Publicar Anúncio</button>
   <a href="index.html" class="btn-voltar">Cancelar e Voltar</a>
 </div>
@@ -108,6 +122,8 @@
             cidade: document.getElementById("cidade").value,
             categoria: document.getElementById("categoria").value,
             imagem: fotoCompacta, 
+            horarioInicio: document.getElementById("horarioInicio").value, // LINHA NOVA
+            horarioFim: document.getElementById("horarioFim").value,
             userId: user.uid,
             dataCriacao: new Date()
           });
