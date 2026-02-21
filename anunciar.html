@@ -1,241 +1,120 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anunciar - Obraí</title>
-
+  <title>Anunciar Ferramenta - Obrahhí</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f2f1;
-      margin: 0;
-      color: #333;
-    }
-
-    header {
-      background: #145c43;
-      color: white;
-      text-align: center;
-      padding: 30px 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .container {
-      max-width: 450px;
-      margin: -30px auto 40px; /* Sobe um pouco para sobrepor o header */
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #145c43;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      box-sizing: border-box; /* Garante que o padding não quebre a largura */
-      transition: border-color 0.3s;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #145c43;
-      box-shadow: 0 0 5px rgba(20, 92, 67, 0.2);
-    }
-
-    .file-input-group {
-      background: #f9f9f9;
-      padding: 15px;
-      border-radius: 8px;
-      border: 2px dashed #ccc;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    button {
-      width: 100%;
-      padding: 15px;
-      background: #145c43;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #0e4231;
-    }
-
-    button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    .btn-voltar {
-      display: block;
-      text-align: center;
-      margin-top: 20px;
-      color: #666;
-      text-decoration: none;
-      font-size: 14px;
-    }
+    :root { --primary: #145c43; --bg: #f8faf9; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+    .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    h2 { color: var(--primary); text-align: center; margin-bottom: 25px; }
+    label { display: block; font-weight: 600; margin: 15px 0 5px; font-size: 14px; }
+    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+    .btn-publicar { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; margin-top: 25px; cursor: pointer; transition: 0.3s; }
+    .btn-publicar:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-voltar { display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none; font-size: 14px; }
   </style>
 </head>
-
 <body>
 
-<div id="avisoLogin" style="display: none; background: #fff3cd; color: #856404; padding: 15px; text-align: center; font-weight: bold; border-bottom: 1px solid #ffeeba;">
-  ⚠️ Você precisa estar logado para que seu anúncio seja publicado.
-</div>
-  
-  
-<header>
-  <h1>Anunciar Ferramenta</h1>
-  <p>Preencha os dados abaixo para alugar sua ferramenta</p>
-</header>
-
 <div class="container">
-  <label for="nome">O que você está alugando?</label>
-  <input type="text" id="nome" placeholder="Ex: Furadeira Bosch 220v">
-
-  <label for="preco">Preço da diária (R$)</label>
-  <input type="number" id="preco" placeholder="Ex: 50">
-  <label for="categoria">Categoria</label>
-<select id="categoria" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ddd;">
-  <option value="Eletricas">Ferramentas Elétricas</option>
-  <option value="Jardinagem">Jardinagem</option>
-  <option value="Construcao">Construção Civil</option>
-  <option value="Pintura">Pintura</option>
-  <option value="Outros">Outros</option>
-</select>
+  <h2>Novo Anúncio</h2>
   
+  <label>Fotos da Ferramenta</label>
+  <input type="file" id="imagem" accept="image/*" multiple>
 
-  <label for="cidade">Sua Cidade/Bairro</label>
-  <input type="text" id="cidade" placeholder="Ex: São Paulo - Centro">
+  <label>Nome da Ferramenta</label>
+  <input type="text" id="nome" placeholder="Ex: Furadeira Bosch 600W">
 
-  <label for="whatsapp">Seu WhatsApp</label>
-  <input type="tel" id="whatsapp" placeholder="Ex: 11999999999">
+  <label>Preço por Dia (R$)</label>
+  <input type="number" id="preco" placeholder="0.00">
 
-  <label>Foto da Ferramenta</label>
-  <div class="file-input-group">
-    <input type="file" id="imagem" accept="image/*" multiple style="margin-bottom: 0; border: none; background: none;">
-  </div>
+  <label>Categoria</label>
+  <select id="categoria">
+    <option value="Eletricas">Elétricas</option>
+    <option value="Jardinagem">Jardinagem</option>
+    <option value="Construcao">Construção</option>
+    <option value="Pintura">Pintura</option>
+  </select>
 
-  <button type="button" id="btnPublicar">Publicar Anúncio</button>
-  
-  <a href="index.html" class="btn-voltar">← Voltar para a lista</a>
-  <div id="msg"></div>
+  <label>Seu WhatsApp (apenas números)</label>
+  <input type="number" id="whatsapp" placeholder="Ex: 11999999999">
+
+  <label>Cidade/Bairro</label>
+  <input type="text" id="cidade" placeholder="Onde a ferramenta está?">
+
+  <button class="btn-publicar" id="btnPublicar">Publicar Anúncio</button>
+  <a href="index.html" class="btn-voltar">Cancelar e Voltar</a>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-  
-const firebaseConfig = {
-  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
-  authDomain: "obrai-56278.firebaseapp.com",
-  projectId: "obrai-56278",
-  storageBucket: "obrai-56278.firebasestorage.app",
-  messagingSenderId: "735990959965",
-  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
-};
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const auth = getAuth(app);
+  const firebaseConfig = {
+    apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
+    authDomain: "obrai-56278.firebaseapp.com",
+    projectId: "obrai-56278",
+    storageBucket: "obrai-56278.firebasestorage.app",
+    messagingSenderId: "735990959965",
+    appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
+  };
 
-// Trava de segurança e aviso visual
-const aviso = document.getElementById("avisoLogin");
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+  const auth = getAuth(app);
 
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    aviso.style.display = "block"; // Mostra o banner amarelo
-    setTimeout(() => {
-      alert("Para anunciar, você será levado para a tela de login.");
-      window.location.href = "login.html";
-    }, 2000);
-  } else {
-    aviso.style.display = "none";
-  }
-});
+  const btnPublicar = document.getElementById("btnPublicar");
 
-// CAPTURANDO O BOTÃO CORRETO (Ajustado para id="btnPublicar")
-const btnAnunciar = document.getElementById("btnPublicar"); 
+  btnPublicar.addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user) { alert("Você precisa estar logado!"); return; }
 
-// Localize o botão pelo ID correto que está no seu HTML (linha 120)
-const btnPublicar = document.getElementById("btnPublicar"); 
+    const arquivos = document.getElementById("imagem").files;
+    if (arquivos.length === 0) { alert("Selecione pelo menos uma foto!"); return; }
 
-btnPublicar.addEventListener("click", async () => {
-  const user = auth.currentUser;
-  const arquivos = document.getElementById("imagem").files;
-
-  if (arquivos.length === 0) {
-    alert("Por favor, selecione ao menos uma foto!");
-    return;
-  }
-
-  // Avisa o usuário que está carregando
-  btnPublicar.disabled = true;
-  btnPublicar.innerText = "Publicando... aguarde";
+    btnPublicar.disabled = true;
+    btnPublicar.innerText = "Enviando fotos...";
 
     try {
-    const linksFotos = [];
-    for (let i = 0; i < arquivos.length; i++) {
-      const arquivo = arquivos[i];
-      // Criando um nome de arquivo único para evitar erros de duplicidade
-      const nomeArquivo = `anuncios/${Date.now()}-${arquivo.name}`;
-      const storageRef = ref(storage, nomeArquivo);
+      const linksFotos = [];
+      for (let i = 0; i < arquivos.length; i++) {
+        const arquivo = arquivos[i];
+        const nomeArquivo = `anuncios/${Date.now()}-${arquivo.name}`;
+        const storageRef = ref(storage, nomeArquivo);
+        
+        await uploadBytes(storageRef, arquivo);
+        const url = await getDownloadURL(storageRef);
+        linksFotos.push(url);
+      }
 
-      console.log("Iniciando upload da foto:", i + 1);
-      await uploadBytes(storageRef, arquivo);
-      const url = await getDownloadURL(storageRef);
-      linksFotos.push(url);
+      btnPublicar.innerText = "Salvando anúncio...";
+      
+      await addDoc(collection(db, "anuncios"), {
+        nome: document.getElementById("nome").value,
+        preco: document.getElementById("preco").value,
+        cidade: document.getElementById("cidade").value,
+        whatsapp: document.getElementById("whatsapp").value,
+        categoria: document.getElementById("categoria").value,
+        fotos: linksFotos,
+        userId: user.uid,
+        dataCriacao: new Date()
+      });
+
+      alert("✅ Anúncio publicado com sucesso!");
+      window.location.href = "index.html";
+
+    } catch (error) {
+      alert("Erro: " + error.message);
+      btnPublicar.disabled = false;
+      btnPublicar.innerText = "Publicar Anúncio";
     }
-
-    await addDoc(collection(db, "anuncios"), {
-      nome: document.getElementById("nome").value,
-      preco: document.getElementById("preco").value,
-      cidade: document.getElementById("cidade").value,
-      whatsapp: document.getElementById("whatsapp").value,
-      categoria: document.getElementById("categoria").value,
-      fotos: linksFotos,
-      userId: user.uid,
-      dataCriacao: new Date()
-    });
-
-    alert("✅ Sucesso!");
-    window.location.href = "index.html";
-
-  } catch (error) {
-    // ESSA PARTE É VITAL: Se der erro, o botão VOLTA a funcionar para você tentar de novo
-    console.error("Erro detalhado:", error);
-    alert("❌ Erro ao publicar: " + error.message);
-    
-    btnPublicar.disabled = false; // Destrava o botão
-    btnPublicar.innerText = "Publicar Anúncio"; // Volta o texto original
-  }
-
-});
-
+  });
 </script>
-
-  
 </body>
 </html>
