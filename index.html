@@ -3,156 +3,286 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Obraí | Aluguel de Ferramentas</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Obrahhí | Aluguel de Ferramentas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #145c43; --bg-light: #e8f5e9; --white: #ffffff; }
-    body { background-color: #f4f7f6; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 90px; }
-    
-    /* Header Modernizado */
-    .header-container { background-color: var(--bg-light); padding: 40px 20px 60px; text-align: center; border-radius: 0 0 40px 40px; }
-    .logo-tipo { font-size: 52px; font-weight: 800; color: var(--primary); letter-spacing: -3px; margin: 0; text-transform: lowercase; }
-    .logo-tipo span { color: #2e7d32; }
+    :root { 
+      --deep-bg: #0a0f0d;        /* Quase preto esverdeado */
+      --card-bg: #141a17;        /* Cinza escuro para os cards */
+      --primary: #10b981;        /* Verde Esmeralda moderno */
+      --primary-dark: #065f46;   /* Verde Floresta para detalhes */
+      --text-main: #e2e8f0;      /* Branco acinzentado */
+      --text-muted: #94a3b8;     /* Texto secundário */
+      --border: #1e2923;         /* Bordas sutis */
+    }
 
-    /* Barra de Busca Flutuante */
-    .search-box { max-width: 90%; margin: -30px auto 20px; background: var(--white); padding: 5px 15px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; align-items: center; }
-    .search-box input { border: none; width: 100%; padding: 12px; font-size: 16px; outline: none; background: transparent; }
+    body { 
+      background-color: var(--deep-bg); 
+      margin: 0; 
+      font-family: 'Inter', sans-serif; 
+      color: var(--text-main);
+      padding-bottom: 100px; 
+    }
 
-    /* Filtros com Scroll Suave */
-    .filter-wrapper { overflow-x: auto; padding: 10px 20px; white-space: nowrap; scrollbar-width: none; }
-    .filter-wrapper::-webkit-scrollbar { display: none; }
-    .filter-btn { background: white; border: 1px solid #ddd; padding: 8px 20px; border-radius: 20px; margin-right: 8px; font-weight: 600; color: #666; cursor: pointer; transition: 0.3s; }
-    .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    /* Header Estilo Premium */
+    .header-container { 
+      background: linear-gradient(180deg, #0d1e18 0%, var(--deep-bg) 100%);
+      padding: 50px 20px 70px; 
+      text-align: center; 
+    }
 
-    /* Grid de Anúncios Profissional */
-    .container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
-    .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s; }
-    .card:active { transform: scale(0.98); }
-    .card-img { width: 100%; height: 150px; object-fit: cover; background: #eee; border-bottom: 1px solid #f0f0f0; }
-    .card-content { padding: 12px; flex-grow: 1; }
-    .card-title { font-size: 14px; font-weight: 700; margin: 0; color: #333; height: 38px; overflow: hidden; }
-    .card-price { color: var(--primary); font-weight: 700; font-size: 16px; margin-top: 5px; }
-    .btn-card-wa { background: #25d366; color: white; text-decoration: none; text-align: center; padding: 10px; border-radius: 12px; display: block; font-weight: bold; font-size: 14px; margin: 0 12px 12px; }
+    .logo-tipo { 
+      font-size: 48px; 
+      font-weight: 800; 
+      color: var(--primary); 
+      letter-spacing: -2px; 
+      margin: 0; 
+      text-transform: lowercase; 
+    }
+    .logo-tipo span { color: white; opacity: 0.9; }
 
-    /* Footer Fixo */
-    .app-footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; height: 75px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 1000; }
-    .footer-item { text-decoration: none; text-align: center; color: #888; flex: 1; transition: 0.3s; }
+    /* Barra de Busca Dark */
+    .search-box { 
+      max-width: 500px; 
+      margin: -35px auto 25px; 
+      background: #1a221f; 
+      padding: 6px; 
+      border-radius: 18px; 
+      display: flex; 
+      align-items: center; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid var(--border);
+    }
+    .search-box input { 
+      flex: 1; 
+      border: none; 
+      padding: 12px 15px; 
+      outline: none; 
+      background: transparent; 
+      color: white;
+      font-size: 16px;
+    }
+    .search-box button { 
+      background: var(--primary); 
+      color: var(--deep-bg); 
+      border: none; 
+      padding: 12px 20px; 
+      border-radius: 14px; 
+      font-weight: 700; 
+      cursor: pointer;
+    }
+
+    /* Filtros Modernos */
+    .filter-container { 
+      display: flex; 
+      overflow-x: auto; 
+      gap: 12px; 
+      padding: 0 20px 20px; 
+      scrollbar-width: none; 
+    }
+    .filter-btn { 
+      background: #141a17; 
+      border: 1px solid var(--border);
+      color: var(--text-muted); 
+      padding: 10px 22px; 
+      border-radius: 30px; 
+      white-space: nowrap; 
+      font-weight: 500; 
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .filter-btn.active { 
+      background: var(--primary); 
+      color: var(--deep-bg); 
+      border-color: var(--primary);
+    }
+
+    /* Grid de Cards */
+    .lista-anuncios { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+      gap: 15px; 
+      padding: 20px; 
+    }
+
+    .card { 
+      background: var(--card-bg); 
+      border-radius: 20px; 
+      overflow: hidden; 
+      border: 1px solid var(--border);
+      transition: transform 0.3s ease;
+    }
+    .card:hover { transform: translateY(-5px); }
+
+    .card-img { 
+      width: 100%; 
+      height: 160px; 
+      object-fit: cover; 
+    }
+
+    .card-content { padding: 12px; }
+
+    .card-title { 
+      font-size: 14px; 
+      font-weight: 600; 
+      margin: 0; 
+      color: var(--text-main);
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-price { 
+      font-size: 16px; 
+      font-weight: 800; 
+      color: var(--primary); 
+      margin: 5px 0 10px; 
+    }
+
+    .btn-card-wa { 
+      display: block; 
+      background: var(--primary-dark); 
+      color: white; 
+      text-align: center; 
+      padding: 10px; 
+      text-decoration: none; 
+      border-radius: 12px; 
+      font-weight: 600; 
+      font-size: 13px;
+    }
+
+    /* Tab Bar Dark */
+    .app-footer { 
+      position: fixed; 
+      bottom: 0; 
+      left: 0; 
+      right: 0; 
+      background: rgba(10, 15, 13, 0.95); 
+      backdrop-filter: blur(10px);
+      height: 75px; 
+      display: flex; 
+      justify-content: space-around; 
+      align-items: center; 
+      border-top: 1px solid var(--border);
+    }
+    .footer-item { text-decoration: none; text-align: center; color: var(--text-muted); font-size: 11px; }
     .footer-item.active { color: var(--primary); }
-    .footer-center-btn { background: var(--primary); width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; text-decoration: none; margin-top: -40px; border: 5px solid #f4f7f6; box-shadow: 0 5px 15px rgba(20, 92, 67, 0.3); }
+    .footer-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+
+    .btn-anunciar-centro {
+      background: var(--primary); 
+      color: var(--deep-bg); 
+      width: 50px; 
+      height: 50px; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      text-decoration: none; 
+      margin-top: -35px; 
+      font-size: 28px; 
+      font-weight: bold;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
   </style>
 </head>
 <body>
 
-<header class="header-container">
+<div class="header-container">
   <h1 class="logo-tipo">obrah<span>hí</span></h1>
-  <p style="color: var(--primary); opacity: 0.8; margin-top: 5px; font-weight: 500; font-size: 14px;">Aluguel de ferramentas sem burocracia</p>
-</header>
+</div>
 
 <div class="search-box">
   <input type="text" id="inputBusca" placeholder="O que você precisa hoje?">
+  <button onclick="buscar()">Buscar</button>
 </div>
 
-<div class="filter-wrapper">
-    <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
-    <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
-    <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
-    <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
-    <button class="filter-btn" onclick="filtrar('Pintura', this)">Pintura</button>
+<div class="filter-container">
+  <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
+  <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
+  <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
+  <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
+  <button class="filter-btn" onclick="filtrar('Pintura', this)">Pintura</button>
 </div>
 
-<div class="container" id="listaAnuncios"></div>
+<div class="lista-anuncios" id="listaAnuncios">
+  </div>
 
 <nav class="app-footer">
-  <a href="index.html" class="footer-item active"><div>🏠</div><div style="font-size: 10px;">Início</div></a>
-  <a href="anunciar.html" class="footer-center-btn">+</a>
-  <a href="login.html" id="perfilBtn" class="footer-item"><div>👤</div><div style="font-size: 10px;">Perfil</div></a>
+  <a href="index.html" class="footer-item active">🏠<br>Início</a>
+  <a href="anunciar.html" class="btn-anunciar-centro">+</a>
+  <a href="perfil.html" class="footer-item">👤<br>Perfil</a>
 </nav>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
-  authDomain: "obrai-56278.firebaseapp.com",
-  projectId: "obrai-56278",
-  storageBucket: "obrai-56278.firebasestorage.app",
-  messagingSenderId: "735990959965",
-  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
+    authDomain: "obrai-56278.firebaseapp.com",
+    projectId: "obrai-56278",
+    storageBucket: "obrai-56278.firebasestorage.app",
+    messagingSenderId: "735990959965",
+    appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-const lista = document.getElementById("listaAnuncios");
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-// Gestão de Perfil Sênior
-onAuthStateChanged(auth, (user) => {
-  const perfilBtn = document.getElementById("perfilBtn");
-  if (user) {
-    perfilBtn.innerHTML = `
-      <img src="${user.photoURL}" style="width:24px; height:24px; border-radius:50%; border: 2px solid var(--primary);">
-      <div style="font-size: 10px; font-weight: bold;">Olá, ${user.displayName.split(' ')[0]}</div>
-    `;
-    perfilBtn.href = "perfil.html";
-  }
-});
+  async function carregarAnuncios(categoriaFiltro = 'Todas') {
+    const lista = document.getElementById("listaAnuncios");
+    lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Carregando...</p>";
 
-// Carregamento de Dados Otimizado
-async function carregarAnuncios(filtro = "Todas") {
-  lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 20px;'>Carregando ferramentas...</p>";
-  try {
-    const q = query(collection(db, "anuncios"), orderBy("dataCriacao", "desc"));
-    const querySnapshot = await getDocs(q);
-    lista.innerHTML = "";
+    try {
+      let q = collection(db, "anuncios");
+      
+      if (categoriaFiltro !== 'Todas') {
+        q = query(q, where("categoria", "==", categoriaFiltro));
+      }
 
-    querySnapshot.forEach((doc) => {
-      const anuncio = doc.data();
-      if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
+      const snap = await getDocs(q);
+      lista.innerHTML = "";
 
-      // Suporte híbrido para Base64 (imagem) e Storage (fotos)
-      const imagemExibir = anuncio.imagem || (anuncio.fotos && anuncio.fotos[0]) || 'https://via.placeholder.com/300x300?text=Obrahhi';
-
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <a href="detalhes.html?id=${doc.id}" style="text-decoration: none; color: inherit;">
-          <img src="${imagemExibir}" class="card-img" onerror="this.src='https://via.placeholder.com/300x300?text=Erro+na+Imagem'">
-          <div class="card-content">
-            <h3 class="card-title">${anuncio.nome}</h3>
-            <div class="card-price">R$ ${anuncio.preco} / dia</div>
-          </div>
-        </a>
-        <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-card-wa">Reservar</a>
-      `;
-      lista.appendChild(card);
-    });
-
-    if (lista.innerHTML === "") {
-      lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 20px;'>Nenhuma ferramenta encontrada.</p>";
+      snap.forEach((doc) => {
+        const anuncio = doc.data();
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <a href="detalhes.html?id=${doc.id}" style="text-decoration: none;">
+            <img src="${anuncio.imagem}" class="card-img" onerror="this.src='https://via.placeholder.com/300x300?text=Obrahhi'">
+            <div class="card-content">
+              <h3 class="card-title">${anuncio.nome}</h3>
+              <div class="card-price">R$ ${anuncio.preco} <span style="font-size:10px; color:var(--text-muted)">/dia</span></div>
+              <div class="btn-card-wa">Ver Detalhes</div>
+            </div>
+          </a>
+        `;
+        lista.appendChild(card);
+      });
+    } catch (e) {
+      console.error(e);
+      lista.innerHTML = "Erro ao carregar.";
     }
-  } catch (e) {
-    console.error("Erro Firestore:", e);
-    lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 20px;'>Erro ao carregar anúncios. Verifique sua conexão.</p>";
   }
-}
 
-// Filtros e Busca
-window.filtrar = (categoria, btn) => {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  carregarAnuncios(categoria);
-};
+  window.filtrar = (categoria, btn) => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    carregarAnuncios(categoria);
+  };
 
-document.getElementById("inputBusca").addEventListener("input", (e) => {
-  const termo = e.target.value.toLowerCase();
-  document.querySelectorAll(".card").forEach(card => {
-    card.style.display = card.innerText.toLowerCase().includes(termo) ? "flex" : "none";
-  });
-});
+  window.buscar = () => {
+    const termo = document.getElementById("inputBusca").value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      const nome = card.querySelector('.card-title').innerText.toLowerCase();
+      card.style.display = nome.includes(termo) ? "block" : "none";
+    });
+  };
 
-carregarAnuncios();
+  carregarAnuncios();
 </script>
 </body>
 </html>
