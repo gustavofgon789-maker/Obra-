@@ -98,6 +98,11 @@
 
 <body>
 
+<div id="avisoLogin" style="display: none; background: #fff3cd; color: #856404; padding: 15px; text-align: center; font-weight: bold; border-bottom: 1px solid #ffeeba;">
+  ⚠️ Você precisa estar logado para que seu anúncio seja publicado.
+</div>
+  
+  
 <header>
   <h1>Anunciar Ferramenta</h1>
   <p>Preencha os dados abaixo para alugar sua ferramenta</p>
@@ -152,15 +157,50 @@ const firebaseConfig = {
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const auth = getAuth(app);
+const aviso = document.getElementById("avisoLogin");
 
-// A TRAVA DE SEGURANÇA:
+// MONITOR DE LOGIN
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    // Se não tiver usuário logado, avisa e manda para o login
-    alert("Você precisa estar logado para anunciar uma ferramenta!");
-    window.location.href = "login.html";
+    aviso.style.display = "block"; // Mostra o aviso visual
+    // Espera 3 segundos para o usuário ler e redireciona
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 3000);
+  } else {
+    aviso.style.display = "none";
+    console.log("Usuário logado:", user.email);
   }
 });
+
+// NO MOMENTO DE SALVAR (DENTRO DO SEU EVENTO DE CLIQUE)
+btnAnunciar.addEventListener("click", async () => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("Erro: Você perdeu a conexão. Faça login novamente.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "anuncios"), {
+      nome: nomeInput.value,
+      preco: precoInput.value,
+      cidade: cidadeInput.value,
+      whatsapp: whatsappInput.value,
+      userId: user.uid, // O ID Único do Google
+      userEmail: user.email, // Salva o e-mail para você saber quem é
+      dataCriacao: new Date()
+    });
+    alert("Ferramenta anunciada com sucesso!");
+    window.location.href = "index.html";
+  } catch (error) {
+    console.error("Erro ao salvar:", error);
+    alert("Erro ao publicar. Verifique sua conexão.");
+  }
+});
+
   
   
 // Seleciona o campo de WhatsApp
