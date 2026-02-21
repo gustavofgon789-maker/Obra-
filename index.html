@@ -5,151 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Obraí | Aluguel de Ferramentas</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
   <style>
-    :root {
-      --primary: #145c43;
-      --bg-light: #e8f5e9;
-      --white: #ffffff;
-      --text: #333;
-    }
-
-    body {
-      background-color: #f4f7f6;
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      padding-bottom: 80px; /* Espaço para o menu não cobrir o conteúdo */
-    }
-
-    /* Cabeçalho Profissional */
-    .header-container {
-      background-color: var(--bg-light);
-      padding: 40px 20px 60px 20px;
-      text-align: center;
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
-    }
-
-    .logo-tipo {
-      font-size: 52px;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -3px;
-      margin: 0;
-      text-transform: lowercase;
-    }
-
+    :root { --primary: #145c43; --bg-light: #e8f5e9; --white: #ffffff; }
+    body { background-color: #f4f7f6; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 90px; }
+    
+    /* Header Modernizado */
+    .header-container { background-color: var(--bg-light); padding: 40px 20px 60px; text-align: center; border-radius: 0 0 40px 40px; }
+    .logo-tipo { font-size: 52px; font-weight: 800; color: var(--primary); letter-spacing: -3px; margin: 0; text-transform: lowercase; }
     .logo-tipo span { color: #2e7d32; }
 
-    .search-box {
-      max-width: 90%;
-      margin: -30px auto 20px;
-      background: var(--white);
-      padding: 5px 15px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      display: flex;
-      align-items: center;
-    }
+    /* Barra de Busca Flutuante */
+    .search-box { max-width: 90%; margin: -30px auto 20px; background: var(--white); padding: 5px 15px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; align-items: center; }
+    .search-box input { border: none; width: 100%; padding: 12px; font-size: 16px; outline: none; background: transparent; }
 
-    .search-box input {
-      border: none;
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      outline: none;
-    }
-
-    /* Filtros */
-    .filter-wrapper { overflow-x: auto; padding: 10px 20px; white-space: nowrap; }
-    .filter-btn {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 8px 18px;
-      border-radius: 20px;
-      margin-right: 8px;
-      font-weight: 600;
-      color: #666;
-      cursor: pointer;
-    }
+    /* Filtros com Scroll Suave */
+    .filter-wrapper { overflow-x: auto; padding: 10px 20px; white-space: nowrap; scrollbar-width: none; }
+    .filter-wrapper::-webkit-scrollbar { display: none; }
+    .filter-btn { background: white; border: 1px solid #ddd; padding: 8px 20px; border-radius: 20px; margin-right: 8px; font-weight: 600; color: #666; cursor: pointer; transition: 0.3s; }
     .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-    /* Grid de Anúncios */
-    .container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      padding: 15px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card-img { width: 100%; height: 150px; object-fit: cover; background: #eee; }
+    /* Grid de Anúncios Profissional */
+    .container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
+    .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s; }
+    .card:active { transform: scale(0.98); }
+    .card-img { width: 100%; height: 150px; object-fit: cover; background: #eee; border-bottom: 1px solid #f0f0f0; }
     .card-content { padding: 12px; flex-grow: 1; }
-    .card-title { font-size: 14px; font-weight: 700; margin: 0; color: #333; }
+    .card-title { font-size: 14px; font-weight: 700; margin: 0; color: #333; height: 38px; overflow: hidden; }
     .card-price { color: var(--primary); font-weight: 700; font-size: 16px; margin-top: 5px; }
+    .btn-card-wa { background: #25d366; color: white; text-decoration: none; text-align: center; padding: 10px; border-radius: 12px; display: block; font-weight: bold; font-size: 14px; margin: 0 12px 12px; }
 
-    .btn-card-wa {
-      background: #25d366;
-      color: white;
-      text-decoration: none;
-      text-align: center;
-      padding: 10px;
-      border-radius: 12px;
-      display: block;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    /* Menu Inferior Fixo (Ajustado) */
-    .app-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      height: 70px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-      z-index: 1000;
-    }
-
-    .footer-item { text-decoration: none; text-align: center; color: #888; flex: 1; }
+    /* Footer Fixo */
+    .app-footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; height: 75px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 1000; }
+    .footer-item { text-decoration: none; text-align: center; color: #888; flex: 1; transition: 0.3s; }
     .footer-item.active { color: var(--primary); }
-    
-    .footer-center-btn {
-      background: var(--primary);
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 30px;
-      text-decoration: none;
-      margin-top: -35px;
-      box-shadow: 0 5px 15px rgba(20, 92, 67, 0.3);
-      border: 4px solid white;
-    }
+    .footer-center-btn { background: var(--primary); width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; text-decoration: none; margin-top: -40px; border: 5px solid #f4f7f6; box-shadow: 0 5px 15px rgba(20, 92, 67, 0.3); }
   </style>
 </head>
 <body>
 
 <header class="header-container">
-  <h1 class="logo-tipo">ⓄⒷⓇ<span>ⒶⒾ</span></h1>
-  <p style="color: var(--primary); opacity: 0.8; margin-top: 5px; font-weight: 500; font-size: 14px;">
-    Aluguel de ferramentas sem burocracia
-  </p>
+  <h1 class="logo-tipo">obrah<span>hí</span></h1>
+  <p style="color: var(--primary); opacity: 0.8; margin-top: 5px; font-weight: 500; font-size: 14px;">Aluguel de ferramentas sem burocracia</p>
 </header>
 
 <div class="search-box">
@@ -157,30 +53,20 @@
 </div>
 
 <div class="filter-wrapper">
-  <div class="filter-bar">
     <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
     <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
     <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
     <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
-  </div>
+    <button class="filter-btn" onclick="filtrar('Pintura', this)">Pintura</button>
 </div>
 
-<div class="container" id="listaAnuncios">
-  </div>
+<div class="container" id="listaAnuncios"></div>
 
-<div class="app-footer">
-  <a href="index.html" class="footer-item active">
-    <div>🏠</div>
-    <div style="font-size: 10px;">Início</div>
-  </a>
-
+<nav class="app-footer">
+  <a href="index.html" class="footer-item active"><div>🏠</div><div style="font-size: 10px;">Início</div></a>
   <a href="anunciar.html" class="footer-center-btn">+</a>
-
-  <a href="login.html" id="perfilBtn" class="footer-item">
-    <div>👤</div>
-    <div style="font-size: 10px;">Perfil</div>
-  </a>
-</div>
+  <a href="login.html" id="perfilBtn" class="footer-item"><div>👤</div><div style="font-size: 10px;">Perfil</div></a>
+</nav>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -201,59 +87,63 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const lista = document.getElementById("listaAnuncios");
 
-// Monitor de Login
+// Gestão de Perfil Sênior
 onAuthStateChanged(auth, (user) => {
   const perfilBtn = document.getElementById("perfilBtn");
   if (user) {
     perfilBtn.innerHTML = `
       <img src="${user.photoURL}" style="width:24px; height:24px; border-radius:50%; border: 2px solid var(--primary);">
-      <div style="font-size: 10px;">Olá, ${user.displayName.split(' ')[0]}</div>
+      <div style="font-size: 10px; font-weight: bold;">Olá, ${user.displayName.split(' ')[0]}</div>
     `;
     perfilBtn.href = "perfil.html";
   }
 });
 
+// Carregamento de Dados Otimizado
 async function carregarAnuncios(filtro = "Todas") {
-  lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Carregando...</p>";
+  lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 20px;'>Carregando ferramentas...</p>";
   try {
     const q = query(collection(db, "anuncios"), orderBy("dataCriacao", "desc"));
     const querySnapshot = await getDocs(q);
     lista.innerHTML = "";
 
     querySnapshot.forEach((doc) => {
-    // Localize esta parte no seu index.html e substitua:
-querySnapshot.forEach((doc) => {
-  const anuncio = doc.data();
+      const anuncio = doc.data();
+      if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
 
-  if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
+      // Suporte híbrido para Base64 (imagem) e Storage (fotos)
+      const imagemExibir = anuncio.imagem || (anuncio.fotos && anuncio.fotos[0]) || 'https://via.placeholder.com/300x300?text=Obrahhi';
 
-  // ESTA LINHA É A CHAVE: Ela verifica todas as possibilidades de foto
-  const imagemExibir = anuncio.imagem || (anuncio.fotos && anuncio.fotos[0]) || 'https://via.placeholder.com/300x300?text=Obrahhi';
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <a href="detalhes.html?id=${doc.id}" style="text-decoration: none; color: inherit;">
+          <img src="${imagemExibir}" class="card-img" onerror="this.src='https://via.placeholder.com/300x300?text=Erro+na+Imagem'">
+          <div class="card-content">
+            <h3 class="card-title">${anuncio.nome}</h3>
+            <div class="card-price">R$ ${anuncio.preco} / dia</div>
+          </div>
+        </a>
+        <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-card-wa">Reservar</a>
+      `;
+      lista.appendChild(card);
+    });
 
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerHTML = `
-    <a href="detalhes.html?id=${doc.id}" style="text-decoration: none; color: inherit;">
-      <img src="${imagemExibir}" class="card-img">
-      <div class="card-content">
-        <h3 class="card-title">${anuncio.nome}</h3>
-        <div class="card-price">R$ ${anuncio.preco} / dia</div>
-      </div>
-    </a>
-    <div style="padding: 0 12px 12px 12px;">
-      <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-card-wa">
-        Reservar
-      </a>
-    </div>
-  `;
-  lista.appendChild(card);
-});
-
+    if (lista.innerHTML === "") {
+      lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 20px;'>Nenhuma ferramenta encontrada.</p>";
+    }
   } catch (e) {
-    console.error(e);
-    lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Erro ao carregar anúncios.</p>";
+    console.error("Erro Firestore:", e);
+    lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 20px;'>Erro ao carregar anúncios. Verifique sua conexão.</p>";
   }
 }
+
+// Filtros e Busca
+window.filtrar = (categoria, btn) => {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  carregarAnuncios(categoria);
+};
 
 document.getElementById("inputBusca").addEventListener("input", (e) => {
   const termo = e.target.value.toLowerCase();
@@ -261,12 +151,6 @@ document.getElementById("inputBusca").addEventListener("input", (e) => {
     card.style.display = card.innerText.toLowerCase().includes(termo) ? "flex" : "none";
   });
 });
-
-window.filtrar = (categoria, btn) => {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  carregarAnuncios(categoria);
-};
 
 carregarAnuncios();
 </script>
