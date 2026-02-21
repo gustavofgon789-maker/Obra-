@@ -159,15 +159,23 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// Trava de segurança: Verifica login ao entrar
+// Trava de segurança e aviso visual
+const aviso = document.getElementById("avisoLogin");
+
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    alert("Para anunciar, você será levado para a tela de login.");
-    window.location.href = "login.html";
+    aviso.style.display = "block"; // Mostra o banner amarelo
+    setTimeout(() => {
+      alert("Para anunciar, você será levado para a tela de login.");
+      window.location.href = "login.html";
+    }, 2000);
+  } else {
+    aviso.style.display = "none";
   }
 });
 
-const btnAnunciar = document.getElementById("btnAnunciar"); // Verifique se o ID do seu botão é este!
+// CAPTURANDO O BOTÃO CORRETO (Ajustado para id="btnPublicar")
+const btnAnunciar = document.getElementById("btnPublicar"); 
 
 btnAnunciar.addEventListener("click", async () => {
   const user = auth.currentUser;
@@ -181,6 +189,12 @@ btnAnunciar.addEventListener("click", async () => {
   const preco = document.getElementById("preco").value;
   const cidade = document.getElementById("cidade").value;
   const whatsapp = document.getElementById("whatsapp").value;
+  const categoria = document.getElementById("categoria").value;
+
+  if(!nome || !preco || !whatsapp) {
+    alert("Preencha os campos obrigatórios!");
+    return;
+  }
 
   try {
     const docRef = await addDoc(collection(db, "anuncios"), {
@@ -188,6 +202,7 @@ btnAnunciar.addEventListener("click", async () => {
       preco,
       cidade,
       whatsapp,
+      categoria,
       userId: user.uid,
       userEmail: user.email,
       dataCriacao: new Date()
@@ -196,10 +211,11 @@ btnAnunciar.addEventListener("click", async () => {
     window.location.href = "index.html";
   } catch (error) {
     console.error(error);
-    alert("❌ Erro ao salvar: " + error.message + " (Verifique as Rules no Firebase)");
+    alert("❌ Erro ao salvar: " + error.message);
   }
 });
 </script>
+
   
 </body>
 </html>
