@@ -223,14 +223,14 @@ const whatsappBruto = document.getElementById("whatsapp").value.replace(/\D/g, "
     }
 const categoria = document.getElementById("categoria").value;
     await addDoc(collection(db, "anuncios"), {
-  nome,
-  preco,
-  cidade,
-  whatsapp: whatsappBruto, // Salva só os números: 11999999999
-  categoria,
-  imagem: fotoString,
+  nome: nome,
+  preco: preco,
+  cidade: cidade,
+  whatsapp: whatsapp,
+  userId: auth.currentUser.uid, // <-- ISSO AQUI identifica quem postou
   dataCriacao: new Date()
 });
+
 
 
     alert("Anúncio publicado com sucesso!");
