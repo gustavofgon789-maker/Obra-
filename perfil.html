@@ -83,16 +83,50 @@
   });
 
   async function carregarMeusAnuncios(userId) {
-    const lista = document.getElementById("listaMeusAnuncios");
-    try {
-      const q = query(collection(db, "anuncios"), where("userId", "==", userId));
-      const snap = await getDocs(q);
-      lista.innerHTML = "";
+  const lista = document.getElementById("listaMeusAnuncios");
+  console.log("Buscando anúncios para o ID:", userId); // Debug no console
 
-      if (snap.empty) {
-        lista.innerHTML = "<p style='text-align:center; color:#888;'>Você ainda não anunciou nada.</p>";
-        return;
-      }
+  try {
+    // Removemos o orderBy temporariamente para testar se os anúncios aparecem
+    const q = query(
+      collection(db, "anuncios"), 
+      where("userId", "==", userId)
+    );
+    
+    const snap = await getDocs(q);
+    lista.innerHTML = "";
+
+    if (snap.empty) {
+      lista.innerHTML = `
+        <p style='text-align:center; color:#888; padding: 20px;'>
+          Nenhum anúncio encontrado para sua conta atual.<br>
+          <small>ID: ${userId}</small>
+        </p>`;
+      return;
+    }
+
+    snap.forEach((docSnap) => {
+      const item = docSnap.data();
+      const img = item.imagem || (item.fotos && item.fotos[0]) || 'https://via.placeholder.com/100';
+      
+      const div = document.createElement("div");
+      div.className = "item-anuncio";
+      div.innerHTML = `
+        <img src="${img}" class="item-img">
+        <div class="item-info">
+          <p class="item-nome">${item.nome}</p>
+          <p class="item-preco">R$ ${item.preco} / dia</p>
+        </div>
+        <button class="btn-excluir" onclick="confirmarExclusao('${docSnap.id}')">🗑️</button>
+      `;
+      lista.appendChild(div);
+    });
+  } catch (e) {
+    console.error("Erro detalhado:", e);
+    lista.innerHTML = "<p style='text-align:center; color:red;'>Erro ao carregar anúncios. Verifique o console.</p>";
+  }
+}
+
 
       snap.forEach((docSnap) => {
         const item = docSnap.data();
