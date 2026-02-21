@@ -178,8 +178,15 @@
 <body>
 
 <div class="app-header">
+<div class="app-header">
   <img src="logo.png" alt="Obrahhí Logo">
   
+  <div style="width: 100%; max-width: 500px; position: relative; margin-bottom: 15px;">
+    <input type="text" id="inputBusca" placeholder="O que você precisa hoje?" 
+      style="width: 100%; padding: 12px 40px 12px 15px; border-radius: 25px; border: 1px solid #ddd; outline: none; box-sizing: border-box; font-size: 14px;">
+    <span style="position: absolute; right: 15px; top: 12px; color: #999;">🔍</span>
+  </div>
+
   <div class="filter-bar">
     <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
     <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
@@ -189,8 +196,6 @@
   </div>
 </div>
 
-<div class="container" id="listaAnuncios">
-  </div>
 
 <a href="anunciar.html" class="floating-action">
   <span>+</span> Anunciar Ferramenta
@@ -260,6 +265,24 @@ window.filtrar = (categoria, btn) => {
 
 // Carga inicial
 carregarAnuncios();
+
+const inputBusca = document.getElementById("inputBusca");
+
+inputBusca.addEventListener("input", () => {
+  const termo = inputBusca.value.toLowerCase();
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    const nomeFerramenta = card.querySelector(".card-title").innerText.toLowerCase();
+    
+    if (nomeFerramenta.includes(termo)) {
+      card.style.display = "block"; // Mostra se bater com a busca
+    } else {
+      card.style.display = "none";  // Esconde se não bater
+    }
+  });
+});
+  
 </script>
 
 </body>
