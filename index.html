@@ -107,12 +107,29 @@
       transition: transform 0.3s;
     }
 
-    .card:active { transform: scale(0.97); }
-
     .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
     .card-content { padding: 15px; }
     .card-title { font-size: 14px; font-weight: 600; margin: 0 0 5px; color: var(--text-main); }
     .card-price { color: var(--primary); font-weight: 800; font-size: 16px; }
+
+    /* --- SKELETON SCREEN ANIMATION --- */
+    .skeleton {
+      background: #1e2923;
+      background: linear-gradient(90deg, #1e2923 25%, #2a3a31 50%, #1e2923 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite linear;
+      border-radius: 12px;
+    }
+
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skeleton-card { height: 240px; border-radius: 24px; background: var(--card-bg); border: 1px solid var(--border); overflow: hidden; }
+    .skeleton-img { width: 100%; height: 160px; }
+    .skeleton-text { height: 12px; margin: 15px; width: 70%; }
+    .skeleton-price { height: 15px; margin: 0 15px 15px; width: 40%; }
 
     /* Menu Inferior Fixo */
     .bottom-nav { 
@@ -137,7 +154,6 @@
     .nav-icon { font-size: 22px; display: block; margin-bottom: 4px; }
     .nav-label { font-size: 10px; font-weight: 700; text-transform: uppercase; }
 
-    /* Estilização da Foto do Perfil no Menu */
     #perfilImgContainer img {
       width: 24px;
       height: 24px;
@@ -146,17 +162,14 @@
       border: 2px solid var(--primary);
     }
     
-    .profile-placeholder {
-      font-size: 20px;
-      line-height: 24px;
-    }
+    .profile-placeholder { font-size: 20px; line-height: 24px; }
 
   </style>
 </head>
 <body>
 
 <div class="header-container">
-  <h1 class="logo-tipo">𝔒braí</h1>
+  <h1 class="logo-tipo">obrahhí</h1>
 </div>
 
 <div class="search-box">
@@ -208,7 +221,7 @@
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  // Monitorar Usuário para Atualizar o Bonequinho
+  // Monitorar Usuário para Atualizar o Perfil
   onAuthStateChanged(auth, (user) => {
     const container = document.getElementById("perfilImgContainer");
     if (user && user.photoURL) {
@@ -218,9 +231,24 @@
     }
   });
 
+  // Função para criar o efeito de carregamento (Skeletons)
+  function mostrarSkeletons() {
+    const lista = document.getElementById("listaAnuncios");
+    lista.innerHTML = "";
+    for (let i = 0; i < 4; i++) { // Mostra 4 cards fantasmagóricos
+      lista.innerHTML += `
+        <div class="skeleton-card">
+          <div class="skeleton-img skeleton"></div>
+          <div class="skeleton-text skeleton"></div>
+          <div class="skeleton-price skeleton"></div>
+        </div>
+      `;
+    }
+  }
+
   async function carregarAnuncios(cat = 'Todas') {
     const lista = document.getElementById("listaAnuncios");
-    lista.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Carregando ferramentas...</p>";
+    mostrarSkeletons(); // Ativa os skeletons antes da busca
 
     try {
       let q = collection(db, "anuncios");
@@ -229,7 +257,12 @@
       }
 
       const snap = await getDocs(q);
-      lista.innerHTML = "";
+      lista.innerHTML = ""; // Limpa skeletons para por os dados reais
+
+      if (snap.empty) {
+        lista.innerHTML = "<p style='grid-column:1/-1; text-align:center; color:var(--text-muted);'>Nenhuma ferramenta nesta categoria.</p>";
+        return;
+      }
 
       snap.forEach((doc) => {
         const anuncio = doc.data();
@@ -248,7 +281,7 @@
       });
     } catch (e) {
       console.error(e);
-      lista.innerHTML = "Erro ao carregar.";
+      lista.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Erro ao carregar ferramentas.</p>";
     }
   }
 
