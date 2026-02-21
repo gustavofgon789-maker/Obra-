@@ -174,32 +174,41 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // NO MOMENTO DE SALVAR (DENTRO DO SEU EVENTO DE CLIQUE)
+// SUBSTITUA O SEU EVENTO DE CLIQUE POR ESTE:
 btnAnunciar.addEventListener("click", async () => {
-  const user = auth.currentUser;
+  // 1. Primeiro verificamos se os campos estão preenchidos
+  const nome = document.getElementById("nome").value;
+  const preco = document.getElementById("preco").value;
+  const cidade = document.getElementById("cidade").value;
+  const whatsapp = document.getElementById("whatsapp").value;
 
-  if (!user) {
-    alert("Erro: Você perdeu a conexão. Faça login novamente.");
-    window.location.href = "login.html";
+  if (!nome || !preco || !whatsapp) {
+    alert("Por favor, preencha os campos principais!");
     return;
   }
 
   try {
-    await addDoc(collection(db, "anuncios"), {
-      nome: nomeInput.value,
-      preco: precoInput.value,
-      cidade: cidadeInput.value,
-      whatsapp: whatsappInput.value,
-      userId: user.uid, // O ID Único do Google
-      userEmail: user.email, // Salva o e-mail para você saber quem é
+    // 2. Tentamos salvar no banco de dados
+    const docRef = await addDoc(collection(db, "anuncios"), {
+      nome: nome,
+      preco: preco,
+      cidade: cidade,
+      whatsapp: whatsapp,
+      userId: auth.currentUser.uid, // Identifica que o anúncio é SEU
       dataCriacao: new Date()
     });
-    alert("Ferramenta anunciada com sucesso!");
-    window.location.href = "index.html";
+    
+    // 3. Se chegar aqui, deu certo!
+    alert("✅ Sucesso! Seu anúncio foi publicado.");
+    window.location.href = "index.html"; // Volta para a página inicial
+
   } catch (error) {
-    console.error("Erro ao salvar:", error);
-    alert("Erro ao publicar. Verifique sua conexão.");
+    // 4. Se der erro (ex: regras do Firebase bloqueando), ele avisa aqui
+    console.error("Erro detalhado:", error);
+    alert("❌ Erro ao publicar: " + error.message);
   }
 });
+
 
   
   
