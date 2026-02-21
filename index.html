@@ -6,155 +6,161 @@
   <title>Obrahhí | Aluguel de Ferramentas</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-     <style>
-  :root {
-    --primary: #145c43;
-    --accent: #25D366;
-    --bg: #f8faf9;
-    --text: #1a1a1a;
-  }
+  <style>
+    :root {
+      --primary: #145c43;
+      --accent: #25D366;
+      --bg: #f8faf9;
+      --text: #1a1a1a;
+    }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    margin: 0;
-    padding-bottom: 90px;
-  }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding-bottom: 100px;
+    }
 
-  /* Cabeçalho mais clean e profissional */
-  .app-header {
-    background: white; /* Voltamos para o branco para o seu logo atual brilhar */
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
+    /* Cabeçalho Profissional */
+    .app-header {
+      background: white;
+      padding: 15px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
 
-  .app-header img {
-    height: 45px;
-    margin-bottom: 15px;
-    /* Se o logo tiver fundo, essa borda suave ajuda a integrar */
-    border-radius: 8px; 
-  }
+    .app-header img {
+      height: 45px;
+      margin-bottom: 15px;
+    }
 
-  /* Barra de busca com cor de destaque */
-  .search-container {
-    width: 100%;
-    max-width: 500px;
-    margin-bottom: 12px;
-  }
+    /* Busca */
+    .search-container {
+      width: 90%;
+      max-width: 500px;
+      margin-bottom: 12px;
+    }
 
-  .search-container input {
-    width: 100%;
-    padding: 14px 18px;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    background: #f1f3f2; /* Um cinza muito leve para dar profundidade */
-    outline: none;
-    box-sizing: border-box;
-    font-size: 15px;
-    transition: 0.3s;
-  }
+    .search-container input {
+      width: 100%;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid #eee;
+      background: #f1f3f2;
+      outline: none;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
 
-  .search-container input:focus {
-    background: white;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(20, 92, 67, 0.1);
-  }
+    /* Filtros Centralizados com Respiro */
+    .filter-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-wrapper::-webkit-scrollbar { display: none; }
 
-  /* Filtros coloridos e arredondados */
-  .filter-bar {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    width: 100%;
-    padding: 5px 0;
-    scrollbar-width: none;
-  }
-  .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      padding: 5px 20px; /* Aqui é o respiro nas laterais */
+      min-width: max-content;
+    }
 
-  .filter-btn {
-    background: white;
-    border: 1px solid #ddd;
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #555;
-    white-space: nowrap;
-    cursor: pointer;
-  }
+    .filter-btn {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      white-space: nowrap;
+      cursor: pointer;
+    }
 
-  .filter-btn.active {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-  }
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
 
-  /* Grade de Anúncios - Corrigindo o visual de "vazio" */
-  .container {
-    max-width: 1100px;
-    margin: 15px auto;
-    padding: 0 12px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas fixas no mobile */
-    gap: 12px;
-  }
+    /* Grade de Anúncios (2 colunas no celular) */
+    .container {
+      max-width: 1100px;
+      margin: 15px auto;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
 
-  @media (min-width: 768px) {
-    .container { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-  }
+    @media (min-width: 768px) {
+      .container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    }
 
-  .card {
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    display: flex;
-    flex-direction: column;
-  }
+    .card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
 
-  .card-img {
-    width: 100%;
-    aspect-ratio: 1/1; /* Imagens quadradas ficam ótimas em grid de 2 colunas */
-    object-fit: cover;
-    background: #eee;
-  }
+    .card-img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      background: #f0f0f0;
+    }
 
-  .card-content { padding: 10px; }
-  .card-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: #333; }
-  .card-price { font-size: 15px; font-weight: 800; color: var(--primary); }
+    .card-content { padding: 12px; }
+    .card-title { font-size: 14px; font-weight: 700; margin: 0 0 5px 0; color: #333; height: 34px; overflow: hidden; }
+    .card-price { font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
 
-  /* Botão Flutuante moderno */
-  .floating-action {
-    position: fixed;
-    bottom: 25px;
-    right: 20px;
-    background: var(--primary);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 14px;
-    box-shadow: 0 4px 15px rgba(20, 92, 67, 0.4);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    z-index: 1001;
-  }
-</style>
+    .btn-card-wa {
+      background: var(--accent);
+      color: white;
+      text-align: center;
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 12px;
+      text-decoration: none;
+    }
 
-
+    /* Botão Anunciar */
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 14px 25px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="app-header">
 <div class="app-header">
   <img src="logo.png" alt="Obrahhí Logo">
   
@@ -162,17 +168,21 @@
     <input type="text" id="inputBusca" placeholder="O que você precisa hoje?">
   </div>
 
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
-    <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
-    <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
-    <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
+  <div class="filter-wrapper">
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
+      <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
+      <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
+      <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
+      <button class="filter-btn" onclick="filtrar('Pintura', this)">Pintura</button>
+    </div>
   </div>
 </div>
 
+<div class="container" id="listaAnuncios">
+  </div>
 
-
-<a href="anunciar.html" class="floating-action">
+<a href="anunciar.html" class="floating-btn">
   <span>+</span> Anunciar Ferramenta
 </a>
 
@@ -194,7 +204,7 @@ const db = getFirestore(app);
 const lista = document.getElementById("listaAnuncios");
 
 async function carregarAnuncios(filtro = "Todas") {
-  lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Buscando ferramentas...</p>";
+  lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Carregando...</p>";
   
   try {
     const q = query(collection(db, "anuncios"), orderBy("dataCriacao", "desc"));
@@ -204,19 +214,18 @@ async function carregarAnuncios(filtro = "Todas") {
     querySnapshot.forEach((doc) => {
       const anuncio = doc.data();
 
+      // Aplica o filtro de categoria
       if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
 
       const card = document.createElement("div");
-      card.classList.add("card");
-
+      card.className = "card";
       card.innerHTML = `
-        <img src="${anuncio.imagem || 'https://via.placeholder.com/300x200?text=Sem+Foto'}" class="card-img">
+        <img src="${anuncio.imagem || 'https://via.placeholder.com/300x300?text=Obrahhi'}" class="card-img">
         <div class="card-content">
           <h3 class="card-title">${anuncio.nome}</h3>
-          <div class="card-location">📍 ${anuncio.cidade}</div>
-          <div class="card-price">R$ ${anuncio.preco} <span>/ dia</span></div>
-          <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-whatsapp">
-            Reservar no WhatsApp
+          <div class="card-price">R$ ${anuncio.preco} / dia</div>
+          <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-card-wa">
+            Reservar
           </a>
         </div>
       `;
@@ -224,40 +233,28 @@ async function carregarAnuncios(filtro = "Todas") {
     });
 
   } catch (e) {
-    lista.innerHTML = "<p>Erro ao carregar. Verifique a conexão.</p>";
     console.error(e);
+    lista.innerHTML = "<p style='grid-column: 1/-1;'>Erro ao carregar os anúncios.</p>";
   }
 }
 
-// Tornar a função de filtro acessível aos botões
+// Lógica de Busca Instantânea
+document.getElementById("inputBusca").addEventListener("input", (e) => {
+  const termo = e.target.value.toLowerCase();
+  const cards = document.querySelectorAll(".card");
+  cards.forEach(card => {
+    const texto = card.innerText.toLowerCase();
+    card.style.display = texto.includes(termo) ? "flex" : "none";
+  });
+});
+
 window.filtrar = (categoria, btn) => {
-  // Atualiza visual dos botões
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  
   carregarAnuncios(categoria);
 };
 
-// Carga inicial
 carregarAnuncios();
-
-const inputBusca = document.getElementById("inputBusca");
-
-inputBusca.addEventListener("input", () => {
-  const termo = inputBusca.value.toLowerCase();
-  const cards = document.querySelectorAll(".card");
-
-  cards.forEach(card => {
-    const nomeFerramenta = card.querySelector(".card-title").innerText.toLowerCase();
-    
-    if (nomeFerramenta.includes(termo)) {
-      card.style.display = "block"; // Mostra se bater com a busca
-    } else {
-      card.style.display = "none";  // Esconde se não bater
-    }
-  });
-});
-  
 </script>
 
 </body>
