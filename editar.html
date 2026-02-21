@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Anúncio - Obrahhí</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #145c43; --bg: #f8faf9; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+    .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    h2 { color: var(--primary); text-align: center; margin-bottom: 25px; }
+    label { display: block; font-weight: 600; margin: 15px 0 5px; font-size: 14px; }
+    input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
+    .img-preview { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; background: #eee; }
+    .btn-salvar { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
+    .btn-salvar:disabled { background: #ccc; }
+    .btn-voltar { display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Editar Anúncio</h2>
+  
+  <label>Foto Atual (toque para mudar)</label>
+  <img id="imgPreview" src="" class="img-preview">
+  <input type="file" id="imagem" accept="image/*" style="display: none;">
+  <button type="button" onclick="document.getElementById('imagem').click()" style="width:100%; margin-bottom:20px; padding:8px; border-radius:8px; border:1px solid #ddd; background:#fff;">Alterar Foto</button>
+
+  <label>Nome da Ferramenta</label>
+  <input type="text" id="nome">
+
+  <label>Preço por Dia (R$)</label>
+  <input type="number" id="preco">
+
+  <label>Categoria</label>
+  <select id="categoria">
+    <option value="Eletricas">Elétricas</option>
+    <option value="Jardinagem">Jardinagem</option>
+    <option value="Construcao">Construção</option>
+    <option value="Pintura">Pintura</option>
+  </select>
+
+  <label>WhatsApp</label>
+  <input type="number" id="whatsapp">
+
+  <label>Cidade/Bairro</label>
+  <input type="text" id="cidade">
+
+  <button class="btn-salvar" id="btnSalvar">Salvar Alterações</button>
+  <a href="perfil.html" class="btn-voltar">Cancelar</a>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
+    authDomain: "obrai-56278.firebaseapp.com",
+    projectId: "obrai-56278",
+    storageBucket: "obrai-56278.firebasestorage.app",
+    messagingSenderId: "735990959965",
+    appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  const params = new URLSearchParams(window.location.search);
+  const anuncioId = params.get("id");
+  let fotoAtualBase64 = "";
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) { window.location.href = "login.html"; return; }
+    if (anuncioId) carregarDados();
+  });
+
+  async function carregarDados() {
+    const docSnap = await getDoc(doc(db, "anuncios", anuncioId));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      document.getElementById("nome").value = data.nome;
+      document.getElementById("preco").value = data.preco;
+      document.getElementById("whatsapp").value = data.whatsapp;
+      document.getElementById("cidade").value = data.cidade;
+      document.getElementById("categoria").value = data.categoria;
+      document.getElementById("imgPreview").src = data.imagem;
+      fotoAtualBase64 = data.imagem;
+    }
+  }
+
+  // Lógica para processar nova imagem se o usuário mudar
+  document.getElementById("imagem").addEventListener("change", function(e) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 600;
+        const scale = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scale;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        fotoAtualBase64 = canvas.toDataURL("image/jpeg", 0.6);
+        document.getElementById("imgPreview").src = fotoAtualBase64;
+      };
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  });
+
+  document.getElementById("btnSalvar").addEventListener("click", async () => {
+    const btn = document.getElementById("btnSalvar");
+    btn.disabled = true;
+    btn.innerText = "Salvando...";
+
+    try {
+      await updateDoc(doc(db, "anuncios", anuncioId), {
+        nome: document.getElementById("nome").value,
+        preco: document.getElementById("preco").value,
+        whatsapp: document.getElementById("whatsapp").value,
+        cidade: document.getElementById("cidade").value,
+        categoria: document.getElementById("categoria").value,
+        imagem: fotoAtualBase64
+      });
+      alert("✅ Alterado com sucesso!");
+      window.location.href = "perfil.html";
+    } catch (err) {
+      alert("Erro ao atualizar: " + err.message);
+      btn.disabled = false;
+      btn.innerText = "Salvar Alterações";
+    }
+  });
+</script>
+</body>
+</html>
