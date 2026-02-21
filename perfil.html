@@ -8,25 +8,17 @@
   <style>
     :root { --primary: #145c43; --danger: #dc3545; --bg: #f4f7f6; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-bottom: 100px; }
-    
     .header-perfil { background: var(--primary); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 30px 30px; }
-    .foto-perfil { width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; margin-bottom: 10px; }
-    
+    .foto-perfil { width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; margin-bottom: 10px; background: #eee; }
     .secao-titulo { padding: 25px 20px 10px; font-weight: 700; color: #333; font-size: 18px; }
-    
     .meus-anuncios { padding: 10px 20px; }
     .item-anuncio { background: white; border-radius: 15px; padding: 12px; display: flex; align-items: center; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
     .item-img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; margin-right: 15px; }
     .item-info { flex-grow: 1; }
     .item-nome { font-weight: 600; font-size: 14px; margin: 0; }
     .item-preco { color: var(--primary); font-size: 13px; font-weight: 700; }
-    
-    .btn-excluir { background: #fff1f1; color: var(--danger); border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 18px; transition: 0.3s; }
-    .btn-excluir:active { background: var(--danger); color: white; }
-
+    .btn-excluir { background: #fff1f1; color: var(--danger); border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 18px; }
     .btn-sair { display: block; margin: 30px 20px; padding: 15px; text-align: center; background: white; color: var(--danger); border: 1px solid #eee; border-radius: 15px; text-decoration: none; font-weight: bold; }
-
-    /* Footer igual a index */
     .app-footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; height: 75px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
     .footer-item { text-decoration: none; text-align: center; color: #888; flex: 1; font-size: 10px; }
     .footer-item.active { color: var(--primary); font-weight: bold; }
@@ -35,7 +27,7 @@
 <body>
 
 <div class="header-perfil">
-  <img id="userFoto" src="" class="foto-perfil" alt="Sua foto">
+  <img id="userFoto" src="" class="foto-perfil" onerror="this.src='https://via.placeholder.com/80'">
   <h2 id="userNome" style="margin:0">Carregando...</h2>
   <p id="userEmail" style="opacity: 0.8; font-size: 14px; margin-top: 5px;"></p>
 </div>
@@ -55,7 +47,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, query, where, getDocs, deleteDoc, doc, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, collection, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
@@ -73,8 +65,8 @@
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      document.getElementById("userFoto").src = user.photoURL;
-      document.getElementById("userNome").innerText = user.displayName;
+      document.getElementById("userFoto").src = user.photoURL || '';
+      document.getElementById("userNome").innerText = user.displayName || 'Usuário';
       document.getElementById("userEmail").innerText = user.email;
       carregarMeusAnuncios(user.uid);
     } else {
@@ -83,54 +75,20 @@
   });
 
   async function carregarMeusAnuncios(userId) {
-  const lista = document.getElementById("listaMeusAnuncios");
-  console.log("Buscando anúncios para o ID:", userId); // Debug no console
+    const lista = document.getElementById("listaMeusAnuncios");
+    try {
+      const q = query(collection(db, "anuncios"), where("userId", "==", userId));
+      const snap = await getDocs(q);
+      lista.innerHTML = "";
 
-  try {
-    // Removemos o orderBy temporariamente para testar se os anúncios aparecem
-    const q = query(
-      collection(db, "anuncios"), 
-      where("userId", "==", userId)
-    );
-    
-    const snap = await getDocs(q);
-    lista.innerHTML = "";
-
-    if (snap.empty) {
-      lista.innerHTML = `
-        <p style='text-align:center; color:#888; padding: 20px;'>
-          Nenhum anúncio encontrado para sua conta atual.<br>
-          <small>ID: ${userId}</small>
-        </p>`;
-      return;
-    }
-
-    snap.forEach((docSnap) => {
-      const item = docSnap.data();
-      const img = item.imagem || (item.fotos && item.fotos[0]) || 'https://via.placeholder.com/100';
-      
-      const div = document.createElement("div");
-      div.className = "item-anuncio";
-      div.innerHTML = `
-        <img src="${img}" class="item-img">
-        <div class="item-info">
-          <p class="item-nome">${item.nome}</p>
-          <p class="item-preco">R$ ${item.preco} / dia</p>
-        </div>
-        <button class="btn-excluir" onclick="confirmarExclusao('${docSnap.id}')">🗑️</button>
-      `;
-      lista.appendChild(div);
-    });
-  } catch (e) {
-    console.error("Erro detalhado:", e);
-    lista.innerHTML = "<p style='text-align:center; color:red;'>Erro ao carregar anúncios. Verifique o console.</p>";
-  }
-}
-
+      if (snap.empty) {
+        lista.innerHTML = "<p style='text-align:center; color:#888;'>Nenhum anúncio encontrado.</p>";
+        return;
+      }
 
       snap.forEach((docSnap) => {
         const item = docSnap.data();
-        const img = item.imagem || (item.fotos && item.fotos[0]) || 'https://via.placeholder.com/100';
+        const img = item.imagem || 'https://via.placeholder.com/100';
         
         const div = document.createElement("div");
         div.className = "item-anuncio";
@@ -146,18 +104,18 @@
       });
     } catch (e) {
       console.error(e);
-      lista.innerHTML = "Erro ao carregar seus anúncios.";
+      lista.innerHTML = "Erro ao carregar anúncios.";
     }
   }
 
   window.confirmarExclusao = async (id) => {
-    if (confirm("Tem certeza que deseja apagar este anúncio?")) {
+    if (confirm("Deseja apagar este anúncio?")) {
       try {
         await deleteDoc(doc(db, "anuncios", id));
-        alert("Anúncio removido!");
+        alert("Removido!");
         location.reload();
       } catch (e) {
-        alert("Erro ao excluir.");
+        alert("Erro ao remover.");
       }
     }
   };
