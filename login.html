@@ -3,106 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Entrar - Obrahhí</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Login | Obrahhí</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { 
-      --primary: #145c43; 
-      --primary-dark: #0d3d2c;
-      --bg: #fdfdfd; 
-      --text: #2c3e50;
+      --deep-bg: #0a0f0d;
+      --card-bg: rgba(20, 26, 23, 0.8);
+      --primary: #10b981;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: rgba(30, 41, 35, 0.5);
     }
     
     body { 
       font-family: 'Inter', sans-serif; 
-      background: var(--bg); 
+      background: var(--deep-bg); 
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+      margin: 0; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
-      height: 100dvh; 
-      margin: 0;
-      color: var(--text);
-      /* Background sutil com padrão geométrico ou degradê */
-      background-image: radial-gradient(circle at 2px 2px, #e8f5e9 1px, transparent 0);
-      background-size: 40px 40px;
-    }
-
-    .login-card { 
-      background: white; 
-      padding: 40px 30px; 
-      border-radius: 28px; 
-      box-shadow: 0 20px 50px rgba(0,0,0,0.08); 
-      text-align: center; 
-      width: 90%; 
-      max-width: 400px; 
-      position: relative;
+      height: 100vh; 
+      color: var(--text-main);
       overflow: hidden;
     }
 
-    /* Detalhe decorativo no topo do card */
-    .login-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 6px;
-      background: var(--primary);
+    .login-card { 
+      background: var(--card-bg); 
+      backdrop-filter: blur(12px);
+      padding: 40px 30px; 
+      border-radius: 28px; 
+      border: 1px solid var(--border);
+      text-align: center; 
+      width: 90%; 
+      max-width: 380px; 
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .logo-container {
       margin-bottom: 30px;
     }
 
-    .logo-placeholder {
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -1.5px;
-    }
-
-    .logo-placeholder span {
-      color: #ffd700; /* Um detalhe em dourado para passar valor */
+    .logo-tipo { 
+      font-size: 42px; 
+      font-weight: 800; 
+      color: var(--primary); 
+      letter-spacing: -2px; 
+      margin: 0; 
+      text-transform: lowercase; 
     }
 
     h1 { 
-      font-size: 24px; 
-      font-weight: 800;
+      font-size: 22px; 
+      font-weight: 700; 
       margin-bottom: 12px; 
-      color: var(--text); 
       letter-spacing: -0.5px;
     }
 
     p { 
-      color: #7f8c8d; 
-      font-size: 15px; 
+      color: var(--text-muted); 
+      font-size: 14px; 
+      line-height: 1.6;
       margin-bottom: 35px; 
-      line-height: 1.6; 
-      padding: 0 10px;
     }
 
     .btn-google { 
-      background: white; 
-      border: 2px solid #e0e6ed; 
-      padding: 16px; 
-      border-radius: 16px; 
       width: 100%; 
+      padding: 16px; 
+      background: white; 
+      color: #1f2937; 
+      border: none; 
+      border-radius: 16px; 
+      font-weight: 700; 
+      font-size: 15px; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
       gap: 12px; 
       cursor: pointer; 
-      font-weight: 700;
-      font-size: 16px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      color: var(--text);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-google:hover {
-      background: #f8fafc;
-      border-color: #cbd5e1;
+    .btn-google:hover { 
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+      background: #f9fafb;
     }
 
     .btn-google:active {
@@ -114,20 +108,17 @@
       height: 22px;
     }
 
+    /* Rodapé discreto */
     .footer-text {
       margin-top: 30px;
-      font-size: 13px;
-      color: #bdc3c7;
+      font-size: 12px;
+      color: var(--text-muted);
     }
 
-    /* Animação suave de entrada */
-    .login-card {
-      animation: fadeInUp 0.6s ease-out;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .footer-text a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -135,11 +126,11 @@
 
 <div class="login-card">
   <div class="logo-container">
-    <div class="logo-placeholder">Obrah<span>hí</span></div>
+    <h2 class="logo-tipo">obrahhí</h2>
   </div>
-
-  <h1>Alugue ferramentas em segundos</h1>
-  <p>Conecte sua conta para anunciar ou alugar os melhores equipamentos da sua região.</p>
+  
+  <h1>Seja bem-vindo</h1>
+  <p>Acesse sua conta para gerenciar suas ferramentas e reservas com segurança.</p>
   
   <button class="btn-google" id="btnLogin">
     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
@@ -147,7 +138,7 @@
   </button>
 
   <div class="footer-text">
-    Seguro • Prático • Local
+    Ao entrar, você concorda com nossos <br> <a href="#">Termos de Uso</a>
   </div>
 </div>
 
@@ -168,25 +159,29 @@
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // Redirecionamento automático se já logado
+  // Verifica se já está logado e redireciona
   onAuthStateChanged(auth, (user) => {
-    if (user) { window.location.href = "index.html"; }
+    if (user) {
+      window.location.href = "index.html";
+    }
   });
 
-  const btnLogin = document.getElementById("btnLogin");
-
-  btnLogin.addEventListener("click", () => {
-    btnLogin.style.opacity = "0.7";
-    btnLogin.innerText = "Conectando...";
-    
-    signInWithPopup(auth, provider).catch((error) => {
-      console.error("Erro:", error);
-      alert("Não foi possível conectar. Tente novamente.");
-      btnLogin.style.opacity = "1";
-      btnLogin.innerHTML = `<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> Continuar com Google`;
-    });
+  document.getElementById("btnLogin").addEventListener("click", async () => {
+    try {
+      const btn = document.getElementById("btnLogin");
+      btn.style.opacity = "0.7";
+      btn.innerText = "Conectando...";
+      
+      await signInWithPopup(auth, provider);
+      // O onAuthStateChanged cuidará do redirecionamento
+    } catch (error) {
+      console.error("Erro no login:", error);
+      alert("Houve um problema ao acessar sua conta. Tente novamente.");
+      const btn = document.getElementById("btnLogin");
+      btn.style.opacity = "1";
+      btn.innerHTML = `<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continuar com Google`;
+    }
   });
 </script>
-
 </body>
 </html>
