@@ -144,6 +144,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -154,144 +155,51 @@ const firebaseConfig = {
   appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
 };
 
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const auth = getAuth(app);
-const aviso = document.getElementById("avisoLogin");
 
-// MONITOR DE LOGIN
+// Trava de segurança: Verifica login ao entrar
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    aviso.style.display = "block"; // Mostra o aviso visual
-    // Espera 3 segundos para o usuário ler e redireciona
-    setTimeout(() => {
-      window.location.href = "login.html";
-    }, 3000);
-  } else {
-    aviso.style.display = "none";
-    console.log("Usuário logado:", user.email);
+    alert("Para anunciar, você será levado para a tela de login.");
+    window.location.href = "login.html";
   }
 });
 
-// NO MOMENTO DE SALVAR (DENTRO DO SEU EVENTO DE CLIQUE)
-// SUBSTITUA O SEU EVENTO DE CLIQUE POR ESTE:
+const btnAnunciar = document.getElementById("btnAnunciar"); // Verifique se o ID do seu botão é este!
+
 btnAnunciar.addEventListener("click", async () => {
-  // 1. Primeiro verificamos se os campos estão preenchidos
+  const user = auth.currentUser;
+  
+  if (!user) {
+    alert("Erro: Você precisa estar logado!");
+    return;
+  }
+
   const nome = document.getElementById("nome").value;
   const preco = document.getElementById("preco").value;
   const cidade = document.getElementById("cidade").value;
   const whatsapp = document.getElementById("whatsapp").value;
 
-  if (!nome || !preco || !whatsapp) {
-    alert("Por favor, preencha os campos principais!");
-    return;
-  }
-
   try {
-    // 2. Tentamos salvar no banco de dados
     const docRef = await addDoc(collection(db, "anuncios"), {
-      nome: nome,
-      preco: preco,
-      cidade: cidade,
-      whatsapp: whatsapp,
-      userId: auth.currentUser.uid, // Identifica que o anúncio é SEU
+      nome,
+      preco,
+      cidade,
+      whatsapp,
+      userId: user.uid,
+      userEmail: user.email,
       dataCriacao: new Date()
     });
-    
-    // 3. Se chegar aqui, deu certo!
-    alert("✅ Sucesso! Seu anúncio foi publicado.");
-    window.location.href = "index.html"; // Volta para a página inicial
-
-  } catch (error) {
-    // 4. Se der erro (ex: regras do Firebase bloqueando), ele avisa aqui
-    console.error("Erro detalhado:", error);
-    alert("❌ Erro ao publicar: " + error.message);
-  }
-});
-
-
-  
-  
-// Seleciona o campo de WhatsApp
-const campoWhatsapp = document.getElementById("whatsapp");
-
-// Função que aplica a máscara (11) 99999-9999
-campoWhatsapp.addEventListener("input", (e) => {
-  let valor = e.target.value.replace(/\D/g, ""); // Remove tudo que não é número
-  
-  if (valor.length > 11) valor = valor.slice(0, 11); // Limita a 11 dígitos
-
-  // Aplica a formatação visual
-  if (valor.length > 10) {
-    valor = valor.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
-  } else if (valor.length > 6) {
-    valor = valor.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
-  } else if (valor.length > 2) {
-    valor = valor.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
-  } else if (valor.length > 0) {
-    valor = valor.replace(/^(\d*)/, "($1");
-  }
-  
-  e.target.value = valor;
-});
-  
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const btn = document.getElementById("btnPublicar");
-
-// Função para converter imagem para texto (Base64)
-const toBase64 = file => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-});
-
-btn.addEventListener("click", async () => {
-  const nome = document.getElementById("nome").value;
-  const preco = document.getElementById("preco").value;
-  const cidade = document.getElementById("cidade").value;
-  // Pega o valor e remove ( ) - e espaços antes de salvar
-const whatsappBruto = document.getElementById("whatsapp").value.replace(/\D/g, "");
-
-  const inputImagem = document.getElementById("imagem");
-
-  if(!nome || !preco || !whatsapp) {
-    alert("Por favor, preencha os campos obrigatórios.");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.innerText = "Publicando...";
-
-  try {
-    let fotoString = "";
-    if (inputImagem.files.length > 0) {
-      fotoString = await toBase64(inputImagem.files[0]);
-    }
-const categoria = document.getElementById("categoria").value;
-    await addDoc(collection(db, "anuncios"), {
-  nome: nome,
-  preco: preco,
-  cidade: cidade,
-  whatsapp: whatsapp,
-  userId: auth.currentUser.uid, // <-- ISSO AQUI identifica quem postou
-  dataCriacao: new Date()
-});
-
-
-
-    alert("Anúncio publicado com sucesso!");
+    alert("✅ Anúncio publicado com sucesso!");
     window.location.href = "index.html";
-
   } catch (error) {
-    alert("Erro ao publicar: " + error.message);
-    btn.disabled = false;
-    btn.innerText = "Publicar Anúncio";
+    console.error(error);
+    alert("❌ Erro ao salvar: " + error.message + " (Verifique as Rules no Firebase)");
   }
 });
 </script>
-
+  
 </body>
 </html>
