@@ -17,6 +17,8 @@
     .item-info { flex-grow: 1; }
     .item-nome { font-weight: 600; font-size: 14px; margin: 0; }
     .item-preco { color: var(--primary); font-size: 13px; font-weight: 700; }
+    .acoes-anuncio { display: flex; gap: 10px; }
+    .btn-editar { text-decoration: none; background: #e8f5e9; padding: 8px; border-radius: 10px; font-size: 18px; display: flex; align-items: center; }
     .btn-excluir { background: #fff1f1; color: var(--danger); border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 18px; }
     .btn-sair { display: block; margin: 30px 20px; padding: 15px; text-align: center; background: white; color: var(--danger); border: 1px solid #eee; border-radius: 15px; text-decoration: none; font-weight: bold; }
     .app-footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; height: 75px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
@@ -98,7 +100,10 @@
             <p class="item-nome">${item.nome}</p>
             <p class="item-preco">R$ ${item.preco} / dia</p>
           </div>
-          <button class="btn-excluir" onclick="confirmarExclusao('${docSnap.id}')">🗑️</button>
+          <div class="acoes-anuncio">
+            <a href="editar.html?id=${docSnap.id}" class="btn-editar">✏️</a>
+            <button class="btn-excluir" onclick="confirmarExclusao('${docSnap.id}')">🗑️</button>
+          </div>
         `;
         lista.appendChild(div);
       });
@@ -120,7 +125,8 @@
     }
   };
 
-  document.getElementById("btnSair").addEventListener("click", () => {
+  document.getElementById("btnSair").addEventListener("click", (e) => {
+    e.preventDefault();
     signOut(auth).then(() => window.location.href = "index.html");
   });
 </script>
