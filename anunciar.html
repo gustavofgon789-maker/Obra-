@@ -102,14 +102,15 @@ btnPublicar.addEventListener("click", async () => {
       // Transforma em texto (Base64) com qualidade reduzida para não dar erro
       const fotoCompacta = canvas.toDataURL('image/jpeg', 0.6);
 
-      try {
+            try {
         await addDoc(collection(db, "anuncios"), {
           nome: document.getElementById("nome").value,
           preco: document.getElementById("preco").value,
           whatsapp: document.getElementById("whatsapp").value,
           cidade: document.getElementById("cidade").value,
           categoria: document.getElementById("categoria").value,
-          imagem: fotoCompacta, // Salva a foto como texto no banco
+          imagem: fotoCompacta, 
+          userId: user.uid, // <--- ADICIONE ESTA LINHA (Fundamental!)
           dataCriacao: new Date()
         });
         alert("✅ Publicado!");
@@ -118,9 +119,7 @@ btnPublicar.addEventListener("click", async () => {
         alert("Erro ao salvar no banco: " + err.message);
         btnPublicar.disabled = false;
       }
-    };
-  };
-});
+
 
 
 </script>
