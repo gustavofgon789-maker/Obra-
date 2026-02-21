@@ -221,33 +221,34 @@ async function carregarAnuncios(filtro = "Todas") {
     lista.innerHTML = "";
 
     querySnapshot.forEach((doc) => {
-      const anuncio = doc.data();
-      if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
-    
-      // ESTA É A LINHA QUE VOCÊ VAI ADICIONAR:
-      // Se não tiver a lista de fotos OU a lista estiver vazia, ele pula este anúncio
-      if (!anuncio.fotos || anuncio.fotos.length === 0) return;
+    // Localize esta parte no seu index.html e substitua:
+querySnapshot.forEach((doc) => {
+  const anuncio = doc.data();
 
-      if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
+  if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
 
-      // ... resto do código do card continua igual ...
-      
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <a href="detalhes.html?id=${doc.id}" style="text-decoration: none; color: inherit;">
-          <img src="${anuncio.fotos ? anuncio.fotos[0] : (anuncio.imagem || 'https://via.placeholder.com/300x300?text=Obrahhi')}" class="card-img">
-          <div class="card-content">
-            <h3 class="card-title">${anuncio.nome}</h3>
-            <div class="card-price">R$ ${anuncio.preco} / dia</div>
-          </div>
-        </a>
-        <div style="padding: 0 12px 12px 12px;">
-          <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-card-wa">Reservar</a>
-        </div>
-      `;
-      lista.appendChild(card);
-    });
+  // ESTA LINHA É A CHAVE: Ela verifica todas as possibilidades de foto
+  const imagemExibir = anuncio.imagem || (anuncio.fotos && anuncio.fotos[0]) || 'https://via.placeholder.com/300x300?text=Obrahhi';
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
+    <a href="detalhes.html?id=${doc.id}" style="text-decoration: none; color: inherit;">
+      <img src="${imagemExibir}" class="card-img">
+      <div class="card-content">
+        <h3 class="card-title">${anuncio.nome}</h3>
+        <div class="card-price">R$ ${anuncio.preco} / dia</div>
+      </div>
+    </a>
+    <div style="padding: 0 12px 12px 12px;">
+      <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-card-wa">
+        Reservar
+      </a>
+    </div>
+  `;
+  lista.appendChild(card);
+});
+
   } catch (e) {
     console.error(e);
     lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Erro ao carregar anúncios.</p>";
