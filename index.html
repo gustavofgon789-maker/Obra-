@@ -146,7 +146,7 @@
 <body>
 
 <header class="header-container">
-  <h1 class="logo-tipo">Obr<span>aí</span></h1>
+  <h1 class="logo-tipo">ⓄⒷⓇ<span>ⒶⒾ</span></h1>
   <p style="color: var(--primary); opacity: 0.8; margin-top: 5px; font-weight: 500; font-size: 14px;">
     Aluguel de ferramentas sem burocracia
   </p>
@@ -223,7 +223,15 @@ async function carregarAnuncios(filtro = "Todas") {
     querySnapshot.forEach((doc) => {
       const anuncio = doc.data();
       if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
+    
+      // ESTA É A LINHA QUE VOCÊ VAI ADICIONAR:
+      // Se não tiver a lista de fotos OU a lista estiver vazia, ele pula este anúncio
+      if (!anuncio.fotos || anuncio.fotos.length === 0) return;
 
+      if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
+
+      // ... resto do código do card continua igual ...
+      
       const card = document.createElement("div");
       card.className = "card";
       card.innerHTML = `
