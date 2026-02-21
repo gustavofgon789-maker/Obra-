@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Detalhes da Ferramenta - Obrahhí</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  
   <style>
     :root { --primary: #145c43; --bg: #f4f7f6; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-bottom: 100px; color: #333; }
@@ -40,6 +43,17 @@
     <span class="categoria-badge" id="categoria">Categoria</span>
     <h1 id="nomeFerramenta">Nome da Ferramenta</h1>
     <div class="preco" id="precoFerramenta">R$ 0,00 / dia</div>
+
+<div style="margin-top: 20px;">
+    <label style="font-weight: bold; color: #145c43;">Selecione o período do aluguel:</label>
+    <input type="text" id="calendarioReservas" placeholder="Clique para abrir o calendário" style="width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #145c43; margin-top: 10px; font-size: 16px;">
+</div>
+
+<div id="resumoReserva" style="margin-top: 15px; display: none; background: #e8f5e9; padding: 15px; border-radius: 15px; border: 1px dashed #145c43;">
+    <p id="detalhesDias" style="margin: 0; font-weight: 600; color: #145c43;"></p>
+    <p id="valorTotal" style="margin: 5px 0 0 0; font-size: 18px; font-weight: 800; color: #145c43;"></p>
+</div>
+
 
     <div class="info-label">Localização</div>
     <div class="info-valor" id="localizacao">Cidade - Bairro</div>
@@ -95,6 +109,38 @@
         document.getElementById("fotoFerramenta").src = foto;
         document.getElementById("nomeFerramenta").innerText = dados.nome;
         document.getElementById("precoFerramenta").innerText = `R$ ${dados.preco} / dia`;
+        // Pega o preço que veio do banco
+const precoDiaria = parseFloat(dados.preco);
+
+// Ativa o calendário estilo Airbnb
+flatpickr("#calendarioReservas", {
+    mode: "range",
+    minDate: "today",
+    dateFormat: "d/m/Y",
+    onChange: function(selectedDates) {
+        if (selectedDates.length === 2) {
+            const inicio = selectedDates[0];
+            const fim = selectedDates[1];
+            
+            // Cálculo sênior de dias
+            const diffTime = Math.abs(fim - inicio);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+            // Mostra o resumo na tela
+            document.getElementById("resumoReserva").style.display = "block";
+            document.getElementById("detalhesDias").innerText = `${diffDays} dia(s) selecionados`;
+            document.getElementById("valorTotal").innerText = `Total: R$ ${(diffDays * precoDiaria).toFixed(2)}`;
+
+            // Atualiza o botão do WhatsApp com as datas e horários
+            const dataInicioStr = inicio.toLocaleDateString();
+            const dataFimStr = fim.toLocaleDateString();
+            const mensagem = encodeURIComponent(`Olá! Gostaria de reservar a ferramenta ${dados.nome} para o período de ${dataInicioStr} até ${dataFimStr}. Combinamos a retirada às ${dados.horarioInicio}h e devolução às ${dados.horarioFim}h?`);
+            
+            document.getElementById("linkWhats").href = `https://wa.me/55${dados.whatsapp}?text=${mensagem}`;
+        }
+    }
+});
+        
         document.getElementById("precoFooter").innerText = `R$ ${dados.preco}`;
         document.getElementById("categoria").innerText = dados.categoria;
         document.getElementById("localizacao").innerText = dados.cidade || "Localização não informada";
