@@ -195,40 +195,43 @@ btnPublicar.addEventListener("click", async () => {
   btnPublicar.disabled = true;
   btnPublicar.innerText = "Publicando... aguarde";
 
-  try {
+    try {
     const linksFotos = [];
-
-    // Envia cada foto para o Storage (espaço gratuito de 5GB)
     for (let i = 0; i < arquivos.length; i++) {
       const arquivo = arquivos[i];
+      // Criando um nome de arquivo único para evitar erros de duplicidade
       const nomeArquivo = `anuncios/${Date.now()}-${arquivo.name}`;
       const storageRef = ref(storage, nomeArquivo);
 
+      console.log("Iniciando upload da foto:", i + 1);
       await uploadBytes(storageRef, arquivo);
       const url = await getDownloadURL(storageRef);
       linksFotos.push(url);
     }
 
-    // Salva no Banco de Dados com os links reais das fotos
     await addDoc(collection(db, "anuncios"), {
       nome: document.getElementById("nome").value,
       preco: document.getElementById("preco").value,
       cidade: document.getElementById("cidade").value,
       whatsapp: document.getElementById("whatsapp").value,
       categoria: document.getElementById("categoria").value,
-      fotos: linksFotos, // Lista de fotos salvas
+      fotos: linksFotos,
       userId: user.uid,
       dataCriacao: new Date()
     });
 
-    alert("✅ Sucesso! Anúncio publicado com " + linksFotos.length + " foto(s).");
+    alert("✅ Sucesso!");
     window.location.href = "index.html";
 
   } catch (error) {
-    alert("Erro ao publicar: " + error.message);
-    btnPublicar.disabled = false;
-    btnPublicar.innerText = "Publicar Anúncio";
+    // ESSA PARTE É VITAL: Se der erro, o botão VOLTA a funcionar para você tentar de novo
+    console.error("Erro detalhado:", error);
+    alert("❌ Erro ao publicar: " + error.message);
+    
+    btnPublicar.disabled = false; // Destrava o botão
+    btnPublicar.innerText = "Publicar Anúncio"; // Volta o texto original
   }
+
 });
 
 </script>
