@@ -3,97 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalhes - Obrahhí</title>
+  <title>Detalhes da Ferramenta - Obrahhí</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #145c43; --accent: #25D366; --bg: #f8faf9; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
+    :root { --primary: #145c43; --bg: #f4f7f6; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-bottom: 100px; color: #333; }
     
-    .btn-voltar { position: absolute; top: 20px; left: 20px; background: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 10; font-weight: bold; color: var(--primary); }
+    .btn-voltar { position: absolute; top: 20px; left: 20px; background: white; border: none; padding: 10px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; z-index: 10; text-decoration: none; font-size: 20px; }
     
-    .foto-detalhe { width: 100%; max-height: 400px; object-fit: cover; background: #ddd; }
+    .imagem-topo { width: 100%; height: 350px; object-fit: cover; background: #ddd; }
     
-    .conteudo { padding: 20px; background: white; border-radius: 30px 30px 0 0; margin-top: -30px; position: relative; min-height: 400px; }
+    .conteudo { background: white; margin-top: -30px; border-radius: 30px 30px 0 0; padding: 30px 20px; position: relative; min-height: 400px; }
     
-    .titulo { font-size: 24px; font-weight: 700; color: #333; margin-bottom: 10px; }
-    .preco { font-size: 20px; color: var(--primary); font-weight: 800; margin-bottom: 15px; }
-    .info-item { display: flex; align-items: center; gap: 10px; color: #666; margin-bottom: 10px; font-size: 15px; }
+    .categoria-badge { background: #e8f5e9; color: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
     
-    .btn-reservar {
-    position: fixed;
-    bottom: 20px;
-    left: 50%; /* Alinha o início do botão no meio da tela */
-    transform: translateX(-50%); /* Puxa o botão de volta metade do seu tamanho, centralizando-o */
-    width: 90%;
-    max-width: 400px; /* Evita que o botão fique gigante em tablets ou computadores */
-    background: var(--accent);
-    color: white;
-    text-align: center;
-    padding: 15px;
-    border-radius: 15px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 16px;
-    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-    z-index: 100;
-}
+    h1 { font-size: 24px; margin: 15px 0 5px; color: #1a1a1a; }
+    .preco { font-size: 22px; color: var(--primary); font-weight: 800; margin-bottom: 20px; }
+    
+    .info-label { font-size: 14px; color: #888; margin-top: 20px; }
+    .info-valor { font-size: 16px; font-weight: 500; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
+    .footer-reserva { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 20px; box-shadow: 0 -10px 20px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; }
+    .btn-whatsapp { background: #25d366; color: white; text-decoration: none; padding: 15px 40px; border-radius: 15px; font-weight: bold; font-size: 16px; flex-grow: 1; text-align: center; margin-left: 15px; }
   </style>
 </head>
 <body>
 
-<a href="index.html" class="btn-voltar">←</a>
+<a href="index.html" class="btn-voltar">⬅️</a>
 
-<div id="dadosAnuncio">
-  <p style="padding: 50px; text-align: center;">Carregando detalhes...</p>
+<div id="carregando" style="text-align: center; padding-top: 100px;">Carregando detalhes...</div>
+
+<div id="app" style="display: none;">
+  <img id="fotoFerramenta" src="" class="imagem-topo">
+  
+  <div class="conteudo">
+    <span class="categoria-badge" id="categoria">Categoria</span>
+    <h1 id="nomeFerramenta">Nome da Ferramenta</h1>
+    <div class="preco" id="precoFerramenta">R$ 0,00 / dia</div>
+
+    <div class="info-label">Localização</div>
+    <div class="info-valor" id="localizacao">Cidade - Bairro</div>
+
+    <div class="info-label">Sobre a ferramenta</div>
+    <div class="info-valor" style="border:none">Disponível para aluguel imediato. Entre em contato com o proprietário para combinar a entrega.</div>
+  </div>
+
+  <div class="footer-reserva">
+    <div>
+      <div style="font-size: 12px; color: #888;">Total por dia</div>
+      <div id="precoFooter" style="font-weight: 800; font-size: 18px; color: var(--primary);">R$ 0,00</div>
+    </div>
+    <a href="#" id="linkWhats" target="_blank" class="btn-whatsapp">Reservar Agora</a>
+  </div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
-  authDomain: "obrai-56278.firebaseapp.com",
-  projectId: "obrai-56278",
-  storageBucket: "obrai-56278.firebasestorage.app",
-  messagingSenderId: "735990959965",
-  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
+    authDomain: "obrai-56278.firebaseapp.com",
+    projectId: "obrai-56278",
+    storageBucket: "obrai-56278.firebasestorage.app",
+    messagingSenderId: "735990959965",
+    appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-async function carregarDetalhes() {
+  // 1. Pega o ID da URL
   const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get('id');
+  const idAnuncio = urlParams.get('id');
 
-  if (!id) { window.location.href = 'index.html'; return; }
-
-  const docRef = doc(db, "anuncios", id);
-  const docSnap = await getDoc(docRef);
-
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    document.getElementById("dadosAnuncio").innerHTML = `
-      <img src="${data.imagem || 'https://via.placeholder.com/600x400'}" class="foto-detalhe">
-      <div class="conteudo">
-        <h1 class="titulo">${data.nome}</h1>
-        <div class="preco">R$ ${data.preco} / dia</div>
-        <div class="info-item">📍 ${data.cidade}</div>
-        <div class="info-item">🏷️ Categoria: ${data.categoria || 'Geral'}</div>
-        <p style="color: #444; line-height: 1.6; margin-top: 20px;">
-          Esta ferramenta está disponível para retirada imediata. Entre em contato com o proprietário para verificar a disponibilidade nas datas desejadas.
-        </p>
-        <a href="https://wa.me/55${data.whatsapp}" target="_blank" class="btn-reservar">Reservar via WhatsApp</a>
-      </div>
-    `;
-  } else {
-    document.getElementById("dadosAnuncio").innerHTML = "<p>Anúncio não encontrado.</p>";
+  if (!idAnuncio) {
+    window.location.href = 'index.html';
   }
-}
 
-carregarDetalhes();
+  async function buscarDetalhes() {
+    try {
+      const docRef = doc(db, "anuncios", idAnuncio);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const dados = docSnap.data();
+
+        // Lógica de imagem sênior (Base64 ou link)
+        const foto = dados.imagem || (dados.fotos && dados.fotos[0]) || 'https://via.placeholder.com/600x400?text=Sem+Foto';
+        
+        document.getElementById("fotoFerramenta").src = foto;
+        document.getElementById("nomeFerramenta").innerText = dados.nome;
+        document.getElementById("precoFerramenta").innerText = `R$ ${dados.preco} / dia`;
+        document.getElementById("precoFooter").innerText = `R$ ${dados.preco}`;
+        document.getElementById("categoria").innerText = dados.categoria;
+        document.getElementById("localizacao").innerText = dados.cidade || "Localização não informada";
+
+        // Link do WhatsApp com mensagem automática
+        const mensagem = encodeURIComponent(`Olá! Vi sua ferramenta ${dados.nome} no Obrahhí e gostaria de alugar.`);
+        document.getElementById("linkWhats").href = `https://wa.me/55${dados.whatsapp}?text=${mensagem}`;
+
+        // Mostra o conteúdo e esconde o "carregando"
+        document.getElementById("carregando").style.display = "none";
+        document.getElementById("app").style.display = "block";
+      } else {
+        document.getElementById("carregando").innerText = "Anúncio não encontrado.";
+      }
+    } catch (e) {
+      console.error(e);
+      document.getElementById("carregando").innerText = "Erro ao carregar detalhes.";
+    }
+  }
+
+  buscarDetalhes();
 </script>
 </body>
 </html>
