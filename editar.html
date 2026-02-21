@@ -28,27 +28,34 @@
     .container { 
       width: 100%;
       max-width: 480px; 
-      padding: 40px 25px; 
+      padding: 30px 20px; 
       box-sizing: border-box;
     }
 
-    .header { text-align: center; margin-bottom: 30px; }
-    h2 { color: var(--primary); font-weight: 800; font-size: 26px; margin: 0; letter-spacing: -1px; }
+    .header { text-align: center; margin-bottom: 25px; }
+    h2 { color: var(--primary); font-weight: 800; font-size: 24px; margin: 0; letter-spacing: -1px; }
 
-    /* Preview da Imagem Atual */
+    /* Preview da Imagem Corrigido */
     .preview-container {
       width: 100%;
-      height: 200px;
-      background: var(--card-bg);
+      height: 220px;
+      background: #000; /* Fundo preto para imagens com transparência */
       border-radius: 20px;
       overflow: hidden;
       border: 1px solid var(--border);
-      margin-bottom: 25px;
-      position: relative;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    #imgPreview { width: 100%; height: 100%; object-fit: cover; }
+    #imgPreview { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      display: block; /* Remove espaços vazios abaixo da imagem */
+    }
 
-    .form-group { margin-bottom: 20px; }
+    .form-group { margin-bottom: 18px; width: 100%; box-sizing: border-box; }
 
     label { 
       display: block; 
@@ -62,19 +69,26 @@
 
     input, select { 
       width: 100%; 
-      padding: 15px; 
+      padding: 14px; 
       border: 1px solid var(--border); 
-      border-radius: 14px; 
+      border-radius: 12px; 
       background: var(--card-bg);
       color: white;
-      font-size: 15px;
-      transition: 0.3s;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-sizing: border-box; /* Evita que o padding aumente o tamanho do input */
     }
 
-    input:focus { border-color: var(--primary); outline: none; }
+    input:focus, select:focus { border-color: var(--primary); outline: none; background: #1a221f; }
 
-    .row { display: flex; gap: 12px; }
-    .row > div { flex: 1; }
+    /* Correção da Sobreposição na Row */
+    .row { 
+      display: flex; 
+      gap: 15px; 
+      width: 100%;
+      margin-bottom: 18px;
+    }
+    .row .form-group { margin-bottom: 0; flex: 1; }
 
     .btn-salvar { 
       width: 100%; 
@@ -90,7 +104,7 @@
       transition: 0.3s;
     }
 
-    .btn-salvar:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); }
+    .btn-salvar:active { transform: scale(0.98); }
 
     .btn-cancelar { 
       display: block; 
@@ -99,6 +113,7 @@
       color: var(--text-muted); 
       text-decoration: none; 
       font-size: 14px; 
+      font-weight: 500;
     }
   </style>
 </head>
@@ -110,23 +125,23 @@
   </div>
 
   <div class="preview-container">
-    <img id="imgPreview" src="">
+    <img id="imgPreview" src="https://via.placeholder.com/400x220?text=Carregando+Foto...">
   </div>
   
   <div class="form-group">
-    <label>Alterar Foto (Opcional)</label>
-    <input type="file" id="novaImagem" accept="image/*">
+    <label>Nova Foto (Opcional)</label>
+    <input type="file" id="novaImagem" accept="image/*" style="padding: 10px; font-size: 12px;">
   </div>
 
   <div class="form-group">
     <label>Nome da Ferramenta</label>
-    <input type="text" id="nome">
+    <input type="text" id="nome" placeholder="Ex: Furadeira Bosch">
   </div>
 
   <div class="row">
     <div class="form-group">
       <label>Preço/Dia</label>
-      <input type="number" id="preco">
+      <input type="number" id="preco" placeholder="00">
     </div>
     <div class="form-group">
       <label>Categoria</label>
@@ -141,12 +156,12 @@
 
   <div class="form-group">
     <label>WhatsApp (com DDD)</label>
-    <input type="number" id="whatsapp">
+    <input type="number" id="whatsapp" placeholder="Ex: 11999999999">
   </div>
 
   <div class="form-group">
-    <label>Localização</label>
-    <input type="text" id="cidade">
+    <label>Bairro / Cidade</label>
+    <input type="text" id="cidade" placeholder="Ex: Centro, SP">
   </div>
 
   <button class="btn-salvar" id="btnSalvar">Salvar Alterações</button>
@@ -170,27 +185,35 @@
   const db = getFirestore(app);
 
   const params = new URLSearchParams(window.location.search);
-  const anuncioId = params.get(\"id\");
-  let fotoAtualBase64 = \"\";
+  const anuncioId = params.get("id");
+  let fotoAtualBase64 = "";
 
-  // Carregar dados atuais
   async function carregarDados() {
     if (!anuncioId) return;
-    const docSnap = await getDoc(doc(db, \"anuncios\", anuncioId));
-    if (docSnap.exists()) {
-      const d = docSnap.data();
-      document.getElementById(\"nome\").value = d.nome;
-      document.getElementById(\"preco\").value = d.preco;
-      document.getElementById(\"whatsapp\").value = d.whatsapp;
-      document.getElementById(\"cidade\").value = d.cidade;
-      document.getElementById(\"categoria\").value = d.categoria;
-      document.getElementById(\"imgPreview\").src = d.imagem;
-      fotoAtualBase64 = d.imagem;
+    try {
+      const docSnap = await getDoc(doc(db, "anuncios", anuncioId));
+      if (docSnap.exists()) {
+        const d = docSnap.data();
+        document.getElementById("nome").value = d.nome || "";
+        document.getElementById("preco").value = d.preco || "";
+        document.getElementById("whatsapp").value = d.whatsapp || "";
+        document.getElementById("cidade").value = d.cidade || "";
+        document.getElementById("categoria").value = d.categoria || "Eletricas";
+        
+        if (d.imagem) {
+          document.getElementById("imgPreview").src = d.imagem;
+          fotoAtualBase64 = d.imagem;
+        }
+      }
+    } catch (e) {
+      console.error("Erro ao carregar:", e);
     }
   }
 
-  // Lógica de nova imagem (Compactação Sênior)
-  document.getElementById(\"novaImagem\").addEventListener(\"change\", (e) => {
+  document.getElementById("novaImagem").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
     const reader = new FileReader();
     reader.onload = (event) => {
       const img = new Image();
@@ -201,35 +224,34 @@
         const scale = MAX_WIDTH / img.width;
         canvas.width = MAX_WIDTH;
         canvas.height = img.height * scale;
-        const ctx = canvas.getContext(\"2d\");
+        const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        fotoAtualBase64 = canvas.toDataURL(\"image/jpeg\", 0.6);
-        document.getElementById(\"imgPreview\").src = fotoAtualBase64;
+        fotoAtualBase64 = canvas.toDataURL("image/jpeg", 0.6);
+        document.getElementById("imgPreview").src = fotoAtualBase64;
       };
     };
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(file);
   });
 
-  document.getElementById(\"btnSalvar\").addEventListener(\"click\", async () => {
-    const btn = document.getElementById(\"btnSalvar\");
+  document.getElementById("btnSalvar").addEventListener("click", async () => {
+    const btn = document.getElementById("btnSalvar");
     btn.disabled = true;
-    btn.innerText = \"Atualizando...\";
+    btn.innerText = "Sincronizando...";
 
     try {
-      await updateDoc(doc(db, \"anuncios\", anuncioId), {
-        nome: document.getElementById(\"nome\").value,
-        preco: document.getElementById(\"preco\").value,
-        whatsapp: String(document.getElementById(\"whatsapp\").value),
-        cidade: document.getElementById(\"cidade\").value,
-        categoria: document.getElementById(\"categoria\").value,
+      await updateDoc(doc(db, "anuncios", anuncioId), {
+        nome: document.getElementById("nome").value,
+        preco: document.getElementById("preco").value,
+        whatsapp: String(document.getElementById("whatsapp").value),
+        cidade: document.getElementById("cidade").value,
+        categoria: document.getElementById("categoria").value,
         imagem: fotoAtualBase64
       });
-      alert(\"✅ Dados atualizados com sucesso!\");
-      window.location.href = \"perfil.html\";
+      window.location.href = "perfil.html";
     } catch (err) {
-      alert(\"Erro ao salvar: \" + err.message);
+      alert("Erro ao salvar: " + err.message);
       btn.disabled = false;
-      btn.innerText = \"Salvar Alterações\";
+      btn.innerText = "Salvar Alterações";
     }
   });
 
