@@ -3,103 +3,202 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Obrahhí</title>
+  <title>Obrahhí | Aluguel de Ferramentas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --primary: #145c43;
+      --accent: #25D366;
+      --bg: #f8faf9;
+      --text: #333;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f5;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
       margin: 0;
+      color: var(--text);
+      padding-bottom: 80px; /* Espaço para o botão flutuante */
     }
 
-    header {
-      background: #145c43;
+    /* Topo Fixo Estilo App */
+    .app-header {
+      background: white;
+      padding: 15px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .app-header img {
+      height: 40px;
+      margin-bottom: 15px;
+    }
+
+    /* Filtros estilo Airbnb */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      width: 100%;
+      padding-bottom: 5px;
+      scrollbar-width: none; /* Firefox */
+    }
+    .filter-bar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+    .filter-btn {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
       color: white;
-      text-align: center;
-      padding: 20px;
+      border-color: var(--primary);
     }
 
+    /* Grade de Anúncios */
     .container {
-      max-width: 900px;
+      max-width: 1100px;
       margin: 20px auto;
-      padding: 15px;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
     }
 
+    /* Card Estilo Airbnb */
     .card {
       background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      border: 1px solid #eee;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .card-content {
       padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    .price {
-      font-weight: bold;
-      color: #145c43;
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 5px 0;
     }
-.topo {
-  background: #145c43;
-  text-align: center;
-  padding: 15px 0;
-}
 
-.topo img {
-  max-width: 180px;
-}
+    .card-location {
+      font-size: 13px;
+      color: #777;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
 
-header {
-  display: none; /* esconde o título antigo */
-}
+    .card-price {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
 
-.container {
-  margin-top: 20px;
-}
+    .card-price span {
+      font-weight: 400;
+      color: #777;
+    }
 
-.card {
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: scale(1.02);
-}
-    .floating-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #145c43;
+    .btn-whatsapp {
+      display: block;
+      background: var(--accent);
       color: white;
-      padding: 15px 20px;
-      border-radius: 50px;
+      text-align: center;
+      padding: 12px;
       text-decoration: none;
-      font-weight: bold;
+      border-radius: 10px;
+      font-weight: 700;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    /* Botão Flutuante Principal */
+    .floating-action {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 999;
+    }
+
+    /* Mobile Ajuste */
+    @media (max-width: 600px) {
+      .container {
+        grid-template-columns: 1fr 1fr; /* 2 colunas no celular */
+        gap: 12px;
+        padding: 0 10px;
+      }
+      .card-img { height: 150px; }
+      .card-title { font-size: 14px; }
+      .floating-action { width: 80%; justify-content: center; }
     }
   </style>
 </head>
 
 <body>
-  <div class="topo">
-  <img src="logo.png" alt="Obraí Logo">
-  </div>
-<div class="filtros" style="text-align: center; margin: 20px 0; overflow-x: auto; white-space: nowrap; padding: 10px;">
-  <button onclick="filtrar('Todas')" style="padding: 8px 15px; margin: 5px; border-radius: 20px; border: 1px solid #145c43; background: #145c43; color: white; cursor: pointer;">Todas</button>
-  <button onclick="filtrar('Eletricas')" style="padding: 8px 15px; margin: 5px; border-radius: 20px; border: 1px solid #145c43; background: white; cursor: pointer;">Elétricas</button>
-  <button onclick="filtrar('Jardinagem')" style="padding: 8px 15px; margin: 5px; border-radius: 20px; border: 1px solid #145c43; background: white; cursor: pointer;">Jardinagem</button>
-  <button onclick="filtrar('Construcao')" style="padding: 8px 15px; margin: 5px; border-radius: 20px; border: 1px solid #145c43; background: white; cursor: pointer;">Construção</button>
-</div>
+
+<div class="app-header">
+  <img src="logo.png" alt="Obrahhí Logo">
   
-<header>
-  <h1>Ferramentas Disponíveis</h1>
-</header>
-
-<div class="container">
-  <div id="listaAnuncios"></div>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filtrar('Todas', this)">Todas</button>
+    <button class="filter-btn" onclick="filtrar('Eletricas', this)">Elétricas</button>
+    <button class="filter-btn" onclick="filtrar('Jardinagem', this)">Jardinagem</button>
+    <button class="filter-btn" onclick="filtrar('Construcao', this)">Construção</button>
+    <button class="filter-btn" onclick="filtrar('Pintura', this)">Pintura</button>
+  </div>
 </div>
 
-<a href="anunciar.html" class="floating-btn">+ Anunciar</a>
+<div class="container" id="listaAnuncios">
+  </div>
+
+<a href="anunciar.html" class="floating-action">
+  <span>+</span> Anunciar Ferramenta
+</a>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -107,8 +206,7 @@ const firebaseConfig = {
   projectId: "obrai-56278",
   storageBucket: "obrai-56278.firebasestorage.app",
   messagingSenderId: "735990959965",
-  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4",
-  measurementId: "G-080J3KWME7"
+  appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -116,65 +214,53 @@ const db = getFirestore(app);
 const lista = document.getElementById("listaAnuncios");
 
 async function carregarAnuncios(filtro = "Todas") {
-  lista.innerHTML = "Carregando...";
-  const querySnapshot = await getDocs(collection(db, "anuncios"));
-  lista.innerHTML = "";
+  lista.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Buscando ferramentas...</p>";
+  
+  try {
+    const q = query(collection(db, "anuncios"), orderBy("dataCriacao", "desc"));
+    const querySnapshot = await getDocs(q);
+    lista.innerHTML = "";
 
-  querySnapshot.forEach((doc) => {
-    const anuncio = doc.data();
+    querySnapshot.forEach((doc) => {
+      const anuncio = doc.data();
 
-    // Lógica de Filtro
-    if (filtro !== "Todas" && anuncio.categoria !== filtro) {
-      return; // Pula este anúncio se não for da categoria selecionada
-    }
+      if (filtro !== "Todas" && anuncio.categoria !== filtro) return;
 
-    const card = document.createElement("div");
-    card.classList.add("card");
-    // ... resto do seu código de montar o card ...
-    lista.appendChild(card);
-  });
-}
+      const card = document.createElement("div");
+      card.classList.add("card");
 
-// Função global para os botões chamarem
-window.filtrar = (categoria) => {
-  carregarAnuncios(categoria);
-};
-
-
-      // Montando o HTML do card de forma organizada
       card.innerHTML = `
-        ${anuncio.imagem ? `<img src="${anuncio.imagem}" style="width:100%; border-radius:10px; margin-bottom:10px;">` : ""}
-        <h3>${anuncio.nome}</h3>
-        <p class="price">R$ ${anuncio.preco} por dia</p>
-        <p>${anuncio.cidade}</p>
-        <a href="https://wa.me/55${anuncio.whatsapp}" 
-           target="_blank"
-           style="
-             display:inline-block;
-             margin-top:10px;
-             padding:10px 15px;
-             background:#25D366;
-             color:white;
-             text-decoration:none;
-             border-radius:8px;
-             font-weight:bold;
-           ">
-           Falar no WhatsApp
-        </a>
+        <img src="${anuncio.imagem || 'https://via.placeholder.com/300x200?text=Sem+Foto'}" class="card-img">
+        <div class="card-content">
+          <h3 class="card-title">${anuncio.nome}</h3>
+          <div class="card-location">📍 ${anuncio.cidade}</div>
+          <div class="card-price">R$ ${anuncio.preco} <span>/ dia</span></div>
+          <a href="https://wa.me/55${anuncio.whatsapp}" target="_blank" class="btn-whatsapp">
+            Reservar no WhatsApp
+          </a>
+        </div>
       `;
-
       lista.appendChild(card);
     });
 
-  } catch (error) {
-    lista.innerHTML = "<p>Erro ao carregar anúncios. Verifique o console.</p>";
-    console.error("Erro detalhado:", error);
+  } catch (e) {
+    lista.innerHTML = "<p>Erro ao carregar. Verifique a conexão.</p>";
+    console.error(e);
   }
 }
 
+// Tornar a função de filtro acessível aos botões
+window.filtrar = (categoria, btn) => {
+  // Atualiza visual dos botões
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  carregarAnuncios(categoria);
+};
+
+// Carga inicial
 carregarAnuncios();
 </script>
-
 
 </body>
 </html>
