@@ -22,8 +22,8 @@
 <div class="container">
   <h2>Novo Anúncio</h2>
   
-  <label>Fotos da Ferramenta</label>
-  <input type="file" id="imagem" accept="image/*" multiple>
+  <label>Foto da Ferramenta</label>
+  <input type="file" id="imagem" accept="image/*">
 
   <label>Nome da Ferramenta</label>
   <input type="text" id="nome" placeholder="Ex: Furadeira Bosch 600W">
@@ -52,8 +52,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -66,62 +65,62 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  const storage = getStorage(app);
   const auth = getAuth(app);
 
   const btnPublicar = document.getElementById("btnPublicar");
 
-  // Substitua todo o seu script do botão publicar por este:
+  btnPublicar.addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user) { 
+      alert("Faça login primeiro!"); 
+      window.location.href = "login.html";
+      return; 
+    }
 
-btnPublicar.addEventListener("click", async () => {
-  const user = auth.currentUser;
-  if (!user) { alert("Faça login primeiro!"); return; }
+    const arquivo = document.getElementById("imagem").files[0];
+    if (!arquivo) { alert("Selecione uma foto!"); return; }
 
-  const arquivo = document.getElementById("imagem").files[0];
-  if (!arquivo) { alert("Selecione uma foto!"); return; }
+    btnPublicar.disabled = true;
+    btnPublicar.innerText = "Processando...";
 
-  btnPublicar.disabled = true;
-  btnPublicar.innerText = "Processando...";
+    const reader = new FileReader();
+    reader.readAsDataURL(arquivo);
+    
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target.result;
+      img.onload = async () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const MAX_WIDTH = 600; 
+        const scaleSize = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scaleSize;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-  const reader = new FileReader();
-  reader.readAsDataURL(arquivo);
-  
-  reader.onload = (e) => {
-    const img = new Image();
-    img.src = e.target.result;
-    img.onload = async () => {
-      // Cria um canvas para redimensionar a foto e ela caber no Firestore
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      const MAX_WIDTH = 600; 
-      const scaleSize = MAX_WIDTH / img.width;
-      canvas.width = MAX_WIDTH;
-      canvas.height = img.height * scaleSize;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const fotoCompacta = canvas.toDataURL('image/jpeg', 0.6);
 
-      // Transforma em texto (Base64) com qualidade reduzida para não dar erro
-      const fotoCompacta = canvas.toDataURL('image/jpeg', 0.6);
-
-            try {
-        await addDoc(collection(db, "anuncios"), {
-          nome: document.getElementById("nome").value,
-          preco: document.getElementById("preco").value,
-          whatsapp: document.getElementById("whatsapp").value,
-          cidade: document.getElementById("cidade").value,
-          categoria: document.getElementById("categoria").value,
-          imagem: fotoCompacta, 
-          userId: user.uid, // <--- ADICIONE ESTA LINHA (Fundamental!)
-          dataCriacao: new Date()
-        });
-        alert("✅ Publicado!");
-        window.location.href = "index.html";
-      } catch (err) {
-        alert("Erro ao salvar no banco: " + err.message);
-        btnPublicar.disabled = false;
-      }
-
-
-
+        try {
+          await addDoc(collection(db, "anuncios"), {
+            nome: document.getElementById("nome").value,
+            preco: document.getElementById("preco").value,
+            whatsapp: document.getElementById("whatsapp").value,
+            cidade: document.getElementById("cidade").value,
+            categoria: document.getElementById("categoria").value,
+            imagem: fotoCompacta, 
+            userId: user.uid,
+            dataCriacao: new Date()
+          });
+          alert("✅ Publicado!");
+          window.location.href = "index.html";
+        } catch (err) {
+          alert("Erro ao salvar: " + err.message);
+          btnPublicar.disabled = false;
+          btnPublicar.innerText = "Publicar Anúncio";
+        }
+      };
+    };
+  });
 </script>
 </body>
 </html>
