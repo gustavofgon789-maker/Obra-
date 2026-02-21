@@ -7,185 +7,73 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --primary: #145c43;
-      --accent: #25D366;
-      --bg: #f8faf9;
-      --text: #1a1a1a;
-    }
+  <style>
+  :root {
+    --verde-escuro: #145c43;
+    --verde-claro: #e8f5e9; /* Verde bem suave de fundo */
+    --branco: #ffffff;
+  }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      margin: 0;
-      padding-bottom: 100px; /* Espaço para o rodapé não cobrir os cards */
-    }
+  body {
+    background-color: #f4f7f6; /* Fundo geral da página */
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+  }
 
-    /* Cabeçalho */
-    .app-header {
-      background: white;
-      padding: 15px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+  /* Cabeçalho com a Logo preenchendo */
+  .header-container {
+    background-color: var(--verde-claro);
+    padding: 40px 20px 60px 20px;
+    text-align: center;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+  }
 
-    .app-header img {
-      height: 45px;
-      margin-bottom: 15px;
-    }
+  .logo-tipo {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--verde-escuro);
+    letter-spacing: -2px;
+    margin: 0;
+    text-transform: lowercase; /* Estilo startup */
+  }
 
-    /* Busca */
-    .search-container {
-      width: 90%;
-      max-width: 500px;
-      margin-bottom: 12px;
-    }
+  .logo-tipo span {
+    color: #2e7d32; /* Um detalhe em verde levemente diferente */
+  }
 
-    .search-container input {
-      width: 100%;
-      padding: 12px 18px;
-      border-radius: 12px;
-      border: 1px solid #eee;
-      background: #f1f3f2;
-      outline: none;
-      box-sizing: border-box;
-      font-size: 15px;
-    }
+  /* Barra de pesquisa que sobrepõe o verde */
+  .search-box {
+    max-width: 90%;
+    margin: -30px auto 20px;
+    background: var(--branco);
+    padding: 10px 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+  }
 
-    /* Filtros com Respiro Lateral */
-    .filter-wrapper {
-      width: 100%;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .filter-wrapper::-webkit-scrollbar { display: none; }
+  .search-box input {
+    border: none;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    outline: none;
+  }
+</style>
 
-    .filter-bar {
-      display: flex;
-      gap: 10px;
-      padding: 5px 20px;
-      min-width: max-content;
-    }
+<header class="header-container">
+  <h1 class="logo-tipo">obrah<span>hí</span></h1>
+  <p style="color: var(--verde-escuro); opacity: 0.8; margin-top: 5px; font-weight: 500;">
+    Aluguel de ferramentas sem burocracia
+  </p>
+</header>
 
-    .filter-btn {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #555;
-      white-space: nowrap;
-      cursor: pointer;
-    }
+<div class="search-box">
+  <input type="text" placeholder="O que você precisa hoje?">
+</div>
 
-    .filter-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    /* Grade de Anúncios (2 colunas) */
-    .container {
-      max-width: 1100px;
-      margin: 15px auto;
-      padding: 0 15px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    @media (min-width: 768px) {
-      .container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-    }
-
-    .card {
-      background: white;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card-img {
-      width: 100%;
-      aspect-ratio: 1/1;
-      object-fit: cover;
-      background: #f0f0f0;
-    }
-
-    .card-content { padding: 12px; }
-    .card-title { font-size: 14px; font-weight: 700; margin: 0 0 5px 0; color: #333; height: 34px; overflow: hidden; }
-    .card-price { font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
-
-    .btn-card-wa {
-      display: block;
-      background: var(--accent);
-      color: white;
-      text-align: center;
-      padding: 8px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 12px;
-      text-decoration: none;
-    }
-
-    /* Rodapé Estilo App */
-    .app-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 10px 0;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-      z-index: 2000;
-    }
-
-    .footer-item {
-      text-decoration: none;
-      text-align: center;
-      color: #888;
-      transition: 0.3s;
-    }
-
-    .footer-item.active { color: var(--primary); }
-
-    .footer-center-btn {
-      text-decoration: none;
-      background: var(--primary);
-      color: white;
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: -35px;
-      box-shadow: 0 4px 12px rgba(20, 92, 67, 0.4);
-      font-size: 24px;
-      font-weight: bold;
-    }
-  </style>
-</head>
-
-<body>
-
-<div class="app-header">
-  <img src="logo.png" alt="Obrahhí Logo">
-  
-  <div class="search-container">
-    <input type="text" id="inputBusca" placeholder="O que você precisa hoje?">
-  </div>
 
   <div class="filter-wrapper">
     <div class="filter-bar">
