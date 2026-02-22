@@ -6,60 +6,87 @@
   <title>Meus Aluguéis | 𝔒braí</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --deep-bg: #050706; --card-bg: #0f1412; --primary: #10b981; --text-muted: #64748b; --border: #1e2923; }
-    body { font-family: 'Inter', sans-serif; background: var(--deep-bg); color: #fff; margin: 0; padding-bottom: 100px; }
-    .header { padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border); }
-    .lista-alugueis { padding: 20px; }
-    .card-aluguel { background: var(--card-bg); border-radius: 20px; padding: 15px; display: flex; align-items: center; margin-bottom: 15px; border: 1px solid var(--border); }
-    .img-ferramenta { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; margin-right: 15px; }
-    .info { flex-grow: 1; }
-    .nome { font-weight: 700; font-size: 15px; margin: 0; }
-    .meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-    .btn-contato { background: var(--primary); color: #000; text-decoration: none; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; }
-    .vazio { text-align: center; padding: 50px 20px; color: var(--text-muted); }
+    :root { 
+      --deep-bg: #0a0f0d; --card-bg: #141a17; --primary: #10b981; 
+      --text-main: #e2e8f0; --text-muted: #94a3b8; --border: #1e2923; 
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--deep-bg); color: var(--text-main); margin: 0; padding-bottom: 120px; }
     
-    /* Footer igual aos outros */
-    .app-footer { position: fixed; bottom: 0; width: 100%; background: rgba(5,7,6,0.95); height: 80px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); }
-    .footer-item { text-decoration: none; color: var(--text-muted); font-size: 10px; text-align: center; flex: 1; }
+    .header { padding: 40px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); }
+    .lista-alugueis { padding: 20px; max-width: 500px; margin: 0 auto; }
+    
+    .card-aluguel { 
+      background: var(--card-bg); border-radius: 20px; padding: 15px; 
+      display: flex; align-items: center; margin-bottom: 15px; border: 1px solid var(--border);
+      text-decoration: none; color: inherit; transition: 0.2s;
+    }
+    .card-aluguel:active { transform: scale(0.98); }
+    
+    .img-ferramenta { width: 70px; height: 70px; border-radius: 15px; object-fit: cover; margin-right: 15px; border: 1px solid var(--border); }
+    .info-aluguel { flex: 1; }
+    .nome-ferramenta { font-weight: 800; font-size: 16px; margin-bottom: 4px; display: block; }
+    .data-aluguel { font-size: 12px; color: var(--text-muted); display: block; }
+    
+    .vazio { text-align: center; padding: 50px 20px; color: var(--text-muted); font-size: 14px; }
+
+    /* Bottom Nav Simétrica (Padrão Sênior) */
+    .bottom-nav { 
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+      width: 90%; max-width: 420px; background: rgba(20, 26, 23, 0.98); 
+      backdrop-filter: blur(20px); padding: 10px 0; border-radius: 25px; 
+      display: flex; align-items: center; justify-content: space-around;
+      border: 1px solid var(--border); z-index: 1000;
+    }
+    .nav-item { flex: 1; text-align: center; text-decoration: none; color: var(--text-muted); font-size: 10px; font-weight: 700; }
+    .nav-item.active { color: var(--primary); }
+    .nav-icon { font-size: 22px; display: block; margin-bottom: 2px; }
   </style>
 </head>
 <body>
 
 <div class="header">
-    <h2 style="margin:0; font-weight:800">Meus Aluguéis</h2>
-    <p style="font-size:12px; color:var(--text-muted); margin-top:5px">Histórico de ferramentas que você consultou</p>
+    <h2 style="margin:0; font-weight:800; color:var(--primary)">Meus Aluguéis</h2>
+    <p style="font-size:12px; color:var(--text-muted); margin-top:5px">Consultas recentes no WhatsApp</p>
 </div>
 
 <div id="listaAlugueis" class="lista-alugueis">
     </div>
 
-<nav class="app-footer">
-  <a href="index.html" class="footer-item">🏠<br>Início</a>
-  <a href="meus-alugueis.html" class="footer-item" style="color:var(--primary)">📋<br>Aluguéis</a>
-  <a href="perfil.html" class="footer-item">👤<br>Painel</a>
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span>HOME</a>
+  <a href="meus-alugueis.html" class="nav-item active"><span class="nav-icon">📋</span>ALUGUÉIS</a>
+  <a href="perfil.html" class="nav-item"><span class="nav-icon">👤</span>PERFIL</a>
 </nav>
 
 <script>
-    const lista = document.getElementById("listaAlugueis");
-    const historico = JSON.parse(localStorage.getItem('meusAlugueis') || '[]');
+    function renderizarHistorico() {
+        const lista = document.getElementById("listaAlugueis");
+        const historico = JSON.parse(localStorage.getItem('meusAlugueis') || '[]');
 
-    if (historico.length === 0) {
-        lista.innerHTML = `<div class="vazio">Você ainda não solicitou nenhum aluguel.</div>`;
-    } else {
+        if (historico.length === 0) {
+            lista.innerHTML = `<div class="vazio">Nenhum pedido recente encontrado.<br>As ferramentas que consultar aparecerão aqui.</div>`;
+            return;
+        }
+
+        lista.innerHTML = "";
         historico.forEach(item => {
-            const card = document.createElement("div");
+            const card = document.createElement("a");
+            card.href = item.linkWhats; // Redireciona direto para o chat salvo
+            card.target = "_blank";
             card.className = "card-aluguel";
             card.innerHTML = `
                 <img src="${item.imagem}" class="img-ferramenta">
-                <div class="info">
-                    <p class="nome">${item.nome}</p>
-                    <span class="meta">Solicitado em: ${item.data}</span>
+                <div class="info-aluguel">
+                    <span class="nome-ferramenta">${item.nome}</span>
+                    <span class="data-aluguel">Solicitado em: ${item.data}</span>
+                    <span style="color:var(--primary); font-size:11px; font-weight:700">Reabrir conversa →</span>
                 </div>
-                <a href="${item.linkWhats}" target="_blank" class="btn-contato">WhatsApp</a>
             `;
             lista.appendChild(card);
         });
     }
+
+    renderizarHistorico();
 </script>
 </body>
 </html>
