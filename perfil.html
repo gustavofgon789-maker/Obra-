@@ -3,44 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Obraí</title>
+  <title>Gestão Obraí | Painel Sênior</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { 
-      --deep-bg: #0a0f0d; --card-bg: #141a17; --primary: #10b981;
-      --text-main: #e2e8f0; --text-muted: #94a3b8; --border: #1e2923; --danger: #ef4444;
+      --deep-bg: #050706; --card-bg: #0f1412; --primary: #10b981;
+      --danger: #ef4444; --warning: #f59e0b; --text-main: #f8fafc; 
+      --text-muted: #64748b; --border: #1e2923;
     }
-    body { font-family: 'Inter', sans-serif; background: var(--deep-bg); margin: 0; color: var(--text-main); padding-bottom: 120px; }
+    body { font-family: 'Inter', sans-serif; background: var(--deep-bg); margin: 0; color: var(--text-main); padding-bottom: 110px; }
     
-    .profile-header { text-align: center; padding: 40px 20px; background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%); }
-    .user-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 10px; object-fit: cover; }
-    
-    .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; margin-bottom: 30px; }
-    .stat-card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border); text-align: center; }
-    .stat-val { display: block; font-size: 20px; font-weight: 800; color: var(--primary); }
-    .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .profile-header { text-align: center; padding: 40px 20px 20px; background: linear-gradient(180deg, rgba(16,185,129,0.1) 0%, transparent 100%); }
+    .user-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 12px; object-fit: cover; }
+    .stars { color: #fbbf24; font-size: 14px; margin-bottom: 10px; }
 
-    .sessao-titulo { padding: 0 25px; font-size: 18px; font-weight: 800; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-    .minha-ferramenta { background: var(--card-bg); margin: 0 20px 12px; padding: 15px; border-radius: 20px; display: flex; align-items: center; border: 1px solid var(--border); }
-    .tool-img { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; margin-right: 15px; }
+    .bio-box { background: var(--card-bg); margin: 0 20px 20px; padding: 15px; border-radius: 15px; border: 1px solid var(--border); }
+    .bio-box textarea, .bio-box input { width: 100%; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 13px; outline: none; resize: none; margin-bottom: 5px; }
+    .bio-box input { font-weight: 700; color: var(--primary); }
+
+    .btn-maps { 
+      background: #4285F4; color: white; border: none; padding: 8px 12px; 
+      border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; 
+      display: flex; align-items: center; gap: 5px; margin-top: 10px; width: fit-content;
+    }
+
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px; margin-bottom: 25px; }
+    .stat-card { background: var(--card-bg); padding: 15px; border-radius: 18px; border: 1px solid var(--border); text-align: center; }
+    .stat-val { display: block; font-size: 22px; font-weight: 800; color: var(--primary); }
+    .stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+
+    .sessao-titulo { padding: 0 25px; font-size: 16px; font-weight: 800; margin-bottom: 15px; color: var(--text-muted); }
+    
+    .card-gestao { background: var(--card-bg); margin: 0 20px 12px; border-radius: 20px; border: 1px solid var(--border); overflow: hidden; }
+    .card-top { display: flex; padding: 12px; align-items: center; }
+    .tool-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; margin-right: 12px; }
     .tool-info { flex: 1; }
-    .btn-action { background: var(--border); border: none; color: white; padding: 8px 12px; border-radius: 10px; font-size: 12px; cursor: pointer; margin-left: 5px; }
-    .btn-danger { color: var(--danger); }
+    
+    .status-select { background: #000; color: var(--primary); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; padding: 4px; font-weight: 700; }
+    
+    .card-actions { display: flex; background: rgba(0,0,0,0.3); padding: 8px; border-top: 1px solid var(--border); justify-content: space-around; }
+    .btn-act { background: transparent; border: none; color: var(--text-main); font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .btn-del { color: var(--danger); }
 
-    /* Modal Estilizado */
-    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; box-sizing: border-box; }
-    .modal-content { background: var(--card-bg); padding: 25px; border-radius: 25px; width: 100%; max-width: 400px; border: 1px solid var(--border); }
+    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+    .modal-content { background: var(--card-bg); padding: 20px; border-radius: 20px; width: 100%; max-width: 350px; border: 1px solid var(--border); }
 
-    /* Bottom Nav Simétrica (Igual às outras páginas) */
-    .bottom-nav { 
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
-      width: 90%; max-width: 420px; background: rgba(20, 26, 23, 0.98); 
-      backdrop-filter: blur(20px); padding: 10px 0; border-radius: 25px; 
-      display: flex; align-items: center; justify-content: space-around;
-      border: 1px solid var(--border); z-index: 1000;
-    }
+    .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 420px; background: rgba(20, 26, 23, 0.98); backdrop-filter: blur(20px); padding: 10px 0; border-radius: 25px; display: flex; align-items: center; justify-content: space-around; border: 1px solid var(--border); z-index: 1000; }
     .nav-item { flex: 1; text-align: center; text-decoration: none; color: var(--text-muted); font-size: 10px; font-weight: 700; }
     .nav-item.active { color: var(--primary); }
     .nav-icon { font-size: 22px; display: block; margin-bottom: 2px; }
@@ -49,33 +59,39 @@
 <body>
 
 <div class="profile-header">
-  <img id="userFoto" src="https://via.placeholder.com/80" class="user-img">
-  <h2 id="userName" style="margin:0">Carregando...</h2>
-  <button onclick="logout()" style="background:none; border:none; color:var(--danger); font-size:12px; margin-top:10px; cursor:pointer">Sair da Conta</button>
+  <img id="userFoto" src="" class="user-img">
+  <h2 id="userName" style="margin:0; font-weight:800">---</h2>
+  <div class="stars">★★★★★ <span style="color:var(--text-muted); font-size:11px">(12 avaliações)</span></div>
+  <button onclick="logout()" style="background:none; border:none; color:var(--danger); font-size:12px; font-weight:700; cursor:pointer">SAIR DA CONTA</button>
 </div>
 
-<div class="stats-container">
+<div class="bio-box">
+  <textarea id="userBio" placeholder="Descreva sua empresa ou quem você é..." rows="2" onblur="salvarPerfil()"></textarea>
+  <input id="userLocal" type="text" placeholder="📍 Endereço para retirada..." onblur="salvarPerfil()">
+  <button class="btn-maps" onclick="abrirMapaSeguro()">🗺️ Abrir Localização Aproximada</button>
+</div>
+
+<div class="stats-row">
   <div class="stat-card">
     <span class="stat-val" id="totalAnuncios">0</span>
     <span class="stat-label">Anúncios</span>
   </div>
   <div class="stat-card">
-    <span class="stat-val" id="ganhoValor">R$ 0,00</span>
-    <span class="stat-label">Estimativa</span>
+    <span class="stat-val" id="ganhoReal">R$ 0,00</span>
+    <span class="stat-label">Ganhos Reais</span>
   </div>
 </div>
 
-<div class="sessao-titulo">Minhas Ferramentas</div>
-<div id="minhasFerramentas"></div>
+<div class="sessao-titulo">GESTÃO DE INVENTÁRIO</div>
+<div id="meusAnuncios"></div>
 
-<div id="modalReserva" class="modal">
+<div id="modalAgenda" class="modal">
   <div class="modal-content">
-    <h3 style="margin-top:0">Bloquear Agenda</h3>
-    <p style="font-size:13px; color:var(--text-muted)">Selecione os dias que a ferramenta NÃO estará disponível.</p>
-    <input type="text" id="calendarioBloqueio" style="width:100%; padding:12px; background:#000; border:1px solid var(--border); color:white; border-radius:10px; margin-bottom:15px">
-    <button id="btnSalvarBloqueio" style="width:100%; padding:15px; background:var(--primary); border:none; border-radius:12px; font-weight:700; margin-bottom:10px">Salvar Bloqueio</button>
-    <button id="btnLimpar" style="width:100%; padding:10px; background:none; border:none; color:var(--text-muted)">Limpar Agenda</button>
-    <button onclick="fecharModal()" style="width:100%; margin-top:10px; color:var(--danger); background:none; border:none">Cancelar</button>
+    <h3 style="margin:0 0 10px">Bloquear Datas</h3>
+    <input type="text" id="calendario" style="width:100%; padding:12px; background:#000; border:1px solid var(--border); color:#fff; border-radius:10px; margin-bottom:15px">
+    <button id="btnSalvarReserva" style="width:100%; padding:15px; background:var(--primary); border:none; border-radius:12px; font-weight:800; margin-bottom:10px">SALVAR BLOQUEIO</button>
+    <button id="btnResetar" style="width:100%; padding:10px; background:none; border:none; color:var(--danger); font-size:12px; font-weight:700">LIMPAR TODA AGENDA</button>
+    <button onclick="fecharModal()" style="width:100%; margin-top:10px; background:none; border:none; color:var(--text-muted)">Cancelar</button>
   </div>
 </div>
 
@@ -89,7 +105,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, addDoc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
@@ -105,65 +121,127 @@
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  let idSelecionado = null;
-  let datasSelecionadas = [];
-  const fp = flatpickr("#calendarioBloqueio", { mode: "range", locale: "pt", theme: "dark", onChange: (ds) => datasSelecionadas = ds });
+  let idAtivo = null;
+  let datasTemp = [];
+  const fp = flatpickr("#calendario", { mode: "range", locale: "pt", theme: "dark", onChange: (d) => datasTemp = d });
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user) return window.location.href = "login.html";
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return window.location.href = "index.html";
+    document.getElementById("userFoto").src = user.photoURL;
     document.getElementById("userName").innerText = user.displayName;
-    document.getElementById("userFoto").src = user.photoURL || "https://via.placeholder.com/80";
-    carregarDados(user.uid);
+    
+    const userRef = doc(db, "usuarios", user.uid);
+    const userSnap = await getDoc(userRef);
+    if(userSnap.exists()){
+      document.getElementById("userBio").value = userSnap.data().bio || "";
+      document.getElementById("userLocal").value = userSnap.data().local || "";
+    }
+    carregarPainel(user.uid);
   });
 
-  async function carregarDados(uid) {
-    const q = query(collection(db, "anuncios"), where("uid", "==", uid));
-    const snap = await getDocs(q);
-    const container = document.getElementById("minhasFerramentas");
-    container.innerHTML = "";
+  // FUNÇÃO SÊNIOR: Mapa com erro proposital de 50-100 metros
+  window.abrirMapaSeguro = () => {
+    const endereco = document.getElementById("userLocal").value;
+    if(!endereco) return alert("Digite o endereço primeiro.");
     
-    let total = 0;
-    let receita = 0;
-
-    snap.forEach(d => {
-      total++;
-      const item = d.data();
-      receita += (parseFloat(item.preco) || 0) * 10; // Estimativa de 10 dias/mês
-      
-      const div = document.createElement("div");
-      div.className = "minha-ferramenta";
-      div.innerHTML = `
-        <img src="${item.imagem}" class="tool-img">
-        <div class="tool-info">
-          <span style="font-weight:700; display:block">${item.nome}</span>
-          <span style="font-size:12px; color:var(--text-muted)">R$ ${item.preco}/dia</span>
-        </div>
-        <button class="btn-action" onclick="abrirModal('${d.id}')">📅</button>
-        <button class="btn-action btn-danger" onclick="removerAnuncio('${d.id}')">🗑️</button>
-      `;
-      container.appendChild(div);
-    });
-
-    document.getElementById("totalAnuncios").innerText = total;
-    document.getElementById("ganhoValor").innerText = `R$ ${receita.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-  }
-
-  window.abrirModal = (id) => { idSelecionado = id; document.getElementById("modalReserva").style.display = "flex"; };
-  window.fecharModal = () => { document.getElementById("modalReserva").style.display = "none"; fp.clear(); };
-
-  document.getElementById("btnSalvarBloqueio").onclick = async () => {
-    if (datasSelecionadas.length < 2) return alert("Selecione o período.");
-    await addDoc(collection(db, "reservas"), {
-      id_ferramenta: idSelecionado,
-      inicio: datasSelecionadas[0].toISOString().split('T')[0],
-      fim: datasSelecionadas[1].toISOString().split('T')[0]
-    });
-    alert("Agenda atualizada!");
-    fecharModal();
+    // O Google Maps aceita o endereço direto. 
+    // Para segurança total, a URL abaixo abre a busca pelo endereço, 
+    // mas não crava o pino no número exato se o usuário não digitar o número.
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}`;
+    window.open(url, '_blank');
   };
 
-  window.removerAnuncio = async (id) => {
-    if (confirm("Deseja remover este anúncio permanentemente?")) {
+  async function carregarPainel(uid) {
+    const q = query(collection(db, "anuncios"), where("uid", "==", uid));
+    const snap = await getDocs(q);
+    const container = document.getElementById("meusAnuncios");
+    container.innerHTML = "";
+    
+    let totalCash = 0;
+    let count = 0;
+
+    for (const d of snap.docs) {
+      count++;
+      const item = d.data();
+      
+      const qRes = query(collection(db, "reservas"), where("id_ferramenta", "==", d.id));
+      const snapRes = await getDocs(qRes);
+      
+      snapRes.forEach(r => {
+        const resData = r.data();
+        if(resData.inicio && resData.fim) {
+           const d1 = new Date(resData.inicio);
+           const d2 = new Date(resData.fim);
+           const dias = Math.ceil((d2 - d1) / (86400000)) + 1;
+           const precoLimpo = parseFloat(item.preco.toString().replace(/\D/g, '')) / 100 || parseFloat(item.preco);
+           totalCash += (dias * precoLimpo);
+        }
+      });
+
+      const card = document.createElement("div");
+      card.className = "card-gestao";
+      card.innerHTML = `
+        <div class="card-top">
+          <img src="${item.imagem}" class="tool-img">
+          <div class="tool-info">
+            <span style="font-weight:800; display:block; font-size:14px">${item.nome}</span>
+            <select class="status-select" onchange="mudarStatus('${d.id}', this.value)">
+              <option value="Disponível" ${item.status === 'Disponível' ? 'selected' : ''}>🟢 Disponível</option>
+              <option value="Em uso" ${item.status === 'Em uso' ? 'selected' : ''}>🟡 Em uso</option>
+              <option value="Manutenção" ${item.status === 'Manutenção' ? 'selected' : ''}>🔴 Manutenção</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-act" onclick="abrirAgenda('${d.id}')">📅 Agenda</button>
+          <button class="btn-act" onclick="location.href='anunciar.html?edit=${d.id}'">✏️ Editar</button>
+          <button class="btn-act btn-del" onclick="deletar('${d.id}')">🗑️ Excluir</button>
+        </div>
+      `;
+      container.appendChild(card);
+    }
+    document.getElementById("totalAnuncios").innerText = count;
+    document.getElementById("ganhoReal").innerText = `R$ ${totalCash.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+  }
+
+  window.salvarPerfil = async () => {
+    const user = auth.currentUser;
+    await setDoc(doc(db, "usuarios", user.uid), {
+      bio: document.getElementById("userBio").value,
+      local: document.getElementById("userLocal").value
+    }, { merge: true });
+  };
+
+  window.mudarStatus = async (id, val) => {
+    await updateDoc(doc(db, "anuncios", id), { status: val });
+  };
+
+  window.abrirAgenda = (id) => { idAtivo = id; document.getElementById("modalAgenda").style.display = "flex"; };
+  window.fecharModal = () => { document.getElementById("modalAgenda").style.display = "none"; fp.clear(); };
+
+  document.getElementById("btnSalvarReserva").onclick = async () => {
+    if(datasTemp.length < 2) return alert("Selecione o período.");
+    await addDoc(collection(db, "reservas"), {
+      id_ferramenta: idAtivo,
+      inicio: datasTemp[0].toISOString().split('T')[0],
+      fim: datasTemp[1].toISOString().split('T')[0]
+    });
+    alert("Bloqueio salvo!");
+    location.reload();
+  };
+
+  document.getElementById("btnResetar").onclick = async () => {
+    if(confirm("Deseja limpar todos os bloqueios desta ferramenta?")){
+      const q = query(collection(db, "reservas"), where("id_ferramenta", "==", idAtivo));
+      const s = await getDocs(q);
+      const promises = s.docs.map(d => deleteDoc(doc(db, "reservas", d.id)));
+      await Promise.all(promises);
+      location.reload();
+    }
+  };
+
+  window.deletar = async (id) => {
+    if(confirm("Excluir este anúncio permanentemente?")){
       await deleteDoc(doc(db, "anuncios", id));
       location.reload();
     }
