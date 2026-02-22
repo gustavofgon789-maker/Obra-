@@ -9,26 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { 
-      --deep-bg: #0a0f0d;
-      --card-bg: #141a17;
-      --primary: #10b981;
-      --text-main: #e2e8f0;
-      --text-muted: #94a3b8;
-      --border: #1e2923;
+      --deep-bg: #0a0f0d; --card-bg: #141a17; --primary: #10b981;
+      --text-main: #e2e8f0; --text-muted: #94a3b8; --border: #1e2923;
     }
+    body { background-color: var(--deep-bg); margin: 0; font-family: 'Inter', sans-serif; color: var(--text-main); padding-bottom: 120px; }
 
-    body { 
-      background-color: var(--deep-bg); 
-      margin: 0; 
-      font-family: 'Inter', sans-serif; 
-      color: var(--text-main);
-      padding-bottom: 120px; 
-    }
-
-    .header-container { padding: 40px 20px 20px; text-align: center; }
+    .header-container { padding: 40px 20px 10px; text-align: center; }
     .logo-tipo { font-size: 42px; font-weight: 800; color: var(--primary); letter-spacing: -2px; margin: 0; }
 
-    .search-container { max-width: 420px; margin: 0 auto 20px; padding: 0 20px; }
+    .search-container { max-width: 420px; margin: 0 auto 10px; padding: 0 20px; }
     .search-box { 
       background: rgba(30, 41, 35, 0.5); padding: 5px 15px; border-radius: 18px; 
       display: flex; align-items: center; border: 1px solid var(--border); margin-bottom: 12px;
@@ -38,7 +27,7 @@
     .loc-box { display: flex; align-items: center; gap: 8px; padding-left: 5px; margin-bottom: 15px;}
     .loc-box select { background: transparent; border: none; color: var(--primary); font-weight: 700; outline: none; cursor: pointer; font-size: 14px; }
 
-    .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 25px; scrollbar-width: none; }
+    .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 20px; scrollbar-width: none; }
     .filter-scroll::-webkit-scrollbar { display: none; }
     .filter-btn { 
       background: var(--card-bg); border: 1px solid var(--border); color: var(--text-muted); 
@@ -47,7 +36,7 @@
     .filter-btn.active { background: var(--primary); color: var(--deep-bg); border-color: var(--primary); }
 
     .lista-anuncios { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
-    .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+    .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
     .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
     .card-content { padding: 12px; }
     .card-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -162,7 +151,6 @@
       const snap = await getDocs(q);
       snap.forEach(docSnap => {
         const item = docSnap.data();
-        // Filtro de local manual para evitar bugs de index do Firebase
         if (localSelecionado !== "Todos" && item.cidade !== localSelecionado) return;
 
         const card = document.createElement("div");
