@@ -25,7 +25,7 @@
       padding-bottom: 120px; 
     }
 
-    /* Header e Logo */
+    /* Header */
     .header-container { 
       padding: 40px 20px 20px; 
       text-align: center; 
@@ -38,7 +38,7 @@
       margin: 0; 
     }
 
-    /* Busca */
+    /* Busca e Filtro de Local */
     .search-container { max-width: 420px; margin: 0 auto 20px; padding: 0 20px; }
     .search-box { 
       background: rgba(30, 41, 35, 0.5); 
@@ -47,23 +47,29 @@
       display: flex; 
       align-items: center; 
       border: 1px solid var(--border);
+      margin-bottom: 12px;
     }
     .search-box input { 
       border: none; background: transparent; padding: 12px; 
       width: 100%; outline: none; color: white; font-size: 15px; 
     }
+    .loc-box { display: flex; align-items: center; gap: 8px; padding-left: 5px; }
+    .loc-box select { 
+        background: transparent; border: none; color: var(--primary); 
+        font-weight: 700; outline: none; cursor: pointer; font-size: 14px;
+    }
 
-    /* Filtros */
+    /* Filtros de Categoria */
     .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 25px; scrollbar-width: none; }
     .filter-scroll::-webkit-scrollbar { display: none; }
     .filter-btn { 
       background: var(--card-bg); border: 1px solid var(--border); 
       color: var(--text-muted); padding: 8px 18px; border-radius: 100px; 
-      font-weight: 600; font-size: 13px; cursor: pointer; 
+      font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap;
     }
-    .filter-btn.active { background: var(--primary); color: var(--deep-bg); }
+    .filter-btn.active { background: var(--primary); color: var(--deep-bg); border-color: var(--primary); }
 
-    /* Cards Grid */
+    /* Grid de Anúncios */
     .lista-anuncios { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
@@ -73,36 +79,34 @@
     .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
     .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
     .card-content { padding: 12px; }
-    .card-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .card-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .card-price { color: var(--primary); font-weight: 800; font-size: 16px; }
 
-    /* Bottom Nav Sênior (Simetria Perfeita) */
+    /* Bottom Nav (Simetria Sênior) */
     .bottom-nav { 
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
-      width: 90%; max-width: 400px; background: rgba(20, 26, 23, 0.98); 
-      backdrop-filter: blur(20px); padding: 8px 0; border-radius: 24px; 
-      display: flex; align-items: center; justify-content: space-around;
+      width: 90%; max-width: 420px; background: rgba(20, 26, 23, 0.98); 
+      backdrop-filter: blur(20px); padding: 10px 0; border-radius: 25px; 
+      display: flex; align-items: center; justify-content: space-between;
       border: 1px solid var(--border); z-index: 1000;
     }
     .nav-item { 
-      flex: 1; /* Garante espaço igual para todos */
-      text-align: center; text-decoration: none; 
+      flex: 1; text-align: center; text-decoration: none; 
       color: var(--text-muted); font-size: 10px; font-weight: 700; 
     }
     .nav-item.active { color: var(--primary); }
-    .nav-icon { font-size: 20px; display: block; margin-bottom: 2px; }
+    .nav-icon { font-size: 22px; display: block; margin-bottom: 2px; }
 
-    /* Central Button */
     .btn-central-wrap { flex: 1; display: flex; justify-content: center; }
     .btn-central {
       background: var(--primary); color: var(--deep-bg); 
-      width: 46px; height: 46px; border-radius: 15px; 
+      width: 48px; height: 48px; border-radius: 16px; 
       display: flex; align-items: center; justify-content: center; 
-      text-decoration: none; font-size: 26px; font-weight: bold;
+      text-decoration: none; font-size: 28px; font-weight: bold;
       box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
     }
 
-    #perfilImgContainer img { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--primary); }
+    #perfilImgContainer img { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--primary); }
   </style>
 </head>
 <body>
@@ -114,6 +118,12 @@
 <div class="search-container">
   <div class="search-box">
     <input type="text" id="inputBusca" placeholder="O que você precisa?" onkeyup="filtrarGeral()">
+  </div>
+  <div class="loc-box">
+    <span>📍</span>
+    <select id="filtroLocal" onchange="carregarAnuncios()">
+      <option value="Todos">Ver toda a região</option>
+    </select>
   </div>
 </div>
 
@@ -171,6 +181,23 @@
     }
   });
 
+  // Função para carregar as cidades sem quebrar
+  async function carregarLocais() {
+    try {
+      const snap = await getDocs(collection(db, "anuncios"));
+      const locais = new Set();
+      snap.forEach(doc => {
+        const data = doc.data();
+        if (data.cidade) locais.add(data.cidade.trim());
+      });
+      const select = document.getElementById("filtroLocal");
+      locais.forEach(loc => {
+        const opt = document.createElement("option");
+        opt.value = loc; opt.text = loc; select.add(opt);
+      });
+    } catch (e) { console.error("Erro ao carregar locais:", e); }
+  }
+
   window.selecionarCategoria = (cat, btn) => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -180,11 +207,21 @@
 
   async function carregarAnuncios() {
     const lista = document.getElementById("listaAnuncios");
+    const localSelecionado = document.getElementById("filtroLocal").value;
     lista.innerHTML = "";
+
     try {
       let q = collection(db, "anuncios");
-      if (categoriaAtual !== 'Todas') q = query(q, where("categoria", "==", categoriaAtual));
       
+      // Lógica de filtros combinada
+      if (categoriaAtual !== 'Todas' && localSelecionado !== 'Todos') {
+        q = query(q, where("categoria", "==", categoriaAtual), where("cidade", "==", localSelecionado));
+      } else if (categoriaAtual !== 'Todas') {
+        q = query(q, where("categoria", "==", categoriaAtual));
+      } else if (localSelecionado !== 'Todos') {
+        q = query(q, where("cidade", "==", localSelecionado));
+      }
+
       const snap = await getDocs(q);
       snap.forEach(docSnap => {
         const item = docSnap.data();
@@ -201,7 +238,7 @@
         `;
         lista.appendChild(card);
       });
-    } catch (e) { console.error("Erro ao carregar:", e); }
+    } catch (e) { console.error("Erro ao carregar anúncios:", e); }
   }
 
   window.filtrarGeral = () => {
@@ -212,6 +249,7 @@
     });
   };
 
+  carregarLocais();
   carregarAnuncios();
 </script>
 </body>
