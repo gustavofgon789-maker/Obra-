@@ -12,61 +12,44 @@
       --deep-bg: #0a0f0d; --card-bg: #141a17; --primary: #10b981;
       --primary-soft: rgba(16, 185, 129, 0.1); --danger: #ef4444;
       --text-main: #e2e8f0; --text-muted: #94a3b8; --border: #1e2923;
-   #modalBloqueio {
-  display: none; 
-  position: fixed; 
-  top: 0; left: 0; 
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.9); 
-  z-index: 9999; 
-  align-items: center; /* Centraliza vertical */
-  justify-content: center; /* Centraliza horizontal */
-   }
-      
     }
     body { font-family: 'Inter', sans-serif; background: var(--deep-bg); margin: 0; color: var(--text-main); padding-bottom: 100px; }
     
-    /* Header e Stats */
     .profile-header { text-align: center; padding: 40px 20px; background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%); border-bottom: 1px solid var(--border); }
     .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 15px; object-fit: cover; }
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
     .stat-card { background: var(--card-bg); padding: 15px; border-radius: 18px; border: 1px solid var(--border); text-align: center; }
     .stat-value { display: block; font-size: 20px; font-weight: 800; color: var(--primary); }
-    .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
 
-    /* Lista */
     .section-title { padding: 20px; font-size: 18px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
     .meus-anuncios { padding: 0 20px; }
     .item-anuncio { background: var(--card-bg); border-radius: 20px; padding: 12px; display: flex; align-items: center; margin-bottom: 12px; border: 1px solid var(--border); }
     .item-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; margin-right: 15px; }
     .item-info { flex-grow: 1; }
-    .item-nome { font-weight: 600; font-size: 14px; margin: 0; }
     
     .acoes-anuncio { display: flex; gap: 8px; }
     .btn-acao { width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); cursor: pointer; text-decoration: none; font-size: 16px; }
     .btn-editar { background: var(--primary-soft); color: var(--primary); }
     .btn-excluir { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
-    .btn-indisponivel { background: #1e2923; color: #fbbf24; }
 
-    /* MODAL ESTILIZADO */
+    /* MODAL CENTRALIZADO */
     #modalReserva {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85); z-index: 2000; backdrop-filter: blur(8px);
-      align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.9); z-index: 9999; backdrop-filter: blur(8px);
+      align-items: center; justify-content: center; /* Centralização total */
     }
     .modal-content {
-      background: var(--card-bg); width: 90%; max-width: 350px; padding: 25px;
+      background: var(--card-bg); width: 85%; max-width: 350px; padding: 25px;
       border-radius: 24px; border: 1px solid var(--border); text-align: center;
     }
     .btn-confirmar {
       background: var(--primary); color: var(--deep-bg); border: none;
-      width: 100%; padding: 15px; border-radius: 12px; font-weight: 800;
-      margin-top: 15px; cursor: pointer;
+      width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; margin-top: 15px;
     }
 
     .btn-sair { display: block; margin: 30px 20px; padding: 16px; text-align: center; background: rgba(239, 68, 68, 0.05); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 18px; text-decoration: none; font-weight: 700; }
-    .app-footer { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10, 15, 13, 0.95); backdrop-filter: blur(10px); height: 75px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); }
-    .footer-item { text-decoration: none; text-align: center; color: var(--text-muted); font-size: 10px; flex: 1; }
+    .app-footer { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10, 15, 13, 0.95); height: 75px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); }
+    .footer-item { text-decoration: none; color: var(--text-muted); font-size: 10px; text-align: center; }
     .footer-item.active { color: var(--primary); }
   </style>
 </head>
@@ -74,7 +57,7 @@
 
 <div class="profile-header">
     <img id="userPhoto" src="" class="profile-img" onerror="this.src='https://via.placeholder.com/100?text=👤'">
-    <h2 id="userName">Carregando...</h2>
+    <h2 id="userName">Sincronizando...</h2>
     <p id="userEmail" style="color:var(--text-muted); font-size:14px; margin-top:5px;"></p>
 </div>
 
@@ -85,7 +68,7 @@
 
 <div class="section-title">
     <span>Minhas Ferramentas</span>
-    <button onclick="window.location.href='anunciar.html'" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer;">+ Add</button>
+    <button onclick="window.location.href='anunciar.html'" style="background:none; border:none; color:var(--primary); font-weight:700;">+ Add</button>
 </div>
 
 <div id="listaMeusAnuncios" class="meus-anuncios"></div>
@@ -95,7 +78,7 @@
 <div id="modalReserva">
   <div class="modal-content">
     <h3 style="margin-top:0">Bloquear Datas</h3>
-    <p style="font-size:12px; color:var(--text-muted)">Selecione o período que a ferramenta estará ocupada.</p>
+    <p style="font-size:12px; color:var(--text-muted)">Selecione o período de indisponibilidade.</p>
     <input type="text" id="calendarioBloqueio" style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--border); background:#0a0f0d; color:white; text-align:center">
     <button class="btn-confirmar" id="btnSalvarBloqueio">Confirmar Bloqueio</button>
     <button onclick="fecharModal()" style="background:none; border:none; color:var(--text-muted); margin-top:15px; cursor:pointer">Cancelar</button>
@@ -140,7 +123,7 @@
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      document.getElementById("userName").innerText = user.displayName || 'Usuário 𝔒braí';
+      document.getElementById("userName").innerText = user.displayName || 'Membro 𝔒braí';
       document.getElementById("userPhoto").src = user.photoURL || '';
       document.getElementById("userEmail").innerText = user.email;
       carregarMeusAnuncios(user.uid);
@@ -155,24 +138,24 @@
     document.getElementById("countAnuncios").innerText = snap.size;
 
     snap.forEach((docSnap) => {
-  const item = docSnap.data();
-  const div = document.createElement("div");
-  div.className = "item-anuncio";
-  div.innerHTML = `
-    <img src="${item.imagem}" class="item-img">
-    <div class="item-info">
-      <p style="margin:0;font-weight:600">${item.nome}</p>
-      <p style="margin:2px 0 0;color:var(--primary);font-size:13px">R$ ${item.preco}</p>
-    </div>
-    <div class="acoes-anuncio">
-      <button class="btn-acao" style="color:#fbbf24" onclick="abrirModal('${docSnap.id}')" title="Bloquear Datas">📅</button>
-      <a href="editar.html?id=${docSnap.id}" class="btn-acao btn-editar" title="Editar Anúncio">✏️</a>
-      <button class="btn-acao" style="color:var(--danger)" onclick="remover('${docSnap.id}')" title="Excluir">🗑️</button>
-    </div>
-  `;
-  lista.appendChild(div);
-});
-
+      const item = docSnap.data();
+      const div = document.createElement("div");
+      div.className = "item-anuncio";
+      div.innerHTML = `
+        <img src="${item.imagem}" class="item-img">
+        <div class="item-info">
+          <p style="margin:0;font-weight:600">${item.nome}</p>
+          <p style="margin:2px 0 0;color:var(--primary);font-size:13px">R$ ${item.preco} / dia</p>
+        </div>
+        <div class="acoes-anuncio">
+          <button class="btn-acao" style="color:#fbbf24" onclick="abrirModal('${docSnap.id}')">📅</button>
+          <a href="editar.html?id=${docSnap.id}" class="btn-acao btn-editar">✏️</a>
+          <button class="btn-acao btn-excluir" onclick="removerAnuncio('${docSnap.id}')">🗑️</button>
+        </div>
+      `;
+      lista.appendChild(div);
+    });
+  }
 
   window.abrirModal = (id) => {
     idSelecionado = id;
@@ -186,20 +169,19 @@
 
   document.getElementById("btnSalvarBloqueio").onclick = async () => {
     if (datasSelecionadas.length < 2) return alert("Selecione o início e o fim.");
-    
     try {
       await addDoc(collection(db, "reservas"), {
         id_ferramenta: idSelecionado,
         inicio: datasSelecionadas[0].toISOString().split('T')[0],
         fim: datasSelecionadas[1].toISOString().split('T')[0]
       });
-      alert("Disponibilidade atualizada!");
+      alert("Datas bloqueadas com sucesso!");
       fecharModal();
     } catch (e) { alert("Erro ao salvar."); }
   };
 
-  window.excluir = async (id) => {
-    if (confirm("Remover anúncio?")) {
+  window.removerAnuncio = async (id) => {
+    if (confirm("Remover anúncio permanentemente?")) {
       await deleteDoc(doc(db, "anuncios", id));
       location.reload();
     }
