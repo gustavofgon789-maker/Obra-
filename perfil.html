@@ -15,8 +15,9 @@
     }
     body { font-family: 'Inter', sans-serif; background: var(--deep-bg); margin: 0; color: var(--text-main); padding-bottom: 120px; }
     
-    /* Loading state */
-    #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--deep-bg); display: flex; align-items: center; justify-content: center; z-index: 3000; }
+    /* Estado de Login/Carregamento */
+    #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--deep-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5000; }
+    .btn-login-google { background: white; color: #000; padding: 15px 25px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; display: none; }
 
     .profile-header { text-align: center; padding: 40px 20px 20px; }
     .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); padding: 3px; object-fit: cover; }
@@ -60,8 +61,9 @@
 </head>
 <body>
 
-<div id="loader">
-    <div style="color:var(--primary); font-weight:800;">CARREGANDO PAINEL...</div>
+<div id="auth-overlay">
+    <div id="loader-msg" style="color:var(--primary); font-weight:800; margin-bottom: 20px;">VERIFICANDO ACESSO...</div>
+    <button id="btnLogin" class="btn-login-google" onclick="loginGoogle()">ENTRAR COM GOOGLE</button>
 </div>
 
 <div class="profile-header">
@@ -122,7 +124,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, query, where, getDocs, doc, getDoc, setDoc, deleteDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -142,11 +144,19 @@
   let datasBloqueio = [];
   const fp = flatpickr("#calendario", { mode: "range", locale: "pt", theme: "dark", onChange: (d) => datasBloqueio = d });
 
-  // 1. LÓGICA DE PERSISTÊNCIA E VERIFICAÇÃO DE USUÁRIO
+  // FUNÇÃO DE LOGIN CASO NÃO ESTEJA LOGADO
+  window.loginGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      alert("Erro ao logar: " + error.message);
+    }
+  };
+
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      // Usuário está logado, remove o loader e preenche os dados
-      document.getElementById("loader").style.display = "none";
+      document.getElementById("auth-overlay").style.display = "none";
       document.getElementById("userName").innerText = user.displayName;
       document.getElementById("userPhoto").src = user.photoURL;
       
@@ -159,8 +169,9 @@
       }
       carregarMeusAnuncios(user.uid);
     } else {
-      // Se não há usuário, ele só redireciona depois de garantir que o Firebase terminou de procurar
-      window.location.href = "index.html"; 
+      // Se não está logado, mostra o botão em vez de expulsar
+      document.getElementById("loader-msg").innerText = "Você não está conectado.";
+      document.getElementById("btnLogin").style.display = "block";
     }
   });
 
@@ -181,7 +192,7 @@
 
   window.irParaMaps = () => {
     const local = document.getElementById("userLocal").value;
-    window.open(`https://www.google.com/maps/search/${encodeURIComponent(local)}`, '_blank');
+    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(local)}`, '_blank');
   };
 
   async function carregarMeusAnuncios(uid) {
@@ -266,7 +277,7 @@
     }
   };
 
-  window.logout = () => signOut(auth).then(() => location.href = "index.html");
+  window.logout = () => signOut(auth).then(() => location.reload());
 </script>
 </body>
 </html>
