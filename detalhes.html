@@ -219,6 +219,26 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  // Dentro da busca de detalhes na detalhes.html
+const qReservas = query(collection(db, "reservas"), where("id_ferramenta", "==", id));
+const snapReservas = await getDocs(qReservas);
+let datasBloqueadas = [];
+
+snapReservas.forEach(res => {
+    const d = res.data();
+    datasBloqueadas.push({ from: d.inicio, to: d.fim });
+});
+
+// Agora configura o flatpickr com as datas desativadas
+flatpickr("#calendarioReservas", {
+    mode: "range",
+    minDate: "today",
+    disable: datasBloqueadas, // <--- Aqui as datas ficam cinzas!
+    dateFormat: "d/m/Y",
+    theme: "dark",
+    // ... resto do seu código
+});
+  
 
   // --- NOVO: FUNÇÃO DE REDIRECIONAMENTO COM CARREGAMENTO ---
   window.reservarAgora = (link) => {
