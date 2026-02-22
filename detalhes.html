@@ -24,7 +24,8 @@
     
     #inputCalendario { width: 100%; padding: 15px; background: #0a0f0d; border: 1px solid var(--border); border-radius: 12px; color: white; text-align: center; font-size: 16px; margin-bottom: 15px; cursor: pointer; }
 
-    .btn-alugar { width: 100%; padding: 18px; background: var(--primary); color: var(--deep-bg); border: none; border-radius: 18px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
+    .btn-alugar { width: 100%; padding: 18px; background: var(--primary); color: var(--deep-bg); border: none; border-radius: 18px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); transition: 0.2s; }
+    .btn-alugar:active { transform: scale(0.98); opacity: 0.9; }
     
     #loader { position: fixed; top:0; left:0; width:100%; height:100%; background:var(--deep-bg); display:flex; align-items:center; justify-content:center; z-index:100; color:var(--primary); font-weight:700; }
   </style>
@@ -98,7 +99,6 @@
       document.getElementById("detalheLocal").innerText = ferramenta.cidade || "Região";
       document.getElementById("detalheDesc").innerText = ferramenta.descricao || "Sem descrição disponível.";
 
-      // 2. Buscar Reservas para Bloqueio
       const qReservas = query(collection(db, "reservas"), where("id_ferramenta", "==", id));
       const snapReservas = await getDocs(qReservas);
       let datasDesativadas = [];
@@ -111,7 +111,6 @@
         });
       });
 
-      // 3. Inicializar Calendário
       flatpickr("#inputCalendario", {
         mode: "range",
         minDate: "today",
@@ -123,7 +122,6 @@
           if (selectedDates.length === 2) {
             const diff = Math.ceil((selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24)) + 1;
             
-            // Limpa o preço para cálculo numérico
             const precoLimpo = parseFloat(ferramenta.preco.toString().replace('R$', '').replace('.', '').replace(',', '.').trim()) || 0;
             const total = diff * precoLimpo;
             
@@ -132,10 +130,14 @@
             document.getElementById("valorFinal").innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             
             document.getElementById("btnWhatsapp").onclick = () => {
-                const msg = `Olá! Quero alugar a ${ferramenta.nome} de ${selectedDates[0].toLocaleDateString('pt-BR')} até ${selectedDates[1].toLocaleDateString('pt-BR')} (${diff} dias).`;
-                const linkWhats = `https://wa.me/${ferramenta.telefone}?text=${encodeURIComponent(msg)}`;
+                // Lógica Sênior: Limpeza absoluta do número para o WhatsApp
+                let numFull = ferramenta.telefone.toString().replace(/\D/g, ''); // Remove tudo que não for número
+                if (!numFull.startsWith('55')) numFull = '55' + numFull; // Adiciona o DDI Brasil se não houver
 
-                // --- LÓGICA DE SALVAR NO HISTÓRICO "MEUS ALUGUÉIS" ---
+                const msg = `Olá! Quero alugar a ${ferramenta.nome} de ${selectedDates[0].toLocaleDateString('pt-BR')} até ${selectedDates[1].toLocaleDateString('pt-BR')} (${diff} dias).`;
+                const linkWhats = `https://wa.me/${numFull}?text=${encodeURIComponent(msg)}`;
+
+                // Histórico para a página "Meus Aluguéis"
                 const historico = JSON.parse(localStorage.getItem('meusAlugueis') || '[]');
                 const novoRegistro = {
                     id: id,
@@ -148,7 +150,7 @@
                 historico.unshift(novoRegistro);
                 localStorage.setItem('meusAlugueis', JSON.stringify(historico.slice(0, 20)));
 
-                window.open(linkWhats);
+                window.open(linkWhats, '_blank');
             };
           }
         }
@@ -156,7 +158,7 @@
 
       document.getElementById("loader").style.display = "none";
     } catch (e) { 
-      console.error("Erro ao carregar detalhes:", e);
+      console.error("Erro:", e);
       document.getElementById("loader").innerText = "Erro ao carregar ferramenta.";
     }
   }
