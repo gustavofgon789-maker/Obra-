@@ -22,138 +22,87 @@
       margin: 0; 
       font-family: 'Inter', sans-serif; 
       color: var(--text-main);
-      padding-bottom: 110px; 
+      padding-bottom: 120px; 
     }
 
+    /* Header e Logo */
     .header-container { 
-      background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
       padding: 40px 20px 20px; 
       text-align: center; 
     }
-
     .logo-tipo { 
       font-size: 42px; 
       font-weight: 800; 
       color: var(--primary); 
-      letter-spacing: -3px; 
+      letter-spacing: -2px; 
       margin: 0; 
-      text-transform: lowercase; 
     }
 
-    .search-container {
-      max-width: 420px;
-      margin: 0 auto 20px;
-      padding: 0 20px;
-    }
-
+    /* Busca */
+    .search-container { max-width: 420px; margin: 0 auto 20px; padding: 0 20px; }
     .search-box { 
       background: rgba(30, 41, 35, 0.5); 
-      backdrop-filter: blur(10px);
       padding: 5px 15px; 
       border-radius: 18px; 
       display: flex; 
       align-items: center; 
       border: 1px solid var(--border);
-      margin-bottom: 10px;
     }
-
     .search-box input { 
-      border: none; 
-      background: transparent; 
-      padding: 12px; 
-      width: 100%; 
-      outline: none; 
-      color: white; 
-      font-size: 15px; 
+      border: none; background: transparent; padding: 12px; 
+      width: 100%; outline: none; color: white; font-size: 15px; 
     }
 
-    .loc-box {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 10px;
-      margin-bottom: 25px;
-    }
-
-    .loc-box select {
-      background: transparent;
-      border: none;
-      color: var(--primary);
-      font-weight: 700;
-      font-size: 13px;
-      outline: none;
-      cursor: pointer;
-    }
-
-    .filter-scroll { 
-      display: flex; 
-      gap: 10px; 
-      overflow-x: auto; 
-      padding: 0 20px 25px; 
-      scrollbar-width: none; 
-    }
+    /* Filtros */
+    .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 25px; scrollbar-width: none; }
     .filter-scroll::-webkit-scrollbar { display: none; }
-
     .filter-btn { 
-      background: var(--card-bg); 
-      border: 1px solid var(--border); 
-      color: var(--text-muted); 
-      padding: 8px 18px; 
-      border-radius: 100px; 
-      white-space: nowrap; 
-      font-weight: 600; 
-      font-size: 13px; 
-      cursor: pointer; 
-      transition: 0.3s;
+      background: var(--card-bg); border: 1px solid var(--border); 
+      color: var(--text-muted); padding: 8px 18px; border-radius: 100px; 
+      font-weight: 600; font-size: 13px; cursor: pointer; 
     }
+    .filter-btn.active { background: var(--primary); color: var(--deep-bg); }
 
-    .filter-btn.active { background: var(--primary); color: var(--deep-bg); border-color: var(--primary); }
-
+    /* Cards Grid */
     .lista-anuncios { 
       display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-      gap: 15px; 
-      padding: 0 20px; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 12px; 
+      padding: 0 15px; 
     }
-
-    .card { background: var(--card-bg); border-radius: 22px; overflow: hidden; border: 1px solid var(--border); transition: 0.2s; }
-    .card:active { transform: scale(0.97); }
+    .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
     .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
     .card-content { padding: 12px; }
-    .card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-loc { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
-    .card-price { color: var(--primary); font-weight: 800; font-size: 15px; }
+    .card-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .card-price { color: var(--primary); font-weight: 800; font-size: 16px; }
 
-    /* Bottom Nav Organizada */
+    /* Bottom Nav Sênior (Simetria Perfeita) */
     .bottom-nav { 
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
-      width: 92%; max-width: 450px; background: rgba(20, 26, 23, 0.95); 
-      backdrop-filter: blur(15px); padding: 10px 5px; border-radius: 25px; 
-      display: flex; justify-content: space-around; align-items: center;
+      width: 90%; max-width: 400px; background: rgba(20, 26, 23, 0.98); 
+      backdrop-filter: blur(20px); padding: 8px 0; border-radius: 24px; 
+      display: flex; align-items: center; justify-content: space-around;
       border: 1px solid var(--border); z-index: 1000;
     }
-    .nav-item { text-align: center; text-decoration: none; color: var(--text-muted); font-size: 9px; font-weight: 700; text-transform: uppercase; flex: 1; }
+    .nav-item { 
+      flex: 1; /* Garante espaço igual para todos */
+      text-align: center; text-decoration: none; 
+      color: var(--text-muted); font-size: 10px; font-weight: 700; 
+    }
     .nav-item.active { color: var(--primary); }
-    .nav-icon { font-size: 18px; display: block; margin-bottom: 3px; }
+    .nav-icon { font-size: 20px; display: block; margin-bottom: 2px; }
 
+    /* Central Button */
+    .btn-central-wrap { flex: 1; display: flex; justify-content: center; }
     .btn-central {
-        background: var(--primary); color: var(--deep-bg); 
-        width: 44px; height: 44px; border-radius: 15px; 
-        display: flex; align-items: center; justify-content: center; 
-        text-decoration: none; font-size: 24px; font-weight: bold;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      background: var(--primary); color: var(--deep-bg); 
+      width: 46px; height: 46px; border-radius: 15px; 
+      display: flex; align-items: center; justify-content: center; 
+      text-decoration: none; font-size: 26px; font-weight: bold;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
     }
 
-    #perfilImgContainer img { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--primary); }
-
-    #installContainer {
-      display: none; position: fixed; bottom: 95px; right: 20px; z-index: 9999;
-    }
-    #btnInstalar {
-      background: var(--primary); color: var(--deep-bg); border: none;
-      padding: 12px 18px; border-radius: 50px; font-weight: 800; font-size: 13px;
-      display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); cursor: pointer;
-    }
+    #perfilImgContainer img { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--primary); }
   </style>
 </head>
 <body>
@@ -166,13 +115,6 @@
   <div class="search-box">
     <input type="text" id="inputBusca" placeholder="O que você precisa?" onkeyup="filtrarGeral()">
   </div>
-  
-  <div class="loc-box">
-    <span>📍</span>
-    <select id="filtroLocal" onchange="carregarAnuncios()">
-      <option value="Todos">Ver toda a região</option>
-    </select>
-  </div>
 </div>
 
 <div class="filter-scroll">
@@ -184,16 +126,21 @@
 
 <div class="lista-anuncios" id="listaAnuncios"></div>
 
-<div id="installContainer">
-  <button id="btnInstalar"><span>📥</span> Baixar App</button>
-</div>
-  
 <nav class="bottom-nav">
-  <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>Home</a>
-  <a href="anunciar.html" class="btn-central">+</a>
-  <a href="meus-alugueis.html" class="nav-item"><span class="nav-icon">📋</span>Aluguéis</a>
+  <a href="index.html" class="nav-item active">
+    <span class="nav-icon">🏠</span>HOME
+  </a>
+  
+  <div class="btn-central-wrap">
+    <a href="anunciar.html" class="btn-central">+</a>
+  </div>
+
+  <a href="meus-alugueis.html" class="nav-item">
+    <span class="nav-icon">📋</span>ALUGUÉIS
+  </a>
+  
   <a href="perfil.html" class="nav-item">
-    <span class="nav-icon" id="perfilImgContainer">👤</span>Perfil
+    <span class="nav-icon" id="perfilImgContainer">👤</span>PERFIL
   </a>
 </nav>
 
@@ -224,17 +171,6 @@
     }
   });
 
-  async function carregarLocais() {
-    const snap = await getDocs(collection(db, "anuncios"));
-    const locais = new Set();
-    snap.forEach(doc => { if(doc.data().cidade) locais.add(doc.data().cidade); });
-    const select = document.getElementById("filtroLocal");
-    locais.forEach(loc => {
-      const opt = document.createElement("option");
-      opt.value = loc; opt.text = loc; select.add(opt);
-    });
-  }
-
   window.selecionarCategoria = (cat, btn) => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -244,19 +180,11 @@
 
   async function carregarAnuncios() {
     const lista = document.getElementById("listaAnuncios");
-    const localSelecionado = document.getElementById("filtroLocal").value;
     lista.innerHTML = "";
-
     try {
       let q = collection(db, "anuncios");
-      if (categoriaAtual !== 'Todas' && localSelecionado !== 'Todos') {
-        q = query(q, where("categoria", "==", categoriaAtual), where("cidade", "==", localSelecionado));
-      } else if (categoriaAtual !== 'Todas') {
-        q = query(q, where("categoria", "==", categoriaAtual));
-      } else if (localSelecionado !== 'Todos') {
-        q = query(q, where("cidade", "==", localSelecionado));
-      }
-
+      if (categoriaAtual !== 'Todas') q = query(q, where("categoria", "==", categoriaAtual));
+      
       const snap = await getDocs(q);
       snap.forEach(docSnap => {
         const item = docSnap.data();
@@ -267,14 +195,13 @@
             <img src="${item.imagem}" class="card-img">
             <div class="card-content">
               <h3 class="card-title">${item.nome}</h3>
-              <div class="card-loc">📍 ${item.cidade || 'Local não informado'}</div>
               <div class="card-price">R$ ${item.preco} <span style="font-size:10px;color:var(--text-muted)">/dia</span></div>
             </div>
           </a>
         `;
         lista.appendChild(card);
       });
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("Erro ao carregar:", e); }
   }
 
   window.filtrarGeral = () => {
@@ -285,22 +212,7 @@
     });
   };
 
-  carregarLocais();
   carregarAnuncios();
-
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault(); deferredPrompt = e;
-    document.getElementById('installContainer').style.display = 'block';
-  });
-  document.getElementById('btnInstalar').addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') document.getElementById('installContainer').style.display = 'none';
-      deferredPrompt = null;
-    }
-  });
 </script>
 </body>
 </html>
