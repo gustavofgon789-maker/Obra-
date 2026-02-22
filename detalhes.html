@@ -103,10 +103,30 @@
       const snapReservas = await getDocs(qReservas);
       let datasDesativadas = [];
 
-      snapReservas.forEach(res => {
-        const d = res.data();
-        datasDesativadas.push({ from: d.inicio, to: d.fim });
-      });
+      // 2. Buscar Datas Bloqueadas no Firebase
+
+snapReservas.forEach(res => {
+  const d = res.data();
+  // Criamos o objeto de data garantindo que o JS entenda o fuso horário correto
+  const inicio = new Date(d.inicio + "T00:00:00");
+  const fim = new Date(d.fim + "T00:00:00");
+  
+  datasDesativadas.push({ from: inicio, to: fim });
+});
+
+// 3. Inicializar Calendário
+flatpickr("#inputCalendario", {
+  mode: "range",
+  minDate: "today",
+  dateFormat: "d/m/Y",
+  disable: datasDesativadas, // O Flatpickr agora vai reconhecer os objetos de data
+  theme: "dark",
+  locale: "pt", // Adicione se quiser em português
+  onChange: (selectedDates) => {
+     // ... resto do seu código de cálculo de preço
+  }
+});
+
 
       // 3. Inicializar Calendário com bloqueios
       flatpickr("#inputCalendario", {
