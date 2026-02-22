@@ -16,7 +16,62 @@
       --text-muted: #94a3b8;
       --border: #1e2923;
     }
+/* Container de Identidade */
+.profile-header {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+}
 
+.profile-img {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    border: 3px solid var(--primary);
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+/* Dashboard de Estatísticas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 0 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Seções de Ferramentas */
+.section-title {
+    padding: 0 20px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+    
     body { 
       font-family: 'Inter', sans-serif; 
       background: var(--deep-bg); 
@@ -147,7 +202,31 @@
   </style>
 </head>
 <body>
+<div class="profile-header">
+    <img id="userPhoto" src="default-avatar.png" class="profile-img">
+    <h2 id="userName" style="margin:0">Carregando...</h2>
+    <p id="userEmail" style="color:var(--text-muted); font-size:14px"></p>
+</div>
 
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-value" id="countAnuncios">0</span>
+        <span class="stat-label">Anúncios</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">5.0 ★</span>
+        <span class="stat-label">Avaliação</span>
+    </div>
+</div>
+
+<div class="section-title">
+    <span>Minhas Ferramentas</span>
+    <button onclick="window.location.href='anunciar.html'" style="background:none; border:none; color:var(--primary); font-weight:700">+ Add</button>
+</div>
+
+<div id="meusAnuncios" class="lista-anuncios">
+</div>
+  
 <div class="header-perfil">
   <img id="userFoto" src="" class="foto-perfil" onerror="this.src='https://via.placeholder.com/100?text=👤'">
   <h2 id="userNome">Carregando...</h2>
@@ -170,7 +249,44 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const auth = getAuth();
+const db = getFirestore();
+
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        // 1. Preencher dados básicos
+        document.getElementById("userName").innerText = user.displayName;
+        document.getElementById("userEmail").innerText = user.email;
+        document.getElementById("userPhoto").src = user.photoURL || 'default-avatar.png';
+
+        // 2. Buscar ferramentas deste anunciante
+        const q = query(collection(db, "anuncios"), where("userId", "==", user.uid));
+        const snap = await getDocs(q);
+        
+        document.getElementById("countAnuncios").innerText = snap.size;
+        
+        const container = document.getElementById("meusAnuncios");
+        container.innerHTML = "";
+
+        snap.forEach(doc => {
+            const item = doc.data();
+            container.innerHTML += `
+                <div class="card" style="opacity: 0.8">
+                    <img src="${item.imagem}" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">${item.nome}</h3>
+                        <div class="card-price">R$ ${item.preco}</div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        window.location.href = "login.html"; // Redireciona se não estiver logado
+    }
+});
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
