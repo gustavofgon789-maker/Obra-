@@ -135,7 +135,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, query, where, getDocs, doc, getDoc, setDoc, deleteDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -155,7 +155,9 @@
   let datasBloqueio = [];
   const fp = flatpickr("#calendario", { mode: "range", locale: "pt", theme: "dark", onChange: (d) => datasBloqueio = d });
 
-  // CORREÇÃO LOGIN: Delay na verificação para evitar expulsão imediata no login
+  // GARANTIR QUE O LOGIN NÃO SE PERCA
+  setPersistence(auth, browserLocalPersistence);
+
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       document.getElementById("userName").innerText = user.displayName;
@@ -170,8 +172,10 @@
       }
       carregarMeusAnuncios(user.uid);
     } else { 
-      // Se não houver usuário após 1.5 segundos, redireciona
-      setTimeout(() => { if(!auth.currentUser) window.location.href = "index.html"; }, 1500);
+      // Espera 2 segundos antes de expulsar, para dar tempo do Firebase carregar
+      setTimeout(() => {
+        if (!auth.currentUser) window.location.href = "index.html";
+      }, 2000);
     }
   });
 
@@ -205,8 +209,6 @@
       const item = docSnap.data();
       if (item.uid === uid || item.userId === uid) {
         count++;
-        
-        // Calcular ganhos reais deste item
         const qR = query(collection(db, "reservas"), where("id_ferramenta", "==", docSnap.id));
         const snapR = await getDocs(qR);
         snapR.forEach(r => {
@@ -250,14 +252,13 @@
   window.abrirAgenda = (id) => { idAtivo = id; document.getElementById("modalAgenda").style.display = "flex"; };
   window.fecharModal = () => { document.getElementById("modalAgenda").style.display = "none"; fp.clear(); };
 
-  document.getElementById("btnSalvarBloqueio").onclick = async () => {
-    if (datasBloqueio.length < 2) return alert("Selecione o período de início e fim.");
+  document.getElementById("btnSalvarReserva").onclick = async () => {
+    if (datasBloqueio.length < 2) return alert("Selecione o período.");
     await addDoc(collection(db, "reservas"), {
       id_ferramenta: idAtivo,
       inicio: datasBloqueio[0].toISOString().split('T')[0],
       fim: datasBloqueio[1].toISOString().split('T')[0]
     });
-    // Ao bloquear data, o status muda automaticamente para facilitar
     await updateDoc(doc(db, "anuncios", idAtivo), { status: "Em Uso" });
     alert("Bloqueio realizado!");
     location.reload();
