@@ -9,33 +9,47 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { --deep-bg: #0a0f0d; --card-bg: #141a17; --primary: #10b981; --text-main: #e2e8f0; --text-muted: #94a3b8; --border: #1e2923; }
-    body { font-family: 'Inter', sans-serif; background: var(--deep-bg); color: var(--text-main); margin: 0; padding-bottom: 100px; }
+    body { font-family: 'Inter', sans-serif; background: var(--deep-bg); color: var(--text-main); margin: 0; padding-bottom: 120px; }
+    
     .btn-voltar { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.5); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; z-index: 10; cursor: pointer; }
     .topo-img { width: 100%; height: 350px; object-fit: cover; }
+    
     .conteudo { padding: 25px; margin-top: -30px; background: var(--deep-bg); border-radius: 30px 30px 0 0; position: relative; }
     .preco-tag { background: var(--primary); color: var(--deep-bg); padding: 6px 15px; border-radius: 100px; font-weight: 800; font-size: 14px; display: inline-block; margin-bottom: 15px; }
     h1 { font-size: 26px; margin: 0 0 10px; font-weight: 800; }
     .local-info { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
+
     .sessao-reserva { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 24px; margin-top: 20px; }
-    #inputCalendario { width: 100%; padding: 15px; background: #0a0f0d; border: 1px solid var(--border); border-radius: 12px; color: white; text-align: center; font-size: 16px; margin-bottom: 15px; cursor: pointer; }
-    .btn-alugar { width: 100%; padding: 18px; background: var(--primary); color: var(--deep-bg); border: none; border-radius: 18px; font-weight: 800; font-size: 16px; cursor: pointer; }
+    #inputCalendario { width: 100%; padding: 15px; background: #0a0f0d; border: 1px solid var(--border); border-radius: 12px; color: white; text-align: center; font-size: 16px; margin-bottom: 15px; cursor: pointer; border: 1px solid var(--border); }
+
+    .btn-alugar { width: 100%; padding: 18px; background: var(--primary); color: var(--deep-bg); border: none; border-radius: 18px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
+    
+    /* Bottom Nav Simétrica para consistência */
+    .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 420px; background: rgba(20, 26, 23, 0.98); backdrop-filter: blur(20px); padding: 10px 0; border-radius: 25px; display: flex; align-items: center; justify-content: space-around; border: 1px solid var(--border); z-index: 1000; }
+    .nav-item { flex: 1; text-align: center; text-decoration: none; color: var(--text-muted); font-size: 10px; font-weight: 700; }
+    .nav-icon { font-size: 22px; display: block; margin-bottom: 2px; }
+    
     #loader { position: fixed; top:0; left:0; width:100%; height:100%; background:var(--deep-bg); display:flex; align-items:center; justify-content:center; z-index:100; color:var(--primary); font-weight:700; }
   </style>
 </head>
 <body>
-<div id="loader">Carregando...</div>
+
+<div id="loader">A carregar detalhes...</div>
+
 <button class="btn-voltar" onclick="history.back()">←</button>
 <img id="detalheImg" src="" class="topo-img">
+
 <div class="conteudo">
   <div class="preco-tag" id="detalhePreco">R$ --</div>
   <h1 id="detalheNome">---</h1>
   <div class="local-info">📍 <span id="detalheLocal">---</span></div>
   <p id="detalheDesc" style="line-height:1.6; color:var(--text-muted)"></p>
+
   <div class="sessao-reserva">
-    <input type="text" id="inputCalendario" placeholder="Escolha as datas" readonly>
+    <input type="text" id="inputCalendario" placeholder="Toque para escolher as datas" readonly>
     <div id="resumoValores" style="display:none; margin-bottom:20px; border-top:1px solid var(--border); padding-top:15px;">
         <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px">
-            <span>Total:</span>
+            <span>Valor Total:</span>
             <span id="valorFinal" style="color:var(--primary)">R$ 0,00</span>
         </div>
     </div>
@@ -43,11 +57,17 @@
   </div>
 </div>
 
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span>HOME</a>
+  <a href="meus-alugueis.html" class="nav-item"><span class="nav-icon">📋</span>ALUGUÉIS</a>
+  <a href="perfil.html" class="nav-item"><span class="nav-icon">👤</span>PERFIL</a>
+</nav>
+
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -60,40 +80,57 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
 
   async function carregarTudo() {
-    const docSnap = await getDoc(doc(db, "anuncios", id));
-    if (!docSnap.exists()) return;
-    const ferramenta = docSnap.data();
+    try {
+      const docSnap = await getDoc(doc(db, "anuncios", id));
+      if (!docSnap.exists()) return window.location.href = "index.html";
+      const item = docSnap.data();
 
-    document.getElementById("detalheImg").src = ferramenta.imagem;
-    document.getElementById("detalheNome").innerText = ferramenta.nome;
-    document.getElementById("detalhePreco").innerText = `R$ ${ferramenta.preco} / dia`;
-    document.getElementById("detalheDesc").innerText = ferramenta.descricao || "";
+      document.getElementById("detalheImg").src = item.imagem;
+      document.getElementById("detalheNome").innerText = item.nome;
+      document.getElementById("detalhePreco").innerText = `R$ ${item.preco} / dia`;
+      document.getElementById("detalheLocal").innerText = item.cidade || "Região";
+      document.getElementById("detalheDesc").innerText = item.descricao || "";
 
-    flatpickr("#inputCalendario", {
-      mode: "range", minDate: "today", dateFormat: "d/m/Y", locale: "pt",
-      onChange: (selectedDates) => {
-        if (selectedDates.length === 2) {
-          const diff = Math.ceil((selectedDates[1] - selectedDates[0]) / (86400000)) + 1;
-          const precoLimpo = parseFloat(ferramenta.preco.toString().replace(/\D/g, '')) / 100 || parseFloat(ferramenta.preco);
-          document.getElementById("resumoValores").style.display = "block";
-          document.getElementById("valorFinal").innerText = `R$ ${(diff * precoLimpo).toFixed(2)}`;
-          
-          document.getElementById("btnWhatsapp").onclick = () => {
-            // CORREÇÃO SÊNIOR: Limpeza do número
-            let fone = ferramenta.telefone.toString().replace(/\D/g, '');
-            if (!fone.startsWith('55')) fone = '55' + fone;
+      // Bloqueio de datas já reservadas
+      const q = query(collection(db, "reservas"), where("id_ferramenta", "==", id));
+      const snapReservas = await getDocs(q);
+      const bloqueadas = [];
+      snapReservas.forEach(r => bloqueadas.push({ from: r.data().inicio, to: r.data().fim }));
+
+      flatpickr("#inputCalendario", {
+        mode: "range", minDate: "today", dateFormat: "d/m/Y", disable: bloqueadas, locale: "pt", theme: "dark",
+        onChange: (selectedDates) => {
+          if (selectedDates.length === 2) {
+            const diff = Math.ceil((selectedDates[1] - selectedDates[0]) / 86400000) + 1;
+            const precoNum = parseFloat(item.preco.toString().replace(/\D/g, '')) / 100 || parseFloat(item.preco);
+            document.getElementById("resumoValores").style.display = "block";
+            document.getElementById("valorFinal").innerText = `R$ ${(diff * precoNum).toFixed(2)}`;
             
-            const msg = encodeURIComponent(`Olá! Quero alugar: ${ferramenta.nome} (${diff} dias)`);
-            window.open(`https://wa.me/${fone}?text=${msg}`, '_blank');
-          };
+            document.getElementById("btnWhatsapp").onclick = () => {
+                // BLINDAGEM DO WHATSAPP
+                let fone = item.telefone.toString().replace(/\D/g, '');
+                if (!fone.startsWith('55')) fone = '55' + fone;
+
+                const msg = encodeURIComponent(`Olá! Gostaria de alugar a ferramenta ${item.nome} para o período de ${selectedDates[0].toLocaleDateString('pt-BR')} a ${selectedDates[1].toLocaleDateString('pt-BR')}.`);
+                const link = `https://wa.me/${fone}?text=${msg}`;
+
+                // Sincroniza com Meus Aluguéis
+                const hist = JSON.parse(localStorage.getItem('meusAlugueis') || '[]');
+                hist.unshift({ id, nome: item.nome, imagem: item.imagem, data: new Date().toLocaleDateString('pt-BR'), linkWhats: link });
+                localStorage.setItem('meusAlugueis', JSON.stringify(hist.slice(0, 15)));
+
+                window.open(link, '_blank');
+            };
+          }
         }
-      }
-    });
-    document.getElementById("loader").style.display = "none";
+      });
+      document.getElementById("loader").style.display = "none";
+    } catch (e) { console.error(e); }
   }
   carregarTudo();
 </script>
