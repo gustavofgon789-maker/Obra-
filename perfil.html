@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Perfil | Obrahhí</title>
+  <title>Meu Perfil | 𝔒braí</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { 
@@ -16,139 +16,79 @@
       --text-muted: #94a3b8;
       --border: #1e2923;
     }
-/* Container de Identidade */
-.profile-header {
-    text-align: center;
-    padding: 30px 20px;
-    background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
-}
-
-.profile-img {
-    width: 100px; height: 100px;
-    border-radius: 50%;
-    border: 3px solid var(--primary);
-    margin-bottom: 15px;
-    object-fit: cover;
-}
-
-/* Dashboard de Estatísticas */
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    padding: 0 20px;
-    margin-bottom: 30px;
-}
-
-.stat-card {
-    background: var(--card-bg);
-    padding: 15px;
-    border-radius: 18px;
-    border: 1px solid var(--border);
-    text-align: center;
-}
-
-.stat-value {
-    display: block;
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--primary);
-}
-
-.stat-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Seções de Ferramentas */
-.section-title {
-    padding: 0 20px;
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-}
     
-    body { 
-      font-family: 'Inter', sans-serif; 
-      background: var(--deep-bg); 
-      margin: 0; 
-      color: var(--text-main);
-      padding-bottom: 100px; 
+    body { font-family: 'Inter', sans-serif; background: var(--deep-bg); margin: 0; color: var(--text-main); padding-bottom: 100px; }
+
+    /* Header Premium */
+    .profile-header {
+        text-align: center;
+        padding: 40px 20px;
+        background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+        border-bottom: 1px solid var(--border);
     }
 
-    /* Header Perfil Premium */
-    .header-perfil { 
-      background: linear-gradient(180deg, #0d1e18 0%, var(--deep-bg) 100%);
-      padding: 60px 20px 40px; 
-      text-align: center; 
-      border-bottom: 1px solid var(--border);
+    .profile-img {
+        width: 100px; height: 100px;
+        border-radius: 50%;
+        border: 3px solid var(--primary);
+        margin-bottom: 15px;
+        object-fit: cover;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
     }
 
-    .foto-perfil { 
-      width: 100px; 
-      height: 100px; 
-      border-radius: 50%; 
-      border: 3px solid var(--primary); 
-      margin-bottom: 15px; 
-      object-fit: cover;
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    /* Stats Dashboard */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        padding: 20px;
     }
 
-    #userNome { font-size: 22px; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
-    #userEmail { color: var(--text-muted); font-size: 14px; margin-top: 5px; }
-
-    .secao-titulo { 
-      padding: 30px 20px 15px; 
-      font-weight: 700; 
-      color: var(--primary); 
-      font-size: 16px; 
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .stat-card {
+        background: var(--card-bg);
+        padding: 15px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        text-align: center;
     }
 
-    /* Lista de Anúncios */
+    .stat-value { display: block; font-size: 20px; font-weight: 800; color: var(--primary); }
+    .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Seção de Ferramentas */
+    .section-title {
+        padding: 20px;
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .meus-anuncios { padding: 0 20px; }
 
     .item-anuncio { 
       background: var(--card-bg); 
       border-radius: 20px; 
-      padding: 15px; 
+      padding: 12px; 
       display: flex; 
       align-items: center; 
-      margin-bottom: 15px; 
-      border: 1px solid var(--border);
-      transition: all 0.3s ease;
-    }
-
-    .item-img { 
-      width: 70px; 
-      height: 70px; 
-      border-radius: 14px; 
-      object-fit: cover; 
-      margin-right: 15px; 
+      margin-bottom: 12px; 
       border: 1px solid var(--border);
     }
 
+    .item-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; margin-right: 15px; }
     .item-info { flex-grow: 1; }
-    .item-nome { font-weight: 600; font-size: 15px; margin: 0; color: var(--text-main); }
-    .item-preco { color: var(--primary); font-size: 14px; font-weight: 700; margin-top: 4px; }
+    .item-nome { font-weight: 600; font-size: 14px; margin: 0; }
+    .item-preco { color: var(--primary); font-size: 13px; font-weight: 700; margin-top: 2px; }
 
     .acoes-anuncio { display: flex; gap: 8px; }
 
     .btn-acao {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-size: 18px;
-      transition: 0.2s;
+      width: 35px; height: 35px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; font-size: 16px;
       border: 1px solid var(--border);
       cursor: pointer;
     }
@@ -156,45 +96,26 @@
     .btn-editar { background: var(--primary-soft); color: var(--primary); }
     .btn-excluir { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
 
-    .btn-acao:hover { transform: scale(1.05); }
-
-    /* Botão Sair Moderno */
+    /* Botão Sair */
     .btn-sair { 
-      display: block; 
-      margin: 40px 20px; 
-      padding: 16px; 
-      text-align: center; 
-      background: #1a1a1a; 
-      color: var(--danger); 
-      border: 1px solid #331a1a; 
-      border-radius: 18px; 
-      text-decoration: none; 
-      font-weight: 700; 
-      font-size: 14px;
-      transition: 0.3s;
+      display: block; margin: 30px 20px; padding: 16px; text-align: center; 
+      background: rgba(239, 68, 68, 0.05); color: var(--danger); 
+      border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 18px; 
+      text-decoration: none; font-weight: 700; font-size: 14px;
     }
-    .btn-sair:hover { background: #251515; }
 
-    /* Tab Bar Fixa */
+    /* Tab Bar */
     .app-footer { 
-      position: fixed; 
-      bottom: 0; left: 0; right: 0; 
-      background: rgba(10, 15, 13, 0.95); 
-      backdrop-filter: blur(10px);
-      height: 75px; 
-      display: flex; 
-      justify-content: space-around; 
-      align-items: center; 
-      border-top: 1px solid var(--border);
+      position: fixed; bottom: 0; left: 0; right: 0; 
+      background: rgba(10, 15, 13, 0.95); backdrop-filter: blur(10px);
+      height: 75px; display: flex; justify-content: space-around; 
+      align-items: center; border-top: 1px solid var(--border); z-index: 1000;
     }
     .footer-item { text-decoration: none; text-align: center; color: var(--text-muted); font-size: 10px; flex: 1; }
     .footer-item.active { color: var(--primary); font-weight: bold; }
-
-    .btn-add {
-      background: var(--primary); 
-      color: var(--deep-bg); 
-      width: 50px; height: 50px; 
-      border-radius: 50%; 
+    .btn-add-main {
+      background: var(--primary); color: var(--deep-bg); 
+      width: 50px; height: 50px; border-radius: 50%; 
       display: flex; align-items: center; justify-content: center; 
       text-decoration: none; margin-top: -35px; font-size: 28px; 
       box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
@@ -202,10 +123,11 @@
   </style>
 </head>
 <body>
+
 <div class="profile-header">
-    <img id="userPhoto" src="default-avatar.png" class="profile-img">
+    <img id="userPhoto" src="" class="profile-img" onerror="this.src='https://via.placeholder.com/100?text=👤'">
     <h2 id="userName" style="margin:0">Carregando...</h2>
-    <p id="userEmail" style="color:var(--text-muted); font-size:14px"></p>
+    <p id="userEmail" style="color:var(--text-muted); font-size:14px; margin-top:5px;"></p>
 </div>
 
 <div class="stats-grid">
@@ -221,72 +143,25 @@
 
 <div class="section-title">
     <span>Minhas Ferramentas</span>
-    <button onclick="window.location.href='anunciar.html'" style="background:none; border:none; color:var(--primary); font-weight:700">+ Add</button>
+    <button onclick="window.location.href='anunciar.html'" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer;">+ Add</button>
 </div>
 
-<div id="meusAnuncios" class="lista-anuncios">
-</div>
-  
-<div class="header-perfil">
-  <img id="userFoto" src="" class="foto-perfil" onerror="this.src='https://via.placeholder.com/100?text=👤'">
-  <h2 id="userNome">Carregando...</h2>
-  <p id="userEmail"></p>
-</div>
-
-<div class="secao-titulo">Minhas Ferramentas</div>
 <div id="listaMeusAnuncios" class="meus-anuncios">
-  <p style="text-align: center; color: var(--text-muted); padding: 20px;">Sincronizando banco de dados...</p>
+  <p style="text-align: center; color: var(--text-muted); padding: 20px;">A carregar ferramentas...</p>
 </div>
 
 <a href="#" id="btnSair" class="btn-sair">Desconectar Conta</a>
 
 <nav class="app-footer">
   <a href="index.html" class="footer-item">🏠<br>Início</a>
-  <a href="anunciar.html" class="btn-add">+</a>
+  <a href="anunciar.html" class="btn-add-main">+</a>
   <a href="perfil.html" class="footer-item active">👤<br>Perfil</a>
 </nav>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const auth = getAuth();
-const db = getFirestore();
-
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        // 1. Preencher dados básicos
-        document.getElementById("userName").innerText = user.displayName;
-        document.getElementById("userEmail").innerText = user.email;
-        document.getElementById("userPhoto").src = user.photoURL || 'default-avatar.png';
-
-        // 2. Buscar ferramentas deste anunciante
-        const q = query(collection(db, "anuncios"), where("userId", "==", user.uid));
-        const snap = await getDocs(q);
-        
-        document.getElementById("countAnuncios").innerText = snap.size;
-        
-        const container = document.getElementById("meusAnuncios");
-        container.innerHTML = "";
-
-        snap.forEach(doc => {
-            const item = doc.data();
-            container.innerHTML += `
-                <div class="card" style="opacity: 0.8">
-                    <img src="${item.imagem}" class="card-img">
-                    <div class="card-content">
-                        <h3 class="card-title">${item.nome}</h3>
-                        <div class="card-price">R$ ${item.preco}</div>
-                    </div>
-                </div>
-            `;
-        });
-    } else {
-        window.location.href = "login.html"; // Redireciona se não estiver logado
-    }
-});
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -303,8 +178,8 @@ onAuthStateChanged(auth, async (user) => {
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      document.getElementById("userFoto").src = user.photoURL || '';
-      document.getElementById("userNome").innerText = user.displayName || 'Membro Obrahhí';
+      document.getElementById("userPhoto").src = user.photoURL || '';
+      document.getElementById("userName").innerText = user.displayName || 'Membro 𝔒braí';
       document.getElementById("userEmail").innerText = user.email;
       carregarMeusAnuncios(user.uid);
     } else {
@@ -319,8 +194,10 @@ onAuthStateChanged(auth, async (user) => {
       const snap = await getDocs(q);
       lista.innerHTML = "";
 
+      document.getElementById("countAnuncios").innerText = snap.size;
+
       if (snap.empty) {
-        lista.innerHTML = "<p style='text-align:center; color:var(--text-muted); padding: 20px;'>Você ainda não anunciou ferramentas.</p>";
+        lista.innerHTML = "<p style='text-align:center; color:var(--text-muted); padding: 20px;'>Ainda não tens ferramentas anunciadas.</p>";
         return;
       }
 
@@ -343,24 +220,28 @@ onAuthStateChanged(auth, async (user) => {
       });
     } catch (e) {
       console.error(e);
-      lista.innerHTML = "<p style='text-align:center; color:var(--danger);'>Erro na conexão com o servidor.</p>";
+      lista.innerHTML = "<p style='text-align:center; color:var(--danger);'>Erro ao carregar dados.</p>";
     }
   }
 
   window.confirmarExclusao = async (id) => {
-    if (confirm("Deseja remover este anúncio permanentemente?")) {
+    if (confirm("Desejas remover este anúncio permanentemente?")) {
       try {
         await deleteDoc(doc(db, "anuncios", id));
         location.reload();
       } catch (e) {
-        alert("Erro ao excluir.");
+        alert("Erro ao excluir o anúncio.");
       }
     }
   };
 
   document.getElementById("btnSair").addEventListener("click", (e) => {
     e.preventDefault();
-    signOut(auth).then(() => window.location.href = "index.html");
+    signOut(auth).then(() => {
+      window.location.href = "index.html";
+    }).catch((error) => {
+      alert("Erro ao sair da conta.");
+    });
   });
 </script>
 </body>
