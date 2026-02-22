@@ -80,7 +80,24 @@
     <h3 style="margin-top:0">Bloquear Datas</h3>
     <p style="font-size:12px; color:var(--text-muted)">Selecione o período de indisponibilidade.</p>
     <input type="text" id="calendarioBloqueio" style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--border); background:#0a0f0d; color:white; text-align:center">
+   <button class="btn-confirmar" id="btnSalvarBloqueio">Confirmar Bloqueio</button>
+  <div id="modalReserva">
+  <div class="modal-content">
+    <h3 style="margin-top:0">Bloquear Datas</h3>
+    <p style="font-size:12px; color:var(--text-muted)">Selecione o período de indisponibilidade.</p>
+    
+    <input type="text" id="calendarioBloqueio" ... >
+    
     <button class="btn-confirmar" id="btnSalvarBloqueio">Confirmar Bloqueio</button>
+
+    <button onclick="limparBloqueios()" style="background:none; border:1px solid var(--danger); color:var(--danger); width:100%; padding:10px; border-radius:12px; margin-top:10px; font-weight:bold; cursor:pointer">
+      🗑️ Limpar Bloqueios Atuais
+    </button>
+    
+    <button onclick="fecharModal()" style="background:none; border:none; color:var(--text-muted); margin-top:15px; cursor:pointer">Voltar</button>
+  </div>
+  </div>
+    
     <button onclick="fecharModal()" style="background:none; border:none; color:var(--text-muted); margin-top:15px; cursor:pointer">Cancelar</button>
   </div>
 </div>
@@ -96,7 +113,29 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, query, where, getDocs, deleteDoc, doc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+// Adicione esta função junto com as outras (abrirModal, carregarMeusAnuncios, etc)
+window.limparBloqueios = async () => {
+    if (!idSelecionado) return;
 
+    if (confirm("Deseja liberar todas as datas bloqueadas desta ferramenta?")) {
+        try {
+            // 1. Procura todos os bloqueios desta ferramenta
+            const q = query(collection(db, "reservas"), where("id_ferramenta", "==", idSelecionado));
+            const snap = await getDocs(q);
+
+            // 2. Apaga um por um
+            const promises = snap.docs.map(docSnap => deleteDoc(doc(db, "reservas", docSnap.id)));
+            await Promise.all(promises);
+
+            alert("Todas as datas foram liberadas!");
+            fecharModal();
+        } catch (e) {
+            console.error(e);
+            alert("Erro ao limpar datas.");
+        }
+    }
+};
+  
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
     authDomain: "obrai-56278.firebaseapp.com",
