@@ -9,6 +9,42 @@
   <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
   
   <style>
+    /* Overlay de Carregamento */
+#loadingOverlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(10, 15, 13, 0.95);
+  z-index: 10000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid var(--primary);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: rotation 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+    
     :root { 
       --deep-bg: #0a0f0d;
       --card-bg: #141a17;
@@ -127,7 +163,11 @@
   </style>
 </head>
 <body>
-
+<div id="loadingOverlay">
+  <span class="loader"></span>
+  <div class="loading-text">Conectando ao proprietário...</div>
+</div>
+  
 <div id="carregando">Sincronizando ferramenta...</div>
 
 <div id="app" style="display: none;">
@@ -180,6 +220,19 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // --- NOVO: FUNÇÃO DE REDIRECIONAMENTO COM CARREGAMENTO ---
+  window.reservarAgora = (link) => {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) overlay.style.display = 'flex';
+
+    setTimeout(() => {
+      window.location.href = link;
+      // Esconde o overlay após o redirecionamento para não travar se o usuário voltar
+      setTimeout(() => { if (overlay) overlay.style.display = 'none'; }, 1000);
+    }, 1500);
+  };
+  // -------------------------------------------------------
+
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
@@ -190,7 +243,6 @@
       if (docSnap.exists()) {
         const dados = docSnap.data();
         
-        // Preencher interface
         document.getElementById("fotoTool").src = dados.imagem;
         document.getElementById("nomeTool").innerText = dados.nome;
         document.getElementById("categoria").innerText = dados.categoria;
@@ -201,7 +253,6 @@
         const hInicio = dados.horarioInicio || "08:00";
         const hFim = dados.horarioFim || "18:00";
 
-        // Configurar Calendário Estilo Airbnb
         flatpickr("#calendarioReservas", {
           mode: "range",
           minDate: "today",
@@ -218,7 +269,13 @@
               document.getElementById("valorTotal").innerText = `R$ ${(diffDays * precoDiaria).toFixed(2)}`;
 
               const msg = encodeURIComponent(`Olá! Quero reservar a ${dados.nome} de ${selectedDates[0].toLocaleDateString()} a ${selectedDates[1].toLocaleDateString()}. Vi que a retirada é às ${hInicio}h e devolução às ${hFim}h. Podemos fechar?`);
-              document.getElementById("linkWhats").href = `https://wa.me/55${dados.whatsapp}?text=${msg}`;
+              
+              // --- ALTERADO: Agora o link chama a função reservarAgora em vez de abrir direto ---
+              const linkCompleto = `https://wa.me/55${dados.whatsapp}?text=${msg}`;
+              const btnWhats = document.getElementById("linkWhats");
+              
+              btnWhats.href = "javascript:void(0)"; // Evita o pulo da página
+              btnWhats.onclick = () => window.reservarAgora(linkCompleto);
             }
           }
         });
@@ -234,5 +291,6 @@
 
   buscarDetalhes();
 </script>
+  
 </body>
 </html>
