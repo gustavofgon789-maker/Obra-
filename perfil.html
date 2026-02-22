@@ -12,6 +12,17 @@
       --deep-bg: #0a0f0d; --card-bg: #141a17; --primary: #10b981;
       --primary-soft: rgba(16, 185, 129, 0.1); --danger: #ef4444;
       --text-main: #e2e8f0; --text-muted: #94a3b8; --border: #1e2923;
+   #modalBloqueio {
+  display: none; 
+  position: fixed; 
+  top: 0; left: 0; 
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9); 
+  z-index: 9999; 
+  align-items: center; /* Centraliza vertical */
+  justify-content: center; /* Centraliza horizontal */
+   }
+      
     }
     body { font-family: 'Inter', sans-serif; background: var(--deep-bg); margin: 0; color: var(--text-main); padding-bottom: 100px; }
     
@@ -144,23 +155,24 @@
     document.getElementById("countAnuncios").innerText = snap.size;
 
     snap.forEach((docSnap) => {
-      const item = docSnap.data();
-      const div = document.createElement("div");
-      div.className = "item-anuncio";
-      div.innerHTML = `
-        <img src="${item.imagem}" class="item-img">
-        <div class="item-info">
-          <p class="item-nome">${item.nome}</p>
-          <p style="color:var(--primary); font-size:12px; font-weight:700">R$ ${item.preco}</p>
-        </div>
-        <div class="acoes-anuncio">
-          <button class="btn-acao btn-indisponivel" onclick="abrirModal('${docSnap.id}')">📅</button>
-          <button class="btn-acao btn-excluir" onclick="excluir('${docSnap.id}')">🗑️</button>
-        </div>
-      `;
-      lista.appendChild(div);
-    });
-  }
+  const item = docSnap.data();
+  const div = document.createElement("div");
+  div.className = "item-anuncio";
+  div.innerHTML = `
+    <img src="${item.imagem}" class="item-img">
+    <div class="item-info">
+      <p style="margin:0;font-weight:600">${item.nome}</p>
+      <p style="margin:2px 0 0;color:var(--primary);font-size:13px">R$ ${item.preco}</p>
+    </div>
+    <div class="acoes-anuncio">
+      <button class="btn-acao" style="color:#fbbf24" onclick="abrirModal('${docSnap.id}')" title="Bloquear Datas">📅</button>
+      <a href="editar.html?id=${docSnap.id}" class="btn-acao btn-editar" title="Editar Anúncio">✏️</a>
+      <button class="btn-acao" style="color:var(--danger)" onclick="remover('${docSnap.id}')" title="Excluir">🗑️</button>
+    </div>
+  `;
+  lista.appendChild(div);
+});
+
 
   window.abrirModal = (id) => {
     idSelecionado = id;
