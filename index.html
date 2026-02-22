@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Obrahhí | Aluguel de Ferramentas</title>
+  <title>𝔒braí | Aluguel de Ferramentas</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#10b981">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { 
@@ -150,7 +152,7 @@
 <body>
 
 <div class="header-container">
-  <h1 class="logo-tipo">obrahhí</h1>
+  <h1 class="logo-tipo">𝔒braí</h1>
 </div>
 
 <div class="search-container">
@@ -174,7 +176,12 @@
 </div>
 
 <div class="lista-anuncios" id="listaAnuncios"></div>
-
+<div id="installContainer" style="display:none; text-align:center; padding: 15px;">
+  <button id="btnInstalar" style="background: var(--primary); color: var(--deep-bg); border: none; padding: 12px 25px; border-radius: 100px; font-weight: 800; font-size: 14px; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);">
+    📥 Baixar App 𝔒braí
+  </button>
+</div>
+  
 <nav class="bottom-nav">
   <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>Home</a>
   <a href="anunciar.html" class="nav-item"><span class="nav-icon">➕</span>Anunciar</a>
@@ -294,6 +301,31 @@
 
   carregarLocais();
   carregarAnuncios();
+  let deferredPrompt;
+const installContainer = document.getElementById('installContainer');
+const btnInstalar = document.getElementById('btnInstalar');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Impede que o navegador mostre o banner padrão
+  e.preventDefault();
+  // Guarda o evento para usar depois
+  deferredPrompt = e;
+  // Mostra o nosso botão personalizado
+  installContainer.style.display = 'block';
+});
+
+btnInstalar.addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('Usuário instalou o app!');
+    }
+    deferredPrompt = null;
+    installContainer.style.display = 'none';
+  }
+});
+  
 </script>
 </body>
 </html>
