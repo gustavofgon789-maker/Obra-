@@ -100,7 +100,30 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  // Localize a parte do Firebase no final da sua index.html e substitua por esta lógica:
+
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const auth = getAuth(app);
+
+// ESTA É A CORREÇÃO:
+onAuthStateChanged(auth, (user) => {
+  const perfilLink = document.querySelector('a[href="perfil.html"]');
+  
+  if (user) {
+    console.log("Usuário logado:", user.displayName);
+    // Se estiver logado, o ícone do perfil vai direto para o painel
+    if(perfilLink) perfilLink.href = "perfil.html";
+  } else {
+    console.log("Navegação anônima liberada");
+    // Se NÃO estiver logado, a Home continua funcionando normal, 
+    // mas ao clicar no perfil, o perfil.html cuidará de pedir o login.
+    if(perfilLink) perfilLink.href = "perfil.html"; 
+  }
+});
+
+// Verifique se não existe nenhum comando "window.location.href = 'perfil.html'" 
+// solto dentro do seu script da index.html. Se existir, apague-o.
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
