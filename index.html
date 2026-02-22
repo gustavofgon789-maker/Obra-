@@ -3,98 +3,104 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Obraí</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <title>𝔒braí | Aluguel de Ferramentas</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#10b981">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { 
-      --deep-bg: #050706; --card-bg: #0f1412; --primary: #10b981;
-      --primary-soft: rgba(16, 185, 129, 0.1); --danger: #ef4444;
-      --warning: #f59e0b; --text-main: #f8fafc; --text-muted: #64748b; --border: #1e2923;
+      --deep-bg: #0a0f0d; --card-bg: #141a17; --primary: #10b981;
+      --text-main: #e2e8f0; --text-muted: #94a3b8; --border: #1e2923;
     }
-    body { font-family: 'Inter', sans-serif; background: var(--deep-bg); margin: 0; color: var(--text-main); padding-bottom: 110px; }
-    
-    /* Overlay de Login para quando não estiver logado */
-    #login-overlay { position: fixed; inset: 0; background: var(--deep-bg); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; }
-    .btn-google { background: white; color: black; padding: 15px 25px; border-radius: 15px; font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+    body { background-color: var(--deep-bg); margin: 0; font-family: 'Inter', sans-serif; color: var(--text-main); padding-bottom: 120px; }
 
-    .profile-header { text-align: center; padding: 40px 20px 20px; }
-    .profile-img { width: 80px; height: 80px; border-radius: 24px; border: 2px solid var(--primary); padding: 3px; object-fit: cover; }
-    .business-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px 20px; }
-    .stat-box { background: var(--card-bg); padding: 18px; border-radius: 22px; border: 1px solid var(--border); }
-    .stat-box.full { grid-column: span 2; background: linear-gradient(135deg, var(--card-bg) 0%, #10b9810a 100%); text-align: center; }
-    .stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 5px; display: block; }
-    .stat-value { font-size: 22px; font-weight: 800; }
-    .money-value { color: var(--primary); font-size: 26px; }
-    .section-title { padding: 10px 20px; font-size: 16px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
-    .item-anuncio { background: var(--card-bg); border-radius: 22px; padding: 14px; display: flex; align-items: center; margin-bottom: 12px; border: 1px solid var(--border); }
-    .item-img { width: 65px; height: 65px; border-radius: 14px; object-fit: cover; margin-right: 15px; }
-    .item-info { flex-grow: 1; min-width: 0; }
-    .item-nome { font-weight: 700; font-size: 15px; margin: 0 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .status-badge { font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-right: 5px; }
-    .status-on { background: var(--primary-soft); color: var(--primary); }
-    .status-off { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
-    .item-ganho { font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px; }
-    .acoes-anuncio { display: flex; gap: 6px; margin-left: 10px; }
-    .btn-circle { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: #161b19; color: white; text-decoration: none; font-size: 14px; cursor: pointer; }
-    #modalReserva { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-    .modal-content { background: var(--card-bg); width: 85%; max-width: 340px; padding: 25px; border-radius: 28px; border: 1px solid var(--border); text-align: center; }
-    .btn-main { background: var(--primary); color: #000; border: none; width: 100%; padding: 15px; border-radius: 14px; font-weight: 800; margin-top: 15px; cursor: pointer; }
-    .btn-sair { display: block; margin: 20px; padding: 15px; text-align: center; color: var(--danger); border: 1px solid rgba(239,68,68,0.15); border-radius: 18px; text-decoration: none; font-weight: 700; font-size: 13px; }
-    .app-footer { position: fixed; bottom: 0; width: 100%; background: rgba(5,7,6,0.95); height: 80px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); }
-    .footer-item { text-decoration: none; color: var(--text-muted); font-size: 10px; text-align: center; }
+    .header-container { padding: 40px 20px 10px; text-align: center; }
+    .logo-tipo { font-size: 42px; font-weight: 800; color: var(--primary); letter-spacing: -2px; margin: 0; }
+
+    .search-container { max-width: 420px; margin: 0 auto 10px; padding: 0 20px; }
+    .search-box { 
+      background: rgba(30, 41, 35, 0.5); padding: 5px 15px; border-radius: 18px; 
+      display: flex; align-items: center; border: 1px solid var(--border); margin-bottom: 12px;
+    }
+    .search-box input { border: none; background: transparent; padding: 12px; width: 100%; outline: none; color: white; font-size: 15px; }
+    
+    .loc-box { display: flex; align-items: center; gap: 8px; padding-left: 5px; margin-bottom: 15px;}
+    .loc-box select { background: transparent; border: none; color: var(--primary); font-weight: 700; outline: none; cursor: pointer; font-size: 14px; }
+
+    .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 20px; scrollbar-width: none; }
+    .filter-scroll::-webkit-scrollbar { display: none; }
+    .filter-btn { 
+      background: var(--card-bg); border: 1px solid var(--border); color: var(--text-muted); 
+      padding: 8px 18px; border-radius: 100px; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap;
+    }
+    .filter-btn.active { background: var(--primary); color: var(--deep-bg); border-color: var(--primary); }
+
+    .lista-anuncios { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
+    .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
+    .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+    .card-content { padding: 12px; }
+    .card-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .card-loc { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; display: block; }
+    .card-price { color: var(--primary); font-weight: 800; font-size: 16px; }
+
+    /* Bottom Nav Simétrica */
+    .bottom-nav { 
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+      width: 90%; max-width: 420px; background: rgba(20, 26, 23, 0.98); 
+      backdrop-filter: blur(20px); padding: 10px 0; border-radius: 25px; 
+      display: flex; align-items: center; justify-content: space-around;
+      border: 1px solid var(--border); z-index: 1000;
+    }
+    .nav-item { flex: 1; text-align: center; text-decoration: none; color: var(--text-muted); font-size: 10px; font-weight: 700; }
+    .nav-item.active { color: var(--primary); }
+    .nav-icon { font-size: 22px; display: block; margin-bottom: 2px; }
+    .btn-central-wrap { flex: 1; display: flex; justify-content: center; }
+    .btn-central {
+      background: var(--primary); color: var(--deep-bg); width: 48px; height: 48px; border-radius: 16px; 
+      display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 28px; font-weight: bold;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    }
+    #perfilImgContainer img { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--primary); }
   </style>
 </head>
 <body>
 
-<div id="login-overlay">
-    <h1 style="color:var(--primary); font-weight:800; margin-bottom:30px">𝔒braí</h1>
-    <button class="btn-google" onclick="fazerLogin()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="20">
-        Entrar com Google
-    </button>
+<div class="header-container">
+  <h1 class="logo-tipo">𝔒braí</h1>
 </div>
 
-<div class="profile-header">
-    <img id="userPhoto" src="" class="profile-img" onerror="this.src='https://via.placeholder.com/100?text=👤'">
-    <h2 id="userName" style="margin:10px 0 0; font-size: 20px;">Carregando...</h2>
+<div class="search-container">
+  <div class="search-box">
+    <input type="text" id="inputBusca" placeholder="O que você precisa?" onkeyup="filtrarGeral()">
+  </div>
+  <div class="loc-box">
+    <span>📍</span>
+    <select id="filtroLocal" onchange="carregarAnuncios()">
+      <option value="Todos">Ver toda a região</option>
+    </select>
+  </div>
 </div>
 
-<div class="business-stats">
-    <div class="stat-box full">
-        <span class="stat-label">💰 Receita Real Acumulada</span>
-        <span class="stat-value money-value" id="ganhoValor">R$ 0,00</span>
-    </div>
-    <div class="stat-box">
-        <span class="stat-label">🛠️ Ativos</span>
-        <span class="stat-value" id="countAnuncios">0</span>
-    </div>
-    <div class="stat-box">
-        <span class="stat-label">⭐ Avaliação</span>
-        <span class="stat-value" style="color:var(--warning)">5.0</span>
-    </div>
+<div class="filter-scroll">
+  <button class="filter-btn active" onclick="selecionarCategoria('Todas', this)">Todas</button>
+  <button class="filter-btn" onclick="selecionarCategoria('Eletricas', this)">Elétricas</button>
+  <button class="filter-btn" onclick="selecionarCategoria('Jardinagem', this)">Jardinagem</button>
+  <button class="filter-btn" onclick="selecionarCategoria('Construcao', this)">Construção</button>
 </div>
 
-<div class="section-title">
-    <span>Gerenciar Inventário</span>
-    <button onclick="window.location.href='anunciar.html'" style="background:var(--primary-soft); border:none; color:var(--primary); padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px;">+ ADICIONAR</button>
-</div>
+<div class="lista-anuncios" id="listaAnuncios"></div>
 
-<div id="listaMeusAnuncios" class="meus-anuncios"></div>
-
-<a href="#" id="btnSair" class="btn-sair">Desconectar Conta</a>
-
-<nav class="app-footer">
-  <a href="index.html" class="footer-item">🏠<br>Início</a>
-  <a href="anunciar.html" style="background:var(--primary); color:#000; width:48px; height:48px; border-radius:16px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:24px; font-weight:bold; margin-bottom:20px">+</a>
-  <a href="perfil.html" class="footer-item" style="color:var(--primary)">👤<br>Painel</a>
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>HOME</a>
+  <div class="btn-central-wrap"><a href="anunciar.html" class="btn-central">+</a></div>
+  <a href="meus-alugueis.html" class="nav-item"><span class="nav-icon">📋</span>ALUGUÉIS</a>
+  <a href="perfil.html" class="nav-item"><span class="nav-icon" id="perfilImgContainer">👤</span>PERFIL</a>
 </nav>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -109,55 +115,71 @@
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  // FUNÇÃO DE LOGIN QUE FALTAVA
-  window.fazerLogin = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-        await signInWithPopup(auth, provider);
-    } catch (error) {
-        alert("Erro ao logar: " + error.message);
-    }
-  };
+  let categoriaAtual = 'Todas';
 
   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      document.getElementById("login-overlay").style.display = "none";
-      document.getElementById("userName").innerText = user.displayName || 'Parceiro Obraí';
-      document.getElementById("userPhoto").src = user.photoURL || '';
-      carregarDashboard(user.uid);
-    } else {
-      // EM VEZ DE REDIRECIONAR PARA LOGIN.HTML, MOSTRA O OVERLAY
-      document.getElementById("login-overlay").style.display = "flex";
-    }
+    const container = document.getElementById("perfilImgContainer");
+    if (user && user.photoURL) container.innerHTML = `<img src="${user.photoURL}" referrerpolicy="no-referrer">`;
   });
 
-  async function carregarDashboard(userId) {
-    const lista = document.getElementById("listaMeusAnuncios");
-    const qAnuncios = query(collection(db, "anuncios"), where("userId", "==", userId));
-    const snapAnuncios = await getDocs(qAnuncios);
-    
-    lista.innerHTML = "";
-    let receitaGeral = 0;
-
-    snapAnuncios.forEach((docSnap) => {
-      const item = docSnap.data();
-      const div = document.createElement("div");
-      div.className = "item-anuncio";
-      div.innerHTML = `
-        <img src="${item.imagem}" class="item-img">
-        <div class="item-info">
-          <p class="item-nome">${item.nome}</p>
-          <span class="status-badge status-on">● DISPONÍVEL</span>
-          <span class="item-ganho">Preço: R$ ${item.preco}</span>
-        </div>
-      `;
-      lista.appendChild(div);
+  async function carregarLocais() {
+    const snap = await getDocs(collection(db, "anuncios"));
+    const locais = new Set();
+    snap.forEach(doc => { if(doc.data().cidade) locais.add(doc.data().cidade.trim()); });
+    const select = document.getElementById("filtroLocal");
+    locais.forEach(loc => {
+      const opt = document.createElement("option");
+      opt.value = loc; opt.text = loc; select.add(opt);
     });
-
-    document.getElementById("countAnuncios").innerText = snapAnuncios.size;
   }
 
-  document.getElementById("btnSair").onclick = () => signOut(auth).then(() => location.reload());
+  window.selecionarCategoria = (cat, btn) => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    categoriaAtual = cat;
+    carregarAnuncios();
+  };
+
+  async function carregarAnuncios() {
+    const lista = document.getElementById("listaAnuncios");
+    const localSelecionado = document.getElementById("filtroLocal").value;
+    lista.innerHTML = "";
+    try {
+      let q = collection(db, "anuncios");
+      if (categoriaAtual !== 'Todas') q = query(q, where("categoria", "==", categoriaAtual));
+      
+      const snap = await getDocs(q);
+      snap.forEach(docSnap => {
+        const item = docSnap.data();
+        if (localSelecionado !== "Todos" && item.cidade !== localSelecionado) return;
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <a href="detalhes.html?id=${docSnap.id}" style="text-decoration:none;color:inherit">
+            <img src="${item.imagem}" class="card-img">
+            <div class="card-content">
+              <h3 class="card-title">${item.nome}</h3>
+              <span class="card-loc">📍 ${item.cidade || 'Região'}</span>
+              <div class="card-price">R$ ${item.preco} <span style="font-size:10px;color:var(--text-muted)">/dia</span></div>
+            </div>
+          </a>
+        `;
+        lista.appendChild(card);
+      });
+    } catch (e) { console.error(e); }
+  }
+
+  window.filtrarGeral = () => {
+    const termo = document.getElementById("inputBusca").value.toLowerCase();
+    document.querySelectorAll('.card').forEach(card => {
+      const nome = card.querySelector('.card-title').innerText.toLowerCase();
+      card.style.display = nome.includes(termo) ? "block" : "none";
+    });
+  };
+
+  carregarLocais();
+  carregarAnuncios();
 </script>
 </body>
 </html>
