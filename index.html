@@ -25,87 +25,52 @@
       padding-bottom: 120px; 
     }
 
-    /* Header */
-    .header-container { 
-      padding: 40px 20px 20px; 
-      text-align: center; 
-    }
-    .logo-tipo { 
-      font-size: 42px; 
-      font-weight: 800; 
-      color: var(--primary); 
-      letter-spacing: -2px; 
-      margin: 0; 
-    }
+    .header-container { padding: 40px 20px 20px; text-align: center; }
+    .logo-tipo { font-size: 42px; font-weight: 800; color: var(--primary); letter-spacing: -2px; margin: 0; }
 
-    /* Busca e Filtro de Local */
     .search-container { max-width: 420px; margin: 0 auto 20px; padding: 0 20px; }
     .search-box { 
-      background: rgba(30, 41, 35, 0.5); 
-      padding: 5px 15px; 
-      border-radius: 18px; 
-      display: flex; 
-      align-items: center; 
-      border: 1px solid var(--border);
-      margin-bottom: 12px;
+      background: rgba(30, 41, 35, 0.5); padding: 5px 15px; border-radius: 18px; 
+      display: flex; align-items: center; border: 1px solid var(--border); margin-bottom: 12px;
     }
-    .search-box input { 
-      border: none; background: transparent; padding: 12px; 
-      width: 100%; outline: none; color: white; font-size: 15px; 
-    }
-    .loc-box { display: flex; align-items: center; gap: 8px; padding-left: 5px; }
-    .loc-box select { 
-        background: transparent; border: none; color: var(--primary); 
-        font-weight: 700; outline: none; cursor: pointer; font-size: 14px;
-    }
+    .search-box input { border: none; background: transparent; padding: 12px; width: 100%; outline: none; color: white; font-size: 15px; }
+    
+    .loc-box { display: flex; align-items: center; gap: 8px; padding-left: 5px; margin-bottom: 15px;}
+    .loc-box select { background: transparent; border: none; color: var(--primary); font-weight: 700; outline: none; cursor: pointer; font-size: 14px; }
 
-    /* Filtros de Categoria */
     .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 25px; scrollbar-width: none; }
     .filter-scroll::-webkit-scrollbar { display: none; }
     .filter-btn { 
-      background: var(--card-bg); border: 1px solid var(--border); 
-      color: var(--text-muted); padding: 8px 18px; border-radius: 100px; 
-      font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap;
+      background: var(--card-bg); border: 1px solid var(--border); color: var(--text-muted); 
+      padding: 8px 18px; border-radius: 100px; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap;
     }
     .filter-btn.active { background: var(--primary); color: var(--deep-bg); border-color: var(--primary); }
 
-    /* Grid de Anúncios */
-    .lista-anuncios { 
-      display: grid; 
-      grid-template-columns: repeat(2, 1fr); 
-      gap: 12px; 
-      padding: 0 15px; 
-    }
-    .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
+    .lista-anuncios { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
+    .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); position: relative; }
     .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
     .card-content { padding: 12px; }
     .card-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .card-loc { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; display: block; }
     .card-price { color: var(--primary); font-weight: 800; font-size: 16px; }
 
-    /* Bottom Nav (Simetria Sênior) */
+    /* Bottom Nav Simétrica */
     .bottom-nav { 
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
       width: 90%; max-width: 420px; background: rgba(20, 26, 23, 0.98); 
       backdrop-filter: blur(20px); padding: 10px 0; border-radius: 25px; 
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-around;
       border: 1px solid var(--border); z-index: 1000;
     }
-    .nav-item { 
-      flex: 1; text-align: center; text-decoration: none; 
-      color: var(--text-muted); font-size: 10px; font-weight: 700; 
-    }
+    .nav-item { flex: 1; text-align: center; text-decoration: none; color: var(--text-muted); font-size: 10px; font-weight: 700; }
     .nav-item.active { color: var(--primary); }
     .nav-icon { font-size: 22px; display: block; margin-bottom: 2px; }
-
     .btn-central-wrap { flex: 1; display: flex; justify-content: center; }
     .btn-central {
-      background: var(--primary); color: var(--deep-bg); 
-      width: 48px; height: 48px; border-radius: 16px; 
-      display: flex; align-items: center; justify-content: center; 
-      text-decoration: none; font-size: 28px; font-weight: bold;
+      background: var(--primary); color: var(--deep-bg); width: 48px; height: 48px; border-radius: 16px; 
+      display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 28px; font-weight: bold;
       box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
     }
-
     #perfilImgContainer img { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--primary); }
   </style>
 </head>
@@ -137,21 +102,10 @@
 <div class="lista-anuncios" id="listaAnuncios"></div>
 
 <nav class="bottom-nav">
-  <a href="index.html" class="nav-item active">
-    <span class="nav-icon">🏠</span>HOME
-  </a>
-  
-  <div class="btn-central-wrap">
-    <a href="anunciar.html" class="btn-central">+</a>
-  </div>
-
-  <a href="meus-alugueis.html" class="nav-item">
-    <span class="nav-icon">📋</span>ALUGUÉIS
-  </a>
-  
-  <a href="perfil.html" class="nav-item">
-    <span class="nav-icon" id="perfilImgContainer">👤</span>PERFIL
-  </a>
+  <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>HOME</a>
+  <div class="btn-central-wrap"><a href="anunciar.html" class="btn-central">+</a></div>
+  <a href="meus-alugueis.html" class="nav-item"><span class="nav-icon">📋</span>ALUGUÉIS</a>
+  <a href="perfil.html" class="nav-item"><span class="nav-icon" id="perfilImgContainer">👤</span>PERFIL</a>
 </nav>
 
 <script type="module">
@@ -176,26 +130,18 @@
 
   onAuthStateChanged(auth, (user) => {
     const container = document.getElementById("perfilImgContainer");
-    if (user && user.photoURL) {
-      container.innerHTML = `<img src="${user.photoURL}" referrerpolicy="no-referrer">`;
-    }
+    if (user && user.photoURL) container.innerHTML = `<img src="${user.photoURL}" referrerpolicy="no-referrer">`;
   });
 
-  // Função para carregar as cidades sem quebrar
   async function carregarLocais() {
-    try {
-      const snap = await getDocs(collection(db, "anuncios"));
-      const locais = new Set();
-      snap.forEach(doc => {
-        const data = doc.data();
-        if (data.cidade) locais.add(data.cidade.trim());
-      });
-      const select = document.getElementById("filtroLocal");
-      locais.forEach(loc => {
-        const opt = document.createElement("option");
-        opt.value = loc; opt.text = loc; select.add(opt);
-      });
-    } catch (e) { console.error("Erro ao carregar locais:", e); }
+    const snap = await getDocs(collection(db, "anuncios"));
+    const locais = new Set();
+    snap.forEach(doc => { if(doc.data().cidade) locais.add(doc.data().cidade.trim()); });
+    const select = document.getElementById("filtroLocal");
+    locais.forEach(loc => {
+      const opt = document.createElement("option");
+      opt.value = loc; opt.text = loc; select.add(opt);
+    });
   }
 
   window.selecionarCategoria = (cat, btn) => {
@@ -209,22 +155,16 @@
     const lista = document.getElementById("listaAnuncios");
     const localSelecionado = document.getElementById("filtroLocal").value;
     lista.innerHTML = "";
-
     try {
       let q = collection(db, "anuncios");
+      if (categoriaAtual !== 'Todas') q = query(q, where("categoria", "==", categoriaAtual));
       
-      // Lógica de filtros combinada
-      if (categoriaAtual !== 'Todas' && localSelecionado !== 'Todos') {
-        q = query(q, where("categoria", "==", categoriaAtual), where("cidade", "==", localSelecionado));
-      } else if (categoriaAtual !== 'Todas') {
-        q = query(q, where("categoria", "==", categoriaAtual));
-      } else if (localSelecionado !== 'Todos') {
-        q = query(q, where("cidade", "==", localSelecionado));
-      }
-
       const snap = await getDocs(q);
       snap.forEach(docSnap => {
         const item = docSnap.data();
+        // Filtro de local manual para evitar bugs de index do Firebase
+        if (localSelecionado !== "Todos" && item.cidade !== localSelecionado) return;
+
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
@@ -232,13 +172,14 @@
             <img src="${item.imagem}" class="card-img">
             <div class="card-content">
               <h3 class="card-title">${item.nome}</h3>
+              <span class="card-loc">📍 ${item.cidade || 'Região'}</span>
               <div class="card-price">R$ ${item.preco} <span style="font-size:10px;color:var(--text-muted)">/dia</span></div>
             </div>
           </a>
         `;
         lista.appendChild(card);
       });
-    } catch (e) { console.error("Erro ao carregar anúncios:", e); }
+    } catch (e) { console.error(e); }
   }
 
   window.filtrarGeral = () => {
