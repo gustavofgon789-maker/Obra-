@@ -90,7 +90,14 @@
     <h3>Gestão de Ativos</h3>
     <button onclick="window.location.href='anunciar.html'" style="background:var(--primary-soft); border:none; color:var(--primary); padding:8px 15px; border-radius:12px; font-weight:700; font-size:12px; cursor:pointer">+ Ativo</button>
 </div>
-
+<div class="stat-box full">
+    <span class="stat-label">💰 Receita Real Acumulada</span>
+    <span class="stat-value money" id="ganhoValor">R$ 0,00</span>
+    <span style="font-size: 10px; color: var(--text-muted); display: block; margin-top: 5px;">
+        Total gerado através dos dias bloqueados na agenda
+    </span>
+</div>
+  
 <div id="listaMeusAnuncios" class="meus-anuncios"></div>
 
 <a href="#" id="btnSair" class="btn-sair">Desconectar Sistema</a>
@@ -150,30 +157,46 @@
     } else { window.location.href = "login.html"; }
   });
 
-  async function carregarDashboard(userId) {
+  // --- SUBSTITUA A FUNÇÃO carregarDashboard POR ESTA ---
+
+async function carregarDashboard(userId) {
     const lista = document.getElementById("listaMeusAnuncios");
+    
+    // 1. Busca os anúncios do usuário
     const qAnuncios = query(collection(db, "anuncios"), where("userId", "==", userId));
     const snapAnuncios = await getDocs(qAnuncios);
     
-    // Buscar TODAS as reservas de uma vez para comparar
+    // 2. Busca todas as reservas (bloqueios) feitas
     const snapReservas = await getDocs(collection(db, "reservas"));
-    const reservasAtivas = snapReservas.docs.map(d => d.data());
+    const todasReservas = snapReservas.docs.map(d => d.data());
 
     lista.innerHTML = "";
-    let estimativaTotal = 0;
+    let receitaRealTotal = 0;
     const hoje = new Date().toISOString().split('T')[0];
 
+    // Criamos um mapa para facilitar o cálculo por ferramenta
     snapAnuncios.forEach((docSnap) => {
       const item = docSnap.data();
       const idFerramenta = docSnap.id;
-      
-      // Cálculo de Ganhos
-      const preco = parseFloat(item.preco.toString().replace('R$', '').replace(',', '.').trim()) || 0;
-      estimativaTotal += (preco * 4);
+      const precoDia = parseFloat(item.preco.toString().replace('R$', '').replace('.', '').replace(',', '.').trim()) || 0;
 
-      // Lógica de Status em Tempo Real
-      const estaReservada = reservasAtivas.some(res => 
-        res.id_ferramenta === idFerramenta && 
+      // CÁLCULO DE RECEITA REAL: 
+      // Soma os dias de todos os bloqueios passados e presentes desta ferramenta
+      const reservasDestaFerramenta = todasReservas.filter(res => res.id_ferramenta === idFerramenta);
+      
+      let diasAlugados = 0;
+      reservasDestaFerramenta.forEach(res => {
+          const inicio = new Date(res.inicio);
+          const fim = new Date(res.fim);
+          const diffTempo = Math.abs(fim - inicio);
+          const diffDias = Math.ceil(diffTempo / (1000 * 60 * 60 * 24)) + 1;
+          diasAlugados += diffDias;
+      });
+
+      receitaRealTotal += (diasAlugados * precoDia);
+
+      // Verificação de Status atual
+      const estaReservada = reservasDestaFerramenta.some(res => 
         hoje >= res.inicio && hoje <= res.fim
       );
 
@@ -181,13 +204,17 @@
         ? `<span class="status-badge status-alugado">● Em Uso</span>`
         : `<span class="status-badge status-disponivel">● Disponível</span>`;
 
+      // Renderização do Item
       const div = document.createElement("div");
       div.className = "item-anuncio";
       div.innerHTML = `
         <img src="${item.imagem}" class="item-img">
         <div class="item-info">
           <p class="item-nome">${item.nome}</p>
-          ${statusHtml}
+          <div style="display:flex; align-items:center; gap:10px">
+            ${statusHtml}
+            <span style="font-size:10px; color:var(--text-muted)">Ganhos: R$ ${(diasAlugados * precoDia).toFixed(2)}</span>
+          </div>
         </div>
         <div class="acoes-anuncio">
           <button class="btn-circle" onclick="abrirModal('${idFerramenta}')">📅</button>
@@ -198,9 +225,15 @@
       lista.appendChild(div);
     });
 
+    // Atualiza o Dashboard com valores Reais
     document.getElementById("countAnuncios").innerText = snapAnuncios.size;
-    document.getElementById("ganhoValor").innerText = `R$ ${estimativaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-  }
+    document.getElementById("ganhoValor").innerText = `R$ ${receitaRealTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    
+    // Calcula Score baseado na receita (Exemplo: se ganhou algo, score sobe)
+    const score = receitaRealTotal > 0 ? "5.0" : "4.8";
+    document.getElementById("scoreValue").innerText = score;
+}
+
 
   window.abrirModal = (id) => {
     idSelecionado = id;
