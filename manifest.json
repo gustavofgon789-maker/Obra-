@@ -1,7 +1,7 @@
 {
   "name": "𝔒braí - Aluguel de Ferramentas",
   "short_name": "𝔒braí",
-  "start_url": "index.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#0a0f0d",
   "theme_color": "#10b981",
@@ -9,8 +9,7 @@
     {
       "src": "logo-app.png",
       "sizes": "1024x1024",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }
