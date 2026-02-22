@@ -44,7 +44,7 @@
 
   <div class="sessao-reserva">
     <span class="label-reserva">Selecione os dias:</span>
-    <input type="text" id="inputCalendario" placeholder="Toque para escolher as datas">
+    <input type="text" id="inputCalendario" placeholder="Toque para escolher as datas" readonly>
     
     <div id="resumoValores" style="display:none; margin-bottom:20px; border-top:1px solid var(--border); padding-top:15px;">
         <div style="display:flex; justify-content:space-between; margin-bottom:5px">
@@ -62,6 +62,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -96,57 +97,44 @@
       document.getElementById("detalheNome").innerText = ferramenta.nome;
       document.getElementById("detalhePreco").innerText = `R$ ${ferramenta.preco} / dia`;
       document.getElementById("detalheLocal").innerText = ferramenta.cidade || "Região";
-      document.getElementById("detalheDesc").innerText = ferramenta.descricao || "Sem descrição disponível.";
+      document.getElementById("detalheDesc").innerText = ferramenta.descricao || "";
 
-      // 2. Buscar Datas Bloqueadas no Firebase
+      // 2. Buscar Reservas para Bloqueio
       const qReservas = query(collection(db, "reservas"), where("id_ferramenta", "==", id));
       const snapReservas = await getDocs(qReservas);
       let datasDesativadas = [];
 
-      // 2. Buscar Datas Bloqueadas no Firebase
+      snapReservas.forEach(res => {
+        const d = res.data();
+        // Correção de fuso horário para garantir que a data no calendário seja a correta
+        datasDesativadas.push({ 
+          from: new Date(d.inicio + "T00:00:00"), 
+          to: new Date(d.fim + "T00:00:00") 
+        });
+      });
 
-snapReservas.forEach(res => {
-  const d = res.data();
-  // Criamos o objeto de data garantindo que o JS entenda o fuso horário correto
-  const inicio = new Date(d.inicio + "T00:00:00");
-  const fim = new Date(d.fim + "T00:00:00");
-  
-  datasDesativadas.push({ from: inicio, to: fim });
-});
-
-// 3. Inicializar Calendário
-flatpickr("#inputCalendario", {
-  mode: "range",
-  minDate: "today",
-  dateFormat: "d/m/Y",
-  disable: datasDesativadas, // O Flatpickr agora vai reconhecer os objetos de data
-  theme: "dark",
-  locale: "pt", // Adicione se quiser em português
-  onChange: (selectedDates) => {
-     // ... resto do seu código de cálculo de preço
-  }
-});
-
-
-      // 3. Inicializar Calendário com bloqueios
+      // 3. Inicializar Calendário (Apenas UMA vez)
       flatpickr("#inputCalendario", {
         mode: "range",
         minDate: "today",
         dateFormat: "d/m/Y",
-        disable: datasDesativadas, // <--- Aqui o bloqueio acontece!
+        disable: datasDesativadas,
         theme: "dark",
+        locale: "pt",
         onChange: (selectedDates) => {
           if (selectedDates.length === 2) {
             const diff = Math.ceil((selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24)) + 1;
-            const total = diff * parseFloat(ferramenta.preco.replace(',', '.'));
+            
+            // Limpa o preço para cálculo numérico
+            const precoLimpo = parseFloat(ferramenta.preco.toString().replace('R$', '').replace('.', '').replace(',', '.').trim());
+            const total = diff * precoLimpo;
             
             document.getElementById("resumoValores").style.display = "block";
             document.getElementById("totalDias").innerText = diff;
-            document.getElementById("valorFinal").innerText = `R$ ${total.toFixed(2)}`;
+            document.getElementById("valorFinal").innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             
-            // Configurar Botão WhatsApp
             document.getElementById("btnWhatsapp").onclick = () => {
-                const msg = `Olá! Tenho interesse em alugar a ${ferramenta.nome} do dia ${selectedDates[0].toLocaleDateString()} até ${selectedDates[1].toLocaleDateString()}. Total de ${diff} dias.`;
+                const msg = `Olá! Quero alugar a ${ferramenta.nome} de ${selectedDates[0].toLocaleDateString('pt-BR')} até ${selectedDates[1].toLocaleDateString('pt-BR')} (${diff} dias).`;
                 window.open(`https://wa.me/${ferramenta.telefone}?text=${encodeURIComponent(msg)}`);
             };
           }
@@ -154,7 +142,10 @@ flatpickr("#inputCalendario", {
       });
 
       document.getElementById("loader").style.display = "none";
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+      console.error("Erro ao carregar detalhes:", e);
+      document.getElementById("loader").innerText = "Erro ao carregar ferramenta.";
+    }
   }
 
   carregarTudo();
