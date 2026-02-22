@@ -22,7 +22,7 @@
       margin: 0; 
       font-family: 'Inter', sans-serif; 
       color: var(--text-main);
-      padding-bottom: 110px; /* Aumentado para não cobrir o conteúdo */
+      padding-bottom: 110px; 
     }
 
     .header-container { 
@@ -124,7 +124,7 @@
     .card-loc { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
     .card-price { color: var(--primary); font-weight: 800; font-size: 15px; }
 
-    /* Bottom Nav Atualizada com 4 itens */
+    /* Bottom Nav Organizada */
     .bottom-nav { 
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
       width: 92%; max-width: 450px; background: rgba(20, 26, 23, 0.95); 
@@ -138,9 +138,9 @@
 
     .btn-central {
         background: var(--primary); color: var(--deep-bg); 
-        width: 42px; height: 42px; border-radius: 14px; 
+        width: 44px; height: 44px; border-radius: 15px; 
         display: flex; align-items: center; justify-content: center; 
-        text-decoration: none; font-size: 22px; font-weight: bold;
+        text-decoration: none; font-size: 24px; font-weight: bold;
         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
@@ -190,9 +190,11 @@
   
 <nav class="bottom-nav">
   <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>Home</a>
-  <a href="meus-alugueis.html" class="nav-item"><span class="nav-icon">📋</span>Aluguéis</a>
   <a href="anunciar.html" class="btn-central">+</a>
-  <a href="perfil.html" class="nav-item"><span class="nav-icon" id="perfilImgContainer">👤</span>Perfil</a>
+  <a href="meus-alugueis.html" class="nav-item"><span class="nav-icon">📋</span>Aluguéis</a>
+  <a href="perfil.html" class="nav-item">
+    <span class="nav-icon" id="perfilImgContainer">👤</span>Perfil
+  </a>
 </nav>
 
 <script type="module">
@@ -260,7 +262,6 @@
         const item = docSnap.data();
         const card = document.createElement("div");
         card.className = "card";
-        // IMPORTANTE: Garantir que o link passe o ID correto para detalhes.html
         card.innerHTML = `
           <a href="detalhes.html?id=${docSnap.id}" style="text-decoration:none;color:inherit">
             <img src="${item.imagem}" class="card-img">
@@ -287,7 +288,6 @@
   carregarLocais();
   carregarAnuncios();
 
-  // Registro PWA e Instalação
   let deferredPrompt;
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault(); deferredPrompt = e;
