@@ -3,210 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalhes | Obrahhí</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Detalhes | 𝔒braí</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
-  
+  <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Overlay de Carregamento */
-#loadingOverlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(10, 15, 13, 0.95);
-  z-index: 10000;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10px);
-}
-
-.loader {
-  width: 48px;
-  height: 48px;
-  border: 5px solid var(--primary);
-  border-bottom-color: transparent;
-  border-radius: 50%;
-  display: inline-block;
-  animation: rotation 1s linear infinite;
-  margin-bottom: 20px;
-}
-
-@keyframes rotation {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loading-text {
-  color: var(--text-main);
-  font-weight: 600;
-  font-size: 16px;
-  letter-spacing: 1px;
-}
+    :root { --deep-bg: #0a0f0d; --card-bg: #141a17; --primary: #10b981; --text-main: #e2e8f0; --text-muted: #94a3b8; --border: #1e2923; }
+    body { font-family: 'Inter', sans-serif; background: var(--deep-bg); color: var(--text-main); margin: 0; padding-bottom: 100px; }
     
-    :root { 
-      --deep-bg: #0a0f0d;
-      --card-bg: #141a17;
-      --primary: #10b981;
-      --text-main: #e2e8f0;
-      --text-muted: #94a3b8;
-      --border: #1e2923;
-    }
-
-    body { 
-      font-family: 'Inter', sans-serif; 
-      background: var(--deep-bg); 
-      margin: 0; 
-      color: var(--text-main);
-      padding-bottom: 120px; 
-    }
-
-    /* Botão Voltar Glass */
-    .btn-voltar { 
-      position: absolute; top: 20px; left: 20px; 
-      background: rgba(0, 0, 0, 0.5); 
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: white; padding: 12px; border-radius: 50%; 
-      cursor: pointer; z-index: 10; text-decoration: none; 
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .imagem-topo { 
-      width: 100%; height: 40vh; object-fit: cover; 
-      mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-    }
-
-    .conteudo { padding: 0 25px; margin-top: -20px; }
-
-    .categoria-badge {
-      background: var(--primary);
-      color: var(--deep-bg);
-      padding: 4px 12px;
-      border-radius: 8px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      display: inline-block;
-      margin-bottom: 10px;
-    }
-
-    h1 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -1px; }
+    .btn-voltar { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.5); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; z-index: 10; cursor: pointer; }
+    .topo-img { width: 100%; height: 350px; object-fit: cover; }
     
-    .local-info { color: var(--text-muted); font-size: 14px; margin: 8px 0 20px; display: flex; align-items: center; gap: 5px; }
+    .conteudo { padding: 25px; margin-top: -30px; background: var(--deep-bg); border-radius: 30px 30px 0 0; position: relative; }
+    .preco-tag { background: var(--primary); color: var(--deep-bg); padding: 6px 15px; border-radius: 100px; font-weight: 800; font-size: 14px; display: inline-block; margin-bottom: 15px; }
+    h1 { font-size: 26px; margin: 0 0 10px; font-weight: 800; }
+    .local-info { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
 
-    .secao-reserva {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 20px;
-      margin-top: 25px;
-    }
+    .sessao-reserva { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 24px; margin-top: 20px; }
+    .label-reserva { display: block; font-weight: 700; margin-bottom: 10px; font-size: 14px; }
+    
+    #inputCalendario { width: 100%; padding: 15px; background: #0a0f0d; border: 1px solid var(--border); border-radius: 12px; color: white; text-align: center; font-size: 16px; margin-bottom: 15px; }
 
-    .label-secao { font-weight: 700; color: var(--primary); font-size: 14px; margin-bottom: 15px; display: block; }
-
-    /* Estilização do Input do Calendário */
-    #calendarioReservas {
-      width: 100%;
-      background: #0a0f0d;
-      border: 1px solid var(--border);
-      padding: 15px;
-      border-radius: 12px;
-      color: white;
-      font-family: 'Inter';
-      font-size: 16px;
-      box-sizing: border-box;
-      outline: none;
-    }
-
-    #resumoReserva {
-      margin-top: 20px;
-      padding-top: 15px;
-      border-top: 1px solid var(--border);
-      display: none;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .total-row { display: flex; justify-content: space-between; align-items: center; }
-    .total-label { font-size: 14px; color: var(--text-muted); }
-    .total-valor { font-size: 22px; font-weight: 800; color: var(--primary); }
-
-    /* Rodapé de Reserva Fixo */
-    .footer-reserva {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(10, 15, 13, 0.9);
-      backdrop-filter: blur(15px);
-      padding: 20px 25px 30px;
-      border-top: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center;
-      z-index: 100;
-    }
-
-    .preco-footer { font-size: 20px; font-weight: 800; color: white; }
-    .preco-footer span { font-size: 12px; color: var(--text-muted); font-weight: 400; }
-
-    .btn-reservar {
-      background: var(--primary);
-      color: var(--deep-bg);
-      padding: 16px 30px;
-      border-radius: 16px;
-      text-decoration: none;
-      font-weight: 700;
-      transition: 0.3s;
-      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
-    }
-
-    #carregando { text-align: center; margin-top: 100px; color: var(--primary); font-weight: 700; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .btn-alugar { width: 100%; padding: 18px; background: var(--primary); color: var(--deep-bg); border: none; border-radius: 18px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
+    
+    #loader { position: fixed; top:0; left:0; width:100%; height:100%; background:var(--deep-bg); display:flex; align-items:center; justify-content:center; z-index:100; color:var(--primary); font-weight:700; }
   </style>
 </head>
 <body>
-<div id="loadingOverlay">
-  <span class="loader"></span>
-  <div class="loading-text">Conectando ao proprietário...</div>
-</div>
-  
-<div id="carregando">Sincronizando ferramenta...</div>
 
-<div id="app" style="display: none;">
-  <a href="index.html" class="btn-voltar">⬅</a>
-  <img id="fotoTool" src="" class="imagem-topo">
+<div id="loader">Sincronizando ferramenta...</div>
 
-  <div class="conteudo">
-    <div class="categoria-badge" id="categoria">Categoria</div>
-    <h1 id="nomeTool">Carregando...</h1>
-    <div class="local-info">📍 <span id="localizacao">Localização</span></div>
+<button class="btn-voltar" onclick="history.back()">←</button>
+<img id="detalheImg" src="" class="topo-img">
 
-    <div class="secao-reserva">
-      <span class="label-secao">Disponibilidade & Agendamento</span>
-      <input type="text" id="calendarioReservas" placeholder="Selecione as datas">
-      
-      <div id="resumoReserva">
-        <div class="total-row">
-          <div>
-            <div class="total-label" id="detalhesDias">0 dias selecionados</div>
-            <div style="font-size: 12px; color: #555;" id="horariosInfo"></div>
-          </div>
-          <div class="total-valor" id="valorTotal">R$ 0,00</div>
+<div class="conteudo">
+  <div class="preco-tag" id="detalhePreco">R$ --</div>
+  <h1 id="detalheNome">---</h1>
+  <div class="local-info">📍 <span id="detalheLocal">---</span></div>
+  <p id="detalheDesc" style="line-height:1.6; color:var(--text-muted)"></p>
+
+  <div class="sessao-reserva">
+    <span class="label-reserva">Selecione os dias:</span>
+    <input type="text" id="inputCalendario" placeholder="Toque para escolher as datas">
+    
+    <div id="resumoValores" style="display:none; margin-bottom:20px; border-top:1px solid var(--border); padding-top:15px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px">
+            <span style="color:var(--text-muted)">Total de dias:</span>
+            <span id="totalDias">0</span>
         </div>
-      </div>
+        <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px">
+            <span>Valor Total:</span>
+            <span id="valorFinal" style="color:var(--primary)">R$ 0,00</span>
+        </div>
     </div>
-  </div>
 
-  <div class="footer-reserva">
-    <div class="preco-footer">
-      <span id="precoFooter">R$ 0</span> <span>/ dia</span>
-    </div>
-    <a href="#" id="linkWhats" class="btn-reservar">Reservar Agora</a>
+    <button class="btn-alugar" id="btnWhatsapp">Chamar no WhatsApp</button>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -219,98 +77,67 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  // Dentro da busca de detalhes na detalhes.html
-const qReservas = query(collection(db, "reservas"), where("id_ferramenta", "==", id));
-const snapReservas = await getDocs(qReservas);
-let datasBloqueadas = [];
 
-snapReservas.forEach(res => {
-    const d = res.data();
-    datasBloqueadas.push({ from: d.inicio, to: d.fim });
-});
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
 
-// Agora configura o flatpickr com as datas desativadas
-flatpickr("#calendarioReservas", {
-    mode: "range",
-    minDate: "today",
-    disable: datasBloqueadas, // <--- Aqui as datas ficam cinzas!
-    dateFormat: "d/m/Y",
-    theme: "dark",
-    // ... resto do seu código
-});
-  
+  if (!id) window.location.href = "index.html";
 
-  // --- NOVO: FUNÇÃO DE REDIRECIONAMENTO COM CARREGAMENTO ---
-  window.reservarAgora = (link) => {
-    const overlay = document.getElementById('loadingOverlay');
-    if (overlay) overlay.style.display = 'flex';
-
-    setTimeout(() => {
-      window.location.href = link;
-      // Esconde o overlay após o redirecionamento para não travar se o usuário voltar
-      setTimeout(() => { if (overlay) overlay.style.display = 'none'; }, 1000);
-    }, 1500);
-  };
-  // -------------------------------------------------------
-
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-
-  async function buscarDetalhes() {
-    if (!id) return;
+  async function carregarTudo() {
     try {
-      const docSnap = await getDoc(doc(db, "anuncios", id));
-      if (docSnap.exists()) {
-        const dados = docSnap.data();
-        
-        document.getElementById("fotoTool").src = dados.imagem;
-        document.getElementById("nomeTool").innerText = dados.nome;
-        document.getElementById("categoria").innerText = dados.categoria;
-        document.getElementById("localizacao").innerText = dados.cidade || "Endereço sob consulta";
-        document.getElementById("precoFooter").innerText = `R$ ${dados.preco}`;
-        
-        const precoDiaria = parseFloat(dados.preco);
-        const hInicio = dados.horarioInicio || "08:00";
-        const hFim = dados.horarioFim || "18:00";
+      // 1. Carregar Dados da Ferramenta
+      const docRef = doc(db, "anuncios", id);
+      const docSnap = await getDoc(docRef);
 
-        flatpickr("#calendarioReservas", {
-          mode: "range",
-          minDate: "today",
-          dateFormat: "d/m/Y",
-          theme: "dark",
-          onChange: function(selectedDates) {
-            if (selectedDates.length === 2) {
-              const diffTime = Math.abs(selectedDates[1] - selectedDates[0]);
-              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      if (!docSnap.exists()) return window.location.href = "index.html";
+      const ferramenta = docSnap.data();
 
-              document.getElementById("resumoReserva").style.display = "block";
-              document.getElementById("detalhesDias").innerText = `${diffDays} dia(s) selecionados`;
-              document.getElementById("horariosInfo").innerText = `Retirada: ${hInicio}h • Devolução: ${hFim}h`;
-              document.getElementById("valorTotal").innerText = `R$ ${(diffDays * precoDiaria).toFixed(2)}`;
+      document.getElementById("detalheImg").src = ferramenta.imagem;
+      document.getElementById("detalheNome").innerText = ferramenta.nome;
+      document.getElementById("detalhePreco").innerText = `R$ ${ferramenta.preco} / dia`;
+      document.getElementById("detalheLocal").innerText = ferramenta.cidade || "Região";
+      document.getElementById("detalheDesc").innerText = ferramenta.descricao || "Sem descrição disponível.";
 
-              const msg = encodeURIComponent(`Olá! Quero reservar a ${dados.nome} de ${selectedDates[0].toLocaleDateString()} a ${selectedDates[1].toLocaleDateString()}. Vi que a retirada é às ${hInicio}h e devolução às ${hFim}h. Podemos fechar?`);
-              
-              // --- ALTERADO: Agora o link chama a função reservarAgora em vez de abrir direto ---
-              const linkCompleto = `https://wa.me/55${dados.whatsapp}?text=${msg}`;
-              const btnWhats = document.getElementById("linkWhats");
-              
-              btnWhats.href = "javascript:void(0)"; // Evita o pulo da página
-              btnWhats.onclick = () => window.reservarAgora(linkCompleto);
-            }
+      // 2. Buscar Datas Bloqueadas no Firebase
+      const qReservas = query(collection(db, "reservas"), where("id_ferramenta", "==", id));
+      const snapReservas = await getDocs(qReservas);
+      let datasDesativadas = [];
+
+      snapReservas.forEach(res => {
+        const d = res.data();
+        datasDesativadas.push({ from: d.inicio, to: d.fim });
+      });
+
+      // 3. Inicializar Calendário com bloqueios
+      flatpickr("#inputCalendario", {
+        mode: "range",
+        minDate: "today",
+        dateFormat: "d/m/Y",
+        disable: datasDesativadas, // <--- Aqui o bloqueio acontece!
+        theme: "dark",
+        onChange: (selectedDates) => {
+          if (selectedDates.length === 2) {
+            const diff = Math.ceil((selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24)) + 1;
+            const total = diff * parseFloat(ferramenta.preco.replace(',', '.'));
+            
+            document.getElementById("resumoValores").style.display = "block";
+            document.getElementById("totalDias").innerText = diff;
+            document.getElementById("valorFinal").innerText = `R$ ${total.toFixed(2)}`;
+            
+            // Configurar Botão WhatsApp
+            document.getElementById("btnWhatsapp").onclick = () => {
+                const msg = `Olá! Tenho interesse em alugar a ${ferramenta.nome} do dia ${selectedDates[0].toLocaleDateString()} até ${selectedDates[1].toLocaleDateString()}. Total de ${diff} dias.`;
+                window.open(`https://wa.me/${ferramenta.telefone}?text=${encodeURIComponent(msg)}`);
+            };
           }
-        });
+        }
+      });
 
-        document.getElementById("carregando").style.display = "none";
-        document.getElementById("app").style.display = "block";
-      }
-    } catch (e) {
-      console.error(e);
-      document.getElementById("carregando").innerText = "Erro ao carregar dados.";
-    }
+      document.getElementById("loader").style.display = "none";
+    } catch (e) { console.error(e); }
   }
 
-  buscarDetalhes();
+  carregarTudo();
 </script>
-  
 </body>
 </html>
