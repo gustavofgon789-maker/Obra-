@@ -126,15 +126,6 @@
     .card-loc { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
     .card-price { color: var(--primary); font-weight: 800; font-size: 15px; }
 
-    /* Skeletons */
-    .skeleton {
-      background: linear-gradient(90deg, #1e2923 25%, #2a3a31 50%, #1e2923 75%);
-      background-size: 200% 100%;
-      animation: skeleton-loading 1.5s infinite linear;
-    }
-    @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-    .skeleton-card { height: 250px; border-radius: 22px; background: var(--card-bg); border: 1px solid var(--border); }
-
     /* Nav */
     .bottom-nav { 
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
@@ -147,6 +138,36 @@
     .nav-icon { font-size: 20px; display: block; margin-bottom: 2px; }
 
     #perfilImgContainer img { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--primary); }
+
+    /* NOVO BOTÃO FLUTUANTE DE INSTALAÇÃO */
+    #installContainer {
+      display: none;
+      position: fixed;
+      bottom: 95px; /* Fica logo acima da nav bar */
+      right: 20px;
+      z-index: 9999;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    #btnInstalar {
+      background: var(--primary);
+      color: var(--deep-bg);
+      border: none;
+      padding: 12px 18px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+      cursor: pointer;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -176,9 +197,10 @@
 </div>
 
 <div class="lista-anuncios" id="listaAnuncios"></div>
-<div id="installContainer" style="display:none; text-align:center; padding: 15px;">
-  <button id="btnInstalar" style="background: var(--primary); color: var(--deep-bg); border: none; padding: 12px 25px; border-radius: 100px; font-weight: 800; font-size: 14px; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);">
-    📥 Baixar App 𝔒braí
+
+<div id="installContainer">
+  <button id="btnInstalar">
+    <span>📥</span> Baixar 𝔒braí
   </button>
 </div>
   
@@ -194,12 +216,13 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-// Registra o Service Worker (Obrigatório para o botão aparecer)
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-    .then(() => console.log("Service Worker: Ativo"))
-    .catch(err => console.log("Erro no SW:", err));
-}
+
+  // Registro do Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log("Service Worker: Ativo"))
+      .catch(err => console.log("Erro no SW:", err));
+  }
   
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -223,12 +246,6 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  function mostrarSkeletons() {
-    const lista = document.getElementById("listaAnuncios");
-    lista.innerHTML = Array(4).fill('<div class="skeleton-card skeleton"></div>').join('');
-  }
-
-  // Carrega cidades únicas no seletor
   async function carregarLocais() {
     const snap = await getDocs(collection(db, "anuncios"));
     const locais = new Set();
@@ -255,12 +272,11 @@ if ('serviceWorker' in navigator) {
   async function carregarAnuncios() {
     const lista = document.getElementById("listaAnuncios");
     const localSelecionado = document.getElementById("filtroLocal").value;
-    mostrarSkeletons();
+    lista.innerHTML = "";
 
     try {
       let q = collection(db, "anuncios");
       
-      // Filtro Sênior: Combina categoria e localização
       if (categoriaAtual !== 'Todas' && localSelecionado !== 'Todos') {
         q = query(q, where("categoria", "==", categoriaAtual), where("cidade", "==", localSelecionado));
       } else if (categoriaAtual !== 'Todas') {
@@ -270,13 +286,6 @@ if ('serviceWorker' in navigator) {
       }
 
       const snap = await getDocs(q);
-      lista.innerHTML = "";
-
-      if (snap.empty) {
-        lista.innerHTML = "<p style='grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)'>Nenhum resultado encontrado nesta região.</p>";
-        return;
-      }
-
       snap.forEach(doc => {
         const item = doc.data();
         const card = document.createElement("div");
@@ -296,7 +305,6 @@ if ('serviceWorker' in navigator) {
     } catch (e) { console.error(e); }
   }
 
-  // Busca em tempo real no que está na tela
   window.filtrarGeral = () => {
     const termo = document.getElementById("inputBusca").value.toLowerCase();
     document.querySelectorAll('.card').forEach(card => {
@@ -307,30 +315,28 @@ if ('serviceWorker' in navigator) {
 
   carregarLocais();
   carregarAnuncios();
+
+  // LÓGICA DE INSTALAÇÃO
   let deferredPrompt;
-const installContainer = document.getElementById('installContainer');
-const btnInstalar = document.getElementById('btnInstalar');
+  const installContainer = document.getElementById('installContainer');
+  const btnInstalar = document.getElementById('btnInstalar');
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Impede que o navegador mostre o banner padrão
-  e.preventDefault();
-  // Guarda o evento para usar depois
-  deferredPrompt = e;
-  // Mostra o nosso botão personalizado
-  installContainer.style.display = 'block';
-});
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installContainer.style.display = 'block';
+  });
 
-btnInstalar.addEventListener('click', async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('Usuário instalou o app!');
+  btnInstalar.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        installContainer.style.display = 'none';
+      }
+      deferredPrompt = null;
     }
-    deferredPrompt = null;
-    installContainer.style.display = 'none';
-  }
-});
+  });
   
 </script>
 </body>
