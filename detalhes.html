@@ -10,54 +10,35 @@
   <style>
     :root { --deep-bg: #0a0f0d; --card-bg: #141a17; --primary: #10b981; --text-main: #e2e8f0; --text-muted: #94a3b8; --border: #1e2923; }
     body { font-family: 'Inter', sans-serif; background: var(--deep-bg); color: var(--text-main); margin: 0; padding-bottom: 100px; }
-    
     .btn-voltar { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.5); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; z-index: 10; cursor: pointer; }
     .topo-img { width: 100%; height: 350px; object-fit: cover; }
-    
     .conteudo { padding: 25px; margin-top: -30px; background: var(--deep-bg); border-radius: 30px 30px 0 0; position: relative; }
     .preco-tag { background: var(--primary); color: var(--deep-bg); padding: 6px 15px; border-radius: 100px; font-weight: 800; font-size: 14px; display: inline-block; margin-bottom: 15px; }
     h1 { font-size: 26px; margin: 0 0 10px; font-weight: 800; }
     .local-info { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
-
     .sessao-reserva { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 24px; margin-top: 20px; }
-    .label-reserva { display: block; font-weight: 700; margin-bottom: 10px; font-size: 14px; }
-    
     #inputCalendario { width: 100%; padding: 15px; background: #0a0f0d; border: 1px solid var(--border); border-radius: 12px; color: white; text-align: center; font-size: 16px; margin-bottom: 15px; cursor: pointer; }
-
-    .btn-alugar { width: 100%; padding: 18px; background: var(--primary); color: var(--deep-bg); border: none; border-radius: 18px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); transition: 0.2s; }
-    .btn-alugar:active { transform: scale(0.98); opacity: 0.9; }
-    
+    .btn-alugar { width: 100%; padding: 18px; background: var(--primary); color: var(--deep-bg); border: none; border-radius: 18px; font-weight: 800; font-size: 16px; cursor: pointer; }
     #loader { position: fixed; top:0; left:0; width:100%; height:100%; background:var(--deep-bg); display:flex; align-items:center; justify-content:center; z-index:100; color:var(--primary); font-weight:700; }
   </style>
 </head>
 <body>
-
-<div id="loader">Sincronizando ferramenta...</div>
-
+<div id="loader">Carregando...</div>
 <button class="btn-voltar" onclick="history.back()">←</button>
 <img id="detalheImg" src="" class="topo-img">
-
 <div class="conteudo">
   <div class="preco-tag" id="detalhePreco">R$ --</div>
   <h1 id="detalheNome">---</h1>
   <div class="local-info">📍 <span id="detalheLocal">---</span></div>
   <p id="detalheDesc" style="line-height:1.6; color:var(--text-muted)"></p>
-
   <div class="sessao-reserva">
-    <span class="label-reserva">Selecione os dias:</span>
-    <input type="text" id="inputCalendario" placeholder="Toque para escolher as datas" readonly>
-    
+    <input type="text" id="inputCalendario" placeholder="Escolha as datas" readonly>
     <div id="resumoValores" style="display:none; margin-bottom:20px; border-top:1px solid var(--border); padding-top:15px;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px">
-            <span style="color:var(--text-muted)">Total de dias:</span>
-            <span id="totalDias">0</span>
-        </div>
         <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px">
-            <span>Valor Total:</span>
+            <span>Total:</span>
             <span id="valorFinal" style="color:var(--primary)">R$ 0,00</span>
         </div>
     </div>
-
     <button class="btn-alugar" id="btnWhatsapp">Chamar no WhatsApp</button>
   </div>
 </div>
@@ -66,7 +47,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
@@ -79,90 +60,41 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
 
-  if (!id) window.location.href = "index.html";
-
   async function carregarTudo() {
-    try {
-      const docRef = doc(db, "anuncios", id);
-      const docSnap = await getDoc(docRef);
+    const docSnap = await getDoc(doc(db, "anuncios", id));
+    if (!docSnap.exists()) return;
+    const ferramenta = docSnap.data();
 
-      if (!docSnap.exists()) return window.location.href = "index.html";
-      const ferramenta = docSnap.data();
+    document.getElementById("detalheImg").src = ferramenta.imagem;
+    document.getElementById("detalheNome").innerText = ferramenta.nome;
+    document.getElementById("detalhePreco").innerText = `R$ ${ferramenta.preco} / dia`;
+    document.getElementById("detalheDesc").innerText = ferramenta.descricao || "";
 
-      document.getElementById("detalheImg").src = ferramenta.imagem;
-      document.getElementById("detalheNome").innerText = ferramenta.nome;
-      document.getElementById("detalhePreco").innerText = `R$ ${ferramenta.preco} / dia`;
-      document.getElementById("detalheLocal").innerText = ferramenta.cidade || "Região";
-      document.getElementById("detalheDesc").innerText = ferramenta.descricao || "Sem descrição disponível.";
-
-      const qReservas = query(collection(db, "reservas"), where("id_ferramenta", "==", id));
-      const snapReservas = await getDocs(qReservas);
-      let datasDesativadas = [];
-
-      snapReservas.forEach(res => {
-        const d = res.data();
-        datasDesativadas.push({ 
-          from: new Date(d.inicio + "T00:00:00"), 
-          to: new Date(d.fim + "T00:00:00") 
-        });
-      });
-
-      flatpickr("#inputCalendario", {
-        mode: "range",
-        minDate: "today",
-        dateFormat: "d/m/Y",
-        disable: datasDesativadas,
-        theme: "dark",
-        locale: "pt",
-        onChange: (selectedDates) => {
-          if (selectedDates.length === 2) {
-            const diff = Math.ceil((selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24)) + 1;
+    flatpickr("#inputCalendario", {
+      mode: "range", minDate: "today", dateFormat: "d/m/Y", locale: "pt",
+      onChange: (selectedDates) => {
+        if (selectedDates.length === 2) {
+          const diff = Math.ceil((selectedDates[1] - selectedDates[0]) / (86400000)) + 1;
+          const precoLimpo = parseFloat(ferramenta.preco.toString().replace(/\D/g, '')) / 100 || parseFloat(ferramenta.preco);
+          document.getElementById("resumoValores").style.display = "block";
+          document.getElementById("valorFinal").innerText = `R$ ${(diff * precoLimpo).toFixed(2)}`;
+          
+          document.getElementById("btnWhatsapp").onclick = () => {
+            // CORREÇÃO SÊNIOR: Limpeza do número
+            let fone = ferramenta.telefone.toString().replace(/\D/g, '');
+            if (!fone.startsWith('55')) fone = '55' + fone;
             
-            const precoLimpo = parseFloat(ferramenta.preco.toString().replace('R$', '').replace('.', '').replace(',', '.').trim()) || 0;
-            const total = diff * precoLimpo;
-            
-            document.getElementById("resumoValores").style.display = "block";
-            document.getElementById("totalDias").innerText = diff;
-            document.getElementById("valorFinal").innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            
-            document.getElementById("btnWhatsapp").onclick = () => {
-                // Lógica Sênior: Limpeza absoluta do número para o WhatsApp
-                let numFull = ferramenta.telefone.toString().replace(/\D/g, ''); // Remove tudo que não for número
-                if (!numFull.startsWith('55')) numFull = '55' + numFull; // Adiciona o DDI Brasil se não houver
-
-                const msg = `Olá! Quero alugar a ${ferramenta.nome} de ${selectedDates[0].toLocaleDateString('pt-BR')} até ${selectedDates[1].toLocaleDateString('pt-BR')} (${diff} dias).`;
-                const linkWhats = `https://wa.me/${numFull}?text=${encodeURIComponent(msg)}`;
-
-                // Histórico para a página "Meus Aluguéis"
-                const historico = JSON.parse(localStorage.getItem('meusAlugueis') || '[]');
-                const novoRegistro = {
-                    id: id,
-                    nome: ferramenta.nome,
-                    imagem: ferramenta.imagem,
-                    data: new Date().toLocaleDateString('pt-BR'),
-                    periodo: `${selectedDates[0].toLocaleDateString('pt-BR')} - ${selectedDates[1].toLocaleDateString('pt-BR')}`,
-                    linkWhats: linkWhats
-                };
-                historico.unshift(novoRegistro);
-                localStorage.setItem('meusAlugueis', JSON.stringify(historico.slice(0, 20)));
-
-                window.open(linkWhats, '_blank');
-            };
-          }
+            const msg = encodeURIComponent(`Olá! Quero alugar: ${ferramenta.nome} (${diff} dias)`);
+            window.open(`https://wa.me/${fone}?text=${msg}`, '_blank');
+          };
         }
-      });
-
-      document.getElementById("loader").style.display = "none";
-    } catch (e) { 
-      console.error("Erro:", e);
-      document.getElementById("loader").innerText = "Erro ao carregar ferramenta.";
-    }
+      }
+    });
+    document.getElementById("loader").style.display = "none";
   }
-
   carregarTudo();
 </script>
 </body>
