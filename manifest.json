@@ -1,0 +1,16 @@
+{
+  "name": "𝔒braí - Aluguel de Ferramentas",
+  "short_name": "𝔒braí",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0a0f0d",
+  "theme_color": "#10b981",
+  "description": "Alugue ferramentas de forma rápida e segura.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3259/3259293.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
