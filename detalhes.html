@@ -22,7 +22,7 @@
     .sessao-reserva { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 24px; margin-top: 20px; }
     .label-reserva { display: block; font-weight: 700; margin-bottom: 10px; font-size: 14px; }
     
-    #inputCalendario { width: 100%; padding: 15px; background: #0a0f0d; border: 1px solid var(--border); border-radius: 12px; color: white; text-align: center; font-size: 16px; margin-bottom: 15px; }
+    #inputCalendario { width: 100%; padding: 15px; background: #0a0f0d; border: 1px solid var(--border); border-radius: 12px; color: white; text-align: center; font-size: 16px; margin-bottom: 15px; cursor: pointer; }
 
     .btn-alugar { width: 100%; padding: 18px; background: var(--primary); color: var(--deep-bg); border: none; border-radius: 18px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
     
@@ -86,7 +86,6 @@
 
   async function carregarTudo() {
     try {
-      // 1. Carregar Dados da Ferramenta
       const docRef = doc(db, "anuncios", id);
       const docSnap = await getDoc(docRef);
 
@@ -97,7 +96,7 @@
       document.getElementById("detalheNome").innerText = ferramenta.nome;
       document.getElementById("detalhePreco").innerText = `R$ ${ferramenta.preco} / dia`;
       document.getElementById("detalheLocal").innerText = ferramenta.cidade || "Região";
-      document.getElementById("detalheDesc").innerText = ferramenta.descricao || "";
+      document.getElementById("detalheDesc").innerText = ferramenta.descricao || "Sem descrição disponível.";
 
       // 2. Buscar Reservas para Bloqueio
       const qReservas = query(collection(db, "reservas"), where("id_ferramenta", "==", id));
@@ -106,14 +105,13 @@
 
       snapReservas.forEach(res => {
         const d = res.data();
-        // Correção de fuso horário para garantir que a data no calendário seja a correta
         datasDesativadas.push({ 
           from: new Date(d.inicio + "T00:00:00"), 
           to: new Date(d.fim + "T00:00:00") 
         });
       });
 
-      // 3. Inicializar Calendário (Apenas UMA vez)
+      // 3. Inicializar Calendário
       flatpickr("#inputCalendario", {
         mode: "range",
         minDate: "today",
@@ -126,7 +124,7 @@
             const diff = Math.ceil((selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24)) + 1;
             
             // Limpa o preço para cálculo numérico
-            const precoLimpo = parseFloat(ferramenta.preco.toString().replace('R$', '').replace('.', '').replace(',', '.').trim());
+            const precoLimpo = parseFloat(ferramenta.preco.toString().replace('R$', '').replace('.', '').replace(',', '.').trim()) || 0;
             const total = diff * precoLimpo;
             
             document.getElementById("resumoValores").style.display = "block";
@@ -135,7 +133,22 @@
             
             document.getElementById("btnWhatsapp").onclick = () => {
                 const msg = `Olá! Quero alugar a ${ferramenta.nome} de ${selectedDates[0].toLocaleDateString('pt-BR')} até ${selectedDates[1].toLocaleDateString('pt-BR')} (${diff} dias).`;
-                window.open(`https://wa.me/${ferramenta.telefone}?text=${encodeURIComponent(msg)}`);
+                const linkWhats = `https://wa.me/${ferramenta.telefone}?text=${encodeURIComponent(msg)}`;
+
+                // --- LÓGICA DE SALVAR NO HISTÓRICO "MEUS ALUGUÉIS" ---
+                const historico = JSON.parse(localStorage.getItem('meusAlugueis') || '[]');
+                const novoRegistro = {
+                    id: id,
+                    nome: ferramenta.nome,
+                    imagem: ferramenta.imagem,
+                    data: new Date().toLocaleDateString('pt-BR'),
+                    periodo: `${selectedDates[0].toLocaleDateString('pt-BR')} - ${selectedDates[1].toLocaleDateString('pt-BR')}`,
+                    linkWhats: linkWhats
+                };
+                historico.unshift(novoRegistro);
+                localStorage.setItem('meusAlugueis', JSON.stringify(historico.slice(0, 20)));
+
+                window.open(linkWhats);
             };
           }
         }
