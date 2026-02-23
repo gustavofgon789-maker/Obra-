@@ -104,94 +104,74 @@
 
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+// ... (mantenha suas configurações do Firebase acima)
+
 const auth = getAuth(app);
 
-// ESTA É A CORREÇÃO:
+// CORREÇÃO SÊNIOR: Esta função garante que os anúncios carreguem SEMPRE
 onAuthStateChanged(auth, (user) => {
   const perfilLink = document.querySelector('a[href="perfil.html"]');
   
+  // 1. Independentemente do login, carregamos os anúncios IMEDIATAMENTE
+  carregarAnuncios(); 
+
   if (user) {
-    console.log("Usuário logado:", user.displayName);
-    // Se estiver logado, o ícone do perfil vai direto para o painel
+    console.log("Usuário reconhecido:", user.displayName);
     if(perfilLink) perfilLink.href = "perfil.html";
   } else {
-    console.log("Navegação anônima liberada");
-    // Se NÃO estiver logado, a Home continua funcionando normal, 
-    // mas ao clicar no perfil, o perfil.html cuidará de pedir o login.
-    if(perfilLink) perfilLink.href = "perfil.html"; 
+    console.log("Modo visitante");
+    if(perfilLink) perfilLink.href = "perfil.html";
   }
 });
 
-// Verifique se não existe nenhum comando "window.location.href = 'perfil.html'" 
-// solto dentro do seu script da index.html. Se existir, apague-o.
+// Certifique-se de que a função carregarAnuncios() está assim:
+async function carregarAnuncios() {
+  const lista = document.getElementById("listaAnuncios");
+  if (!lista) return; // Evita erro se o elemento não existir
+  
+  const categoriaAtual = document.querySelector('.cat-btn.active')?.innerText || 'Todas';
+  const localSelecionado = document.getElementById("filtroLocal").value;
+  
+  lista.innerHTML = "<p style='text-align:center; color:var(--primary);'>Carregando ferramentas...</p>";
+  
+  try {
+    let q = collection(db, "anuncios");
+    const snap = await getDocs(q);
+    
+    lista.innerHTML = ""; // Limpa o carregando
+    
+    if (snap.empty) {
+        lista.innerHTML = "<p style='text-align:center; grid-column: 1/-1;'>Nenhum anúncio encontrado.</p>";
+        return;
+    }
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBLvvoNS4VF2Y0rOh-dHj3GFiwao1D4KYU",
-    authDomain: "obrai-56278.firebaseapp.com",
-    projectId: "obrai-56278",
-    storageBucket: "obrai-56278.firebasestorage.app",
-    messagingSenderId: "735990959965",
-    appId: "1:735990959965:web:d28f6cbc7b85abfd48e2b4"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-
-  let categoriaAtual = 'Todas';
-
-  onAuthStateChanged(auth, (user) => {
-    const container = document.getElementById("perfilImgContainer");
-    if (user && user.photoURL) container.innerHTML = `<img src="${user.photoURL}" referrerpolicy="no-referrer">`;
-  });
-
-  async function carregarLocais() {
-    const snap = await getDocs(collection(db, "anuncios"));
-    const locais = new Set();
-    snap.forEach(doc => { if(doc.data().cidade) locais.add(doc.data().cidade.trim()); });
-    const select = document.getElementById("filtroLocal");
-    locais.forEach(loc => {
-      const opt = document.createElement("option");
-      opt.value = loc; opt.text = loc; select.add(opt);
-    });
-  }
-
-  window.selecionarCategoria = (cat, btn) => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    categoriaAtual = cat;
-    carregarAnuncios();
-  };
-
-  async function carregarAnuncios() {
-    const lista = document.getElementById("listaAnuncios");
-    const localSelecionado = document.getElementById("filtroLocal").value;
-    lista.innerHTML = "";
-    try {
-      let q = collection(db, "anuncios");
-      if (categoriaAtual !== 'Todas') q = query(q, where("categoria", "==", categoriaAtual));
+    snap.forEach(docSnap => {
+      const item = docSnap.data();
       
-      const snap = await getDocs(q);
-      snap.forEach(docSnap => {
-        const item = docSnap.data();
-        if (localSelecionado !== "Todos" && item.cidade !== localSelecionado) return;
+      // Filtros
+      if (categoriaAtual !== 'Todas' && item.categoria !== categoriaAtual) return;
+      if (localSelecionado !== "Todos" && item.cidade !== localSelecionado) return;
 
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <a href="detalhes.html?id=${docSnap.id}" style="text-decoration:none;color:inherit">
-            <img src="${item.imagem}" class="card-img">
-            <div class="card-content">
-              <h3 class="card-title">${item.nome}</h3>
-              <span class="card-loc">📍 ${item.cidade || 'Região'}</span>
-              <div class="card-price">R$ ${item.preco} <span style="font-size:10px;color:var(--text-muted)">/dia</span></div>
-            </div>
-          </a>
-        `;
-        lista.appendChild(card);
-      });
-    } catch (e) { console.error(e); }
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <a href="detalhes.html?id=${docSnap.id}" style="text-decoration:none;color:inherit">
+          <img src="${item.imagem}" class="card-img">
+          <div class="card-content">
+            <h3 class="card-title">${item.nome}</h3>
+            <span class="card-loc">📍 ${item.cidade || 'Brasil'}</span>
+            <div class="card-price">R$ ${item.preco} <span style="font-size:10px;color:var(--text-muted)">/dia</span></div>
+          </div>
+        </a>
+      `;
+      lista.appendChild(card);
+    });
+  } catch (e) { 
+    console.error("Erro ao buscar anúncios:", e);
+    lista.innerHTML = "<p style='color:red'>Erro ao carregar anúncios.</p>";
   }
+}
+
 
   window.filtrarGeral = () => {
     const termo = document.getElementById("inputBusca").value.toLowerCase();
