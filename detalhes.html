@@ -50,10 +50,12 @@
     <div id="resumoValores" style="display:none; margin-bottom:20px; border-top:1px solid var(--border); padding-top:15px;">
         <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px">
             <span>Valor Total:</span>
-            <span id="valorFinal" style="color:var(--primary)">R$ 0,00</span>
+            <span id="valorFinal" style="color:var(--primary)">R$0,00</span>
         </div>
     </div>
-    <button class="btn-alugar" id="btnWhatsapp">Chamar no WhatsApp</button>
+    <button id="btnWhatsapp" style="background: #25d366; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 800; width: 100%; cursor: pointer;">
+    Chamar no WhatsApp
+</button>
   </div>
 </div>
 
@@ -118,7 +120,30 @@
 
                 const msg = encodeURIComponent(`Olá! Gostaria de alugar a ferramenta ${item.nome} para o período de ${selectedDates[0].toLocaleDateString('pt-BR')} a ${selectedDates[1].toLocaleDateString('pt-BR')}.`);
                 const link = `https://wa.me/${fone}?text=${msg}`;
+              
+// Supondo que 'item' seja o objeto com os dados do anúncio vindos do Firestore
+const btnWhats = document.getElementById("btnWhatsapp");
 
+if (item && item.whatsapp) {
+    // 1. Limpa o número: remove parênteses, espaços e traços
+    let numeroLimpo = item.whatsapp.replace(/\D/g, '');
+    
+    // 2. Garante o código do país (55 para Brasil)
+    // Se o número tiver 10 ou 11 dígitos, adicionamos o 55 na frente
+    if (numeroLimpo.length <= 11) {
+        numeroLimpo = '55' + numeroLimpo;
+    }
+    
+    // 3. Configura o clique do botão
+    btnWhats.onclick = () => {
+        const mensagem = encodeURIComponent(`Olá! Vi o seu anúncio de "${item.nome}" no Obraí e gostaria de saber mais.`);
+        window.open(`https://wa.me/${numeroLimpo}?text=${mensagem}`, '_blank');
+    };
+} else {
+    // Caso não haja número cadastrado, você pode esconder o botão ou avisar
+    btnWhats.onclick = () => alert("Este anunciante não disponibilizou WhatsApp.");
+    btnWhats.style.opacity = "0.5";
+}
                 // Sincroniza com Meus Aluguéis
                 const hist = JSON.parse(localStorage.getItem('meusAlugueis') || '[]');
                 hist.unshift({ id, nome: item.nome, imagem: item.imagem, data: new Date().toLocaleDateString('pt-BR'), linkWhats: link });
