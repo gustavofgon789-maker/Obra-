@@ -106,49 +106,48 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 
 // ... (mantenha suas configurações do Firebase acima)
 
+    // ... (mantenha as suas configurações do Firebase e as funções filtrarCategoria acima)
+
 const auth = getAuth(app);
 
-// CORREÇÃO SÊNIOR: Esta função garante que os anúncios carreguem SEMPRE
+// 1. CHAMADA IMEDIATA: Carrega os anúncios assim que a página abre, sem esperar o login
+carregarAnuncios();
+
+// 2. MONITOR DE LOGIN: Apenas para ajustar o link do perfil, sem bloquear os anúncios
 onAuthStateChanged(auth, (user) => {
   const perfilLink = document.querySelector('a[href="perfil.html"]');
-  
-  // 1. Independentemente do login, carregamos os anúncios IMEDIATAMENTE
-  carregarAnuncios(); 
-
   if (user) {
-    console.log("Usuário reconhecido:", user.displayName);
-    if(perfilLink) perfilLink.href = "perfil.html";
+    console.log("Usuário logado:", user.displayName);
   } else {
-    console.log("Modo visitante");
-    if(perfilLink) perfilLink.href = "perfil.html";
+    console.log("Navegação anônima");
   }
 });
 
-// Certifique-se de que a função carregarAnuncios() está assim:
+// 3. FUNÇÃO DE CARREGAMENTO ROBUSTA
 async function carregarAnuncios() {
   const lista = document.getElementById("listaAnuncios");
-  if (!lista) return; // Evita erro se o elemento não existir
-  
+  if (!lista) return;
+
   const categoriaAtual = document.querySelector('.cat-btn.active')?.innerText || 'Todas';
-  const localSelecionado = document.getElementById("filtroLocal").value;
-  
-  lista.innerHTML = "<p style='text-align:center; color:var(--primary);'>Carregando ferramentas...</p>";
-  
+  const localSelecionado = document.getElementById("filtroLocal")?.value || "Todos";
+
+  lista.innerHTML = "<p style='text-align:center; color:var(--primary); grid-column: 1/-1;'>Procurando ferramentas...</p>";
+
   try {
-    let q = collection(db, "anuncios");
+    const q = collection(db, "anuncios");
     const snap = await getDocs(q);
     
-    lista.innerHTML = ""; // Limpa o carregando
-    
+    lista.innerHTML = ""; // Limpa o texto de carregamento
+
     if (snap.empty) {
-        lista.innerHTML = "<p style='text-align:center; grid-column: 1/-1;'>Nenhum anúncio encontrado.</p>";
-        return;
+      lista.innerHTML = "<p style='text-align:center; grid-column: 1/-1;'>Nenhum anúncio encontrado.</p>";
+      return;
     }
 
     snap.forEach(docSnap => {
       const item = docSnap.data();
-      
-      // Filtros
+
+      // Aplicar filtros manualmente (mais rápido e evita erros de índice no Firebase)
       if (categoriaAtual !== 'Todas' && item.categoria !== categoriaAtual) return;
       if (localSelecionado !== "Todos" && item.cidade !== localSelecionado) return;
 
@@ -166,20 +165,22 @@ async function carregarAnuncios() {
       `;
       lista.appendChild(card);
     });
-  } catch (e) { 
-    console.error("Erro ao buscar anúncios:", e);
-    lista.innerHTML = "<p style='color:red'>Erro ao carregar anúncios.</p>";
+
+  } catch (e) {
+    console.error("Erro ao carregar:", e);
+    lista.innerHTML = "<p style='color:red; text-align:center; grid-column: 1/-1;'>Erro de conexão com o banco de dados.</p>";
   }
 }
 
+// Garante que o filtro de busca por texto continue funcionando
+window.filtrarGeral = () => {
+  const termo = document.getElementById("inputBusca").value.toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const nome = card.querySelector('.card-title').innerText.toLowerCase();
+    card.style.display = nome.includes(termo) ? "block" : "none";
+  });
+};
 
-  window.filtrarGeral = () => {
-    const termo = document.getElementById("inputBusca").value.toLowerCase();
-    document.querySelectorAll('.card').forEach(card => {
-      const nome = card.querySelector('.card-title').innerText.toLowerCase();
-      card.style.display = nome.includes(termo) ? "block" : "none";
-    });
-  };
 
   carregarLocais();
   carregarAnuncios();
