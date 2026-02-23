@@ -64,22 +64,28 @@
 <div class="business-stats">
     <div class="stat-box full">
         <span class="stat-label">💰 Ganhos Estimados</span>
-        <span class="stat-value money-value" id="ganhoValor">R$ 0,00</span>
+        <span class="stat-value money-value" id="ganhoValor">R$0,00</span>
     </div>
     <div class="stat-box full" style="margin: 0 20px 15px; text-align: left; padding: 20px;">
-    <span class="stat-label" style="color: var(--primary); margin-bottom: 10px;">Sobre o Anunciante</span>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span class="stat-label" style="color: var(--primary); margin: 0;">Sobre o Anunciante</span>
+        <button onclick="editarDescricao()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px;">✏️</button>
+    </div>
     <p id="descVendedor" style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0;">
-        Carregando descrição...
+        Uma empresa há 10 anos no mercado no aluguel de ferramentas.
     </p>
 </div>
 
 <div class="stat-box full" style="margin: 0 20px 20px; text-align: left; padding: 20px;">
-    <span class="stat-label" style="color: var(--primary); margin-bottom: 10px;">Ponto de Retirada</span>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span class="stat-label" style="color: var(--primary); margin: 0;">Ponto de Retirada</span>
+        <button onclick="editarLocalizacao()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px;">✏️</button>
+    </div>
     <p id="enderecoFixo" style="font-size: 15px; font-weight: 600; margin-bottom: 15px;">
-        Endereço não definido
+        Avenida altino arantes 340
     </p>
-    <button onclick="abrirMapa()" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-        📍 Ver Local Aproximado
+    <button onclick="abrirMapa()" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 12px; cursor: pointer;">
+        Ver Local Aproximado
     </button>
 </div>
     <div class="stat-box">
@@ -188,7 +194,21 @@ card.innerHTML = `
     });
     document.getElementById("countAnuncios").innerText = snap.size;
   }
+window.editarDescricao = () => {
+    const novaDesc = prompt("Digite a nova descrição do seu perfil:", document.getElementById("descVendedor").innerText);
+    if (novaDesc) {
+        document.getElementById("descVendedor").innerText = novaDesc;
+        // Aqui você pode futuramente adicionar o código para salvar no Firebase (updateDoc)
+    }
+};
 
+window.editarLocalizacao = () => {
+    const novoEnd = prompt("Digite o novo endereço de retirada:", document.getElementById("enderecoFixo").innerText);
+    if (novoEnd) {
+        document.getElementById("enderecoFixo").innerText = novoEnd;
+        // Aqui você pode futuramente adicionar o código para salvar no Firebase (updateDoc)
+    }
+};
   window.abrirModal = (id) => { idSelecionado = id; document.getElementById("modalReserva").style.display = "flex"; };
   window.fecharModal = () => { document.getElementById("modalReserva").style.display = "none"; };
 
