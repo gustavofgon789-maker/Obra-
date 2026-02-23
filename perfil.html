@@ -148,18 +148,26 @@
       const id = docSnap.id;
       const card = document.createElement("div");
       card.className = "item-anuncio";
-      card.innerHTML = `
-        <img src="${item.imagem}" class="item-img">
-        <div class="item-info">
-          <p class="item-nome">${item.nome}</p>
-          <span style="font-size:11px; color:var(--primary)">R$ ${item.preco}</span>
-        </div>
-        <div class="acoes-anuncio">
-          <button class="btn-circle" onclick="abrirModal('${id}')">📅</button>
-          <button class="btn-circle" onclick="window.location.href='anunciar.html?edit=${id}'">✏️</button>
-          <button class="btn-circle" style="color:var(--danger)" onclick="removerAnuncio('${id}')">🗑️</button>
-        </div>
-      `;
+      // Localize essa parte dentro da função carregarDashboard
+card.innerHTML = `
+  <img src="${item.imagem}" class="item-img">
+  <div class="item-info">
+    <p class="item-nome">${item.nome}</p>
+    
+    <span class="status-badge ${item.status === 'Em Uso' ? 'status-off' : 'status-on'}">
+      ● ${item.status || 'Disponível'}
+    </span>
+    
+    <span style="font-size:11px; color:var(--text-muted); display:block; margin-top:4px;">
+      R$ ${item.preco}
+    </span>
+  </div>
+  <div class="acoes-anuncio">
+    <button class="btn-circle" onclick="abrirModal('${id}')">📅</button>
+    <button class="btn-circle" onclick="window.location.href='anunciar.html?edit=${id}'">✏️</button>
+    <button class="btn-circle" style="color:var(--danger)" onclick="removerAnuncio('${id}')">🗑️</button>
+  </div>
+`;
       lista.appendChild(card);
     });
     document.getElementById("countAnuncios").innerText = snap.size;
