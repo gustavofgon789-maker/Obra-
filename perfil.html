@@ -66,6 +66,22 @@
         <span class="stat-label">💰 Ganhos Estimados</span>
         <span class="stat-value money-value" id="ganhoValor">R$ 0,00</span>
     </div>
+    <div class="stat-box full" style="margin: 0 20px 15px; text-align: left; padding: 20px;">
+    <span class="stat-label" style="color: var(--primary); margin-bottom: 10px;">Sobre o Anunciante</span>
+    <p id="descVendedor" style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0;">
+        Carregando descrição...
+    </p>
+</div>
+
+<div class="stat-box full" style="margin: 0 20px 20px; text-align: left; padding: 20px;">
+    <span class="stat-label" style="color: var(--primary); margin-bottom: 10px;">Ponto de Retirada</span>
+    <p id="enderecoFixo" style="font-size: 15px; font-weight: 600; margin-bottom: 15px;">
+        Endereço não definido
+    </p>
+    <button onclick="abrirMapa()" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+        📍 Ver Local Aproximado
+    </button>
+</div>
     <div class="stat-box">
         <span class="stat-label">🛠️ Meus Itens</span>
         <span class="stat-value" id="countAnuncios">0</span>
@@ -193,6 +209,29 @@ card.innerHTML = `
     alert("Datas bloqueadas!");
     fecharModal();
   };
+  // Função para abrir o Google Maps
+window.abrirMapa = () => {
+    const endereco = document.getElementById("enderecoFixo").innerText;
+    if (endereco && endereco !== "Endereço não definido") {
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}`;
+        window.open(url, '_blank');
+    } else {
+        alert("Endereço ainda não cadastrado.");
+    }
+};
+
+// Modifique sua função onAuthStateChanged para preencher esses dados
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // ... (seu código existente de login)
+        
+        // Exemplo de preenchimento manual ou vindo do perfil do usuário no Firebase
+        document.getElementById("descVendedor").innerText = "Uma empresa há 10 anos no mercado no aluguel de ferramentas.";
+        document.getElementById("enderecoFixo").innerText = "Avenida Altino Arantes, 340";
+        
+        carregarDashboard(user.uid);
+    }
+});
 </script>
 </body>
 </html>
